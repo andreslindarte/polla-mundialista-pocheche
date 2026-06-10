@@ -325,8 +325,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
 async function loadFromURL(url) {
   try {
-    // cache-bust para que GitHub siempre sirva la versión más reciente
-    const res = await fetch(url + '?t=' + Date.now());
+    // Usa la API de GitHub para bypassear el caché del CDN
+    let fetchUrl = url + '?t=' + Date.now();
+    let fetchOpts = {};
+    const m = url.match(/raw\.githubusercontent\.com\/([^/]+\/[^/]+)\/[^/]+\/(.+)/);
+    if (m) {
+      fetchUrl = `https://api.github.com/repos/${m[1]}/contents/${m[2]}`;
+      fetchOpts = { headers: { 'Accept': 'application/vnd.github.v3.raw' }, cache: 'no-store' };
+    }
+    const res = await fetch(fetchUrl, fetchOpts);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const buf = await res.arrayBuffer();
     const wb = XLSX.read(buf, { type: 'array' });
@@ -418,6 +425,13 @@ function extractData(wb) {
     fixture[n] = (gl !== '' && gv !== '' && !isNaN(Number(gl)) && !isNaN(Number(gv)))
       ? { gl:Number(gl), gv:Number(gv) } : null;
   }
+
+  // Ordenar partidos cronológicamente (fecha "11 jun", "12 jun", etc.)
+  const monthNum = { ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12 };
+  matches.sort((a, b) => {
+    const parse = d => { const [day, mon] = d.trim().toLowerCase().split(' '); return (monthNum[mon]||0)*100 + (parseInt(day)||0); };
+    return parse(a.date) - parse(b.date) || a.n - b.n;
+  });
 
   const prArr = XLSX.utils.sheet_to_json(wsPR, { header:1, defval:'' });
   const predictions = participants.map(() => ({}));
