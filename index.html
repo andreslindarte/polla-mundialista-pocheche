@@ -160,26 +160,25 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
 .chip { background:var(--surface2); border:1px solid var(--border); border-radius:20px; padding:5px 14px; font-size:.8rem; font-weight:500; color:var(--muted); }
 .chip strong { color:var(--text); font-weight:700; }
 
-/* ── MATCH DETAIL ── */
-.match-controls { display:flex; gap:14px; align-items:center; margin-bottom:24px; flex-wrap:wrap; }
-.select-wrap { position:relative; flex:1; min-width:200px; max-width:500px; }
-.select-wrap select {
-  width:100%; appearance:none;
-  background:var(--surface2); border:1px solid var(--border);
-  color:var(--text); border-radius:8px; padding:11px 40px 11px 14px;
-  font-family:'Inter',sans-serif; font-size:.9rem; cursor:pointer; transition:border-color .15s;
+/* ── GROUP VIEW ── */
+.group-selector { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px; }
+.grp-btn {
+  font-family:'Barlow Condensed',sans-serif; font-size:1.05rem; font-weight:700;
+  letter-spacing:.08em; padding:8px 20px; border-radius:8px; cursor:pointer;
+  border:1px solid var(--border); background:var(--surface2); color:var(--muted);
+  transition:all .15s; position:relative;
 }
-.select-wrap select:focus { outline:none; border-color:var(--accent); }
-.select-wrap::after { content:'▾'; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
-.match-nav { display:flex; gap:6px; }
-.nav-btn {
-  background:var(--surface2); border:1px solid var(--border); color:var(--text);
-  border-radius:7px; width:38px; height:38px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; font-size:1rem; transition:background .15s;
+.grp-btn:hover { border-color:var(--accent); color:var(--text); }
+.grp-btn.active { background:rgba(240,180,41,.15); border-color:var(--accent); color:var(--accent); }
+.grp-btn .grp-dot {
+  display:inline-block; width:6px; height:6px; border-radius:50%;
+  background:var(--green); margin-left:6px; vertical-align:middle;
 }
-.nav-btn:hover { background:var(--mid); border-color:var(--accent); }
-.nav-btn:disabled { opacity:.3; cursor:default; }
+.group-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:20px; flex-wrap:wrap; gap:8px;
+}
+.group-header h2 { font-family:'Barlow Condensed',sans-serif; font-size:1.4rem; font-weight:800; letter-spacing:.05em; }
 .match-card { background:var(--surface2); border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:24px; }
 .match-card-header { background:var(--mid); padding:12px 20px; display:flex; align-items:center; justify-content:space-between; }
 .grp-badge { font-family:'Barlow Condensed',sans-serif; font-size:.85rem; font-weight:700; letter-spacing:.1em; color:var(--accent); background:rgba(240,180,41,.12); border:1px solid rgba(240,180,41,.25); border-radius:4px; padding:2px 10px; }
@@ -260,7 +259,7 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
 
   <div class="tab-bar">
     <div class="tab active" onclick="switchTab('ranking')">🏆 Ranking</div>
-    <div class="tab" onclick="switchTab('partidos')">🔍 Por partido</div>
+    <div class="tab" onclick="switchTab('partidos')">🗂️ Por grupo</div>
   </div>
 
   <main>
@@ -287,16 +286,8 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
     </div>
 
     <div class="panel" id="panel-partidos">
-      <div class="match-controls">
-        <div class="select-wrap">
-          <select id="match-select" onchange="showMatch(parseInt(this.value))"></select>
-        </div>
-        <div class="match-nav">
-          <button class="nav-btn" id="btn-prev" onclick="navigateMatch(-1)">&#8592;</button>
-          <button class="nav-btn" id="btn-next" onclick="navigateMatch(+1)">&#8594;</button>
-        </div>
-      </div>
-      <div id="match-detail"></div>
+      <div class="group-selector" id="group-selector"></div>
+      <div id="group-detail"></div>
     </div>
   </main>
 </div>
@@ -313,7 +304,6 @@ const EXCEL_URL = 'https://raw.githubusercontent.com/andreslindarte/polla-mundia
 // INIT — intenta cargar desde GitHub, si falla muestra upload
 // ══════════════════════════════════════════════════════════
 let DATA = null;
-let currentMatch = 1;
 
 window.addEventListener('DOMContentLoaded', () => {
   if (EXCEL_URL.startsWith('REEMPLAZAR')) {
@@ -426,12 +416,16 @@ function extractData(wb) {
       ? { gl:Number(gl), gv:Number(gv) } : null;
   }
 
-  // Ordenar partidos cronológicamente (fecha "11 jun", "12 jun", etc.)
-  const monthNum = { ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12 };
-  matches.sort((a, b) => {
-    const parse = d => { const [day, mon] = d.trim().toLowerCase().split(' '); return (monthNum[mon]||0)*100 + (parseInt(day)||0); };
-    return parse(a.date) - parse(b.date) || a.n - b.n;
-  });
+  // Ordenar partidos cronológicamente
+  // La fecha puede ser serial numérico de Excel (ej. 46184) o texto (ej. "11 jun")
+  const _mon = { ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12 };
+  const _dateKey = d => {
+    const n = Number(d);
+    if (!isNaN(n) && n > 1000) return n; // serial numérico de Excel
+    const [day, mon] = String(d||'').toLowerCase().split(' ');
+    return (_mon[mon]||0)*100 + (parseInt(day)||0);
+  };
+  matches.sort((a, b) => _dateKey(a.date) - _dateKey(b.date) || a.n - b.n);
 
   const prArr = XLSX.utils.sheet_to_json(wsPR, { header:1, defval:'' });
   const predictions = participants.map(() => ({}));
@@ -504,9 +498,10 @@ function getMatchDetail(matchN) {
 function launchApp() {
   document.getElementById('loading-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
-  buildMatchSelect();
+  buildGroupSelector();
   renderRanking();
-  showMatch(1);
+  const firstGroup = [...new Set(DATA.matches.map(m => m.group))][0];
+  showGroup(firstGroup);
 }
 
 function switchTab(tab) {
@@ -552,31 +547,48 @@ function renderRanking() {
     </tr>`).join('');
 }
 
-function buildMatchSelect() {
+let currentGroup = 'A';
+
+function buildGroupSelector() {
   const { matches, fixture } = DATA;
-  document.getElementById('match-select').innerHTML = matches.map(m =>
-    `<option value="${m.n}">#${m.n} · ${m.home} vs ${m.away} · Grupo ${m.group}${fixture[m.n]?' ✓':''}</option>`
-  ).join('');
+  const groups = [...new Set(matches.map(m => m.group))];
+  document.getElementById('group-selector').innerHTML = groups.map(g => {
+    const played = matches.filter(m => m.group === g && fixture[m.n]).length;
+    const dot = played > 0 ? '<span class="grp-dot"></span>' : '';
+    return `<button class="grp-btn" id="grp-btn-${g}" onclick="showGroup('${g}')">GRUPO ${g}${dot}</button>`;
+  }).join('');
 }
 
-function showMatch(n) {
+function showGroup(group) {
+  currentGroup = group;
   const { matches, fixture } = DATA;
-  currentMatch = n;
-  document.getElementById('match-select').value = n;
-  document.getElementById('btn-prev').disabled = n <= matches[0].n;
-  document.getElementById('btn-next').disabled = n >= matches[matches.length-1].n;
-  const match = matches.find(m => m.n === n);
-  if (!match) return;
-  const { real, details } = getMatchDetail(n);
+  // Actualizar botones activos
+  document.querySelectorAll('.grp-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(`grp-btn-${group}`);
+  if (btn) btn.classList.add('active');
+
+  const groupMatches = matches.filter(m => m.group === group);
+  const played = groupMatches.filter(m => fixture[m.n]).length;
+
+  document.getElementById('group-detail').innerHTML = `
+    <div class="group-header">
+      <h2>Grupo ${group}</h2>
+      <span class="matches-played">${played} de ${groupMatches.length} jugados</span>
+    </div>
+    ${groupMatches.map(match => renderMatchCard(match)).join('')}`;
+}
+
+function renderMatchCard(match) {
+  const { real, details } = getMatchDetail(match.n);
   const pending = !real;
   const hitters = details.filter(d => d.status==='hit-solo'||d.status==='hit-shared');
   let winnerNote = '';
   if (!pending) {
     if (hitters.length === 0) winnerNote = `<div style="color:var(--muted);font-size:.82rem;text-align:center;padding-bottom:4px">Nadie acertó este partido</div>`;
     else if (hitters.length === 1) winnerNote = `<div style="color:var(--green);font-size:.82rem;text-align:center;padding-bottom:4px">🎯 Acierto único — <strong>${hitters[0].name}</strong> gana 3 pts</div>`;
-    else winnerNote = `<div style="color:var(--accent);font-size:.82rem;text-align:center;padding-bottom:4px">🎯 ${hitters.length} participantes acertaron — 1 pt cada uno</div>`;
+    else winnerNote = `<div style="color:var(--accent);font-size:.82rem;text-align:center;padding-bottom:4px">🎯 ${hitters.length} acertaron — 1 pt cada uno</div>`;
   }
-  document.getElementById('match-detail').innerHTML = `
+  return `
     <div class="match-card">
       <div class="match-card-header">
         <span class="grp-badge">GRUPO ${match.group}</span>
@@ -606,12 +618,6 @@ function showMatch(n) {
         </table>
       </div>
     </div>`;
-}
-
-function navigateMatch(dir) {
-  const { matches } = DATA;
-  const next = matches[matches.findIndex(m => m.n === currentMatch) + dir];
-  if (next) showMatch(next.n);
 }
 </script>
 </body>
