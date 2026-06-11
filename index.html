@@ -259,7 +259,7 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
 
   <div class="tab-bar">
     <div class="tab active" onclick="switchTab('ranking')">🏆 Ranking</div>
-    <div class="tab" onclick="switchTab('partidos')">🗂️ Por grupo</div>
+    <div class="tab" onclick="switchTab('partidos')">📅 Por fecha</div>
   </div>
 
   <main>
@@ -410,22 +410,28 @@ function extractData(wb) {
     if (isNaN(n) || n < 1) continue;
     const home = String(row[2]||'').trim(), away = String(row[5]||'').trim();
     if (!home || !away) continue;
-    matches.push({ n, group:String(row[1]).trim(), home, away, date:String(row[6]||'').trim() });
+    const _MON = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    const rawDate = row[6];
+    let dateDisplay;
+    const dNum = Number(rawDate);
+    if (!isNaN(dNum) && dNum > 1000) {
+      const d = new Date((dNum - 25569) * 86400 * 1000);
+      dateDisplay = `${d.getUTCDate()} ${_MON[d.getUTCMonth()]}`;
+    } else {
+      dateDisplay = String(rawDate||'').trim();
+    }
+    matches.push({ n, group:String(row[1]).trim(), home, away, date:dateDisplay });
     const gl = row[3], gv = row[4];
     fixture[n] = (gl !== '' && gv !== '' && !isNaN(Number(gl)) && !isNaN(Number(gv)))
       ? { gl:Number(gl), gv:Number(gv) } : null;
   }
 
-  // Ordenar partidos cronológicamente
-  // La fecha puede ser serial numérico de Excel (ej. 46184) o texto (ej. "11 jun")
-  const _mon = { ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12 };
-  const _dateKey = d => {
-    const n = Number(d);
-    if (!isNaN(n) && n > 1000) return n; // serial numérico de Excel
-    const [day, mon] = String(d||'').toLowerCase().split(' ');
-    return (_mon[mon]||0)*100 + (parseInt(day)||0);
-  };
-  matches.sort((a, b) => _dateKey(a.date) - _dateKey(b.date) || a.n - b.n);
+  // Ordenar cronológicamente (date ya normalizado a "DD mon")
+  const _MORD = { ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12 };
+  matches.sort((a, b) => {
+    const k = d => { const [dy, mo] = d.toLowerCase().split(' '); return (_MORD[mo]||0)*100+(parseInt(dy)||0); };
+    return k(a.date) - k(b.date) || a.n - b.n;
+  });
 
   const prArr = XLSX.utils.sheet_to_json(wsPR, { header:1, defval:'' });
   const predictions = participants.map(() => ({}));
@@ -500,8 +506,8 @@ function launchApp() {
   document.getElementById('app').style.display = 'block';
   buildGroupSelector();
   renderRanking();
-  const firstGroup = [...new Set(DATA.matches.map(m => m.group))][0];
-  showGroup(firstGroup);
+  const firstDate = DATA.matches[0]?.date || '';
+  showDate(firstDate);
 }
 
 function switchTab(tab) {
@@ -547,35 +553,37 @@ function renderRanking() {
     </tr>`).join('');
 }
 
-let currentGroup = 'A';
+let currentDate = '';
 
 function buildGroupSelector() {
   const { matches, fixture } = DATA;
-  const groups = [...new Set(matches.map(m => m.group))];
-  document.getElementById('group-selector').innerHTML = groups.map(g => {
-    const played = matches.filter(m => m.group === g && fixture[m.n]).length;
+  const dates = [...new Set(matches.map(m => m.date))]; // ya ordenadas cronológicamente
+  document.getElementById('group-selector').innerHTML = dates.map((d, i) => {
+    const played = matches.filter(m => m.date === d && fixture[m.n]).length;
     const dot = played > 0 ? '<span class="grp-dot"></span>' : '';
-    return `<button class="grp-btn" id="grp-btn-${g}" onclick="showGroup('${g}')">GRUPO ${g}${dot}</button>`;
+    const label = d.toUpperCase();
+    return `<button class="grp-btn" id="date-btn-${i}" onclick="showDate('${d}')">${label}${dot}</button>`;
   }).join('');
 }
 
-function showGroup(group) {
-  currentGroup = group;
+function showDate(date) {
+  currentDate = date;
   const { matches, fixture } = DATA;
-  // Actualizar botones activos
+  const dates = [...new Set(matches.map(m => m.date))];
   document.querySelectorAll('.grp-btn').forEach(b => b.classList.remove('active'));
-  const btn = document.getElementById(`grp-btn-${group}`);
+  const idx = dates.indexOf(date);
+  const btn = document.getElementById(`date-btn-${idx}`);
   if (btn) btn.classList.add('active');
 
-  const groupMatches = matches.filter(m => m.group === group);
-  const played = groupMatches.filter(m => fixture[m.n]).length;
+  const dayMatches = matches.filter(m => m.date === date);
+  const played = dayMatches.filter(m => fixture[m.n]).length;
 
   document.getElementById('group-detail').innerHTML = `
     <div class="group-header">
-      <h2>Grupo ${group}</h2>
-      <span class="matches-played">${played} de ${groupMatches.length} jugados</span>
+      <h2>${date.toUpperCase()}</h2>
+      <span class="matches-played">${played} de ${dayMatches.length} jugados</span>
     </div>
-    ${groupMatches.map(match => renderMatchCard(match)).join('')}`;
+    ${dayMatches.map(match => renderMatchCard(match)).join('')}`;
 }
 
 function renderMatchCard(match) {
