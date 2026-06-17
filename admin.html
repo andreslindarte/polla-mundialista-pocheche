@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Admin — Polla Pocheche</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    :root {
+      --navy:#08121E; --blue:#0F2744; --mid:#1A4A7A; --accent:#F0B429;
+      --green:#22C55E; --red:#EF4444; --muted:#64748B; --surface:#111C2B;
+      --surface2:#162236; --border:rgba(255,255,255,.08); --text:#E2EBF4; --radius:10px;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--text); min-height:100vh; }
+
+    /* ── Screens ── */
+    .screen { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:36px; max-width:420px; width:100%; }
+    .card h2 { font-size:1.5rem; font-weight:700; margin-bottom:8px; }
+    .card p { color:var(--muted); font-size:.9rem; margin-bottom:24px; line-height:1.5; }
+    .field-label { display:block; font-size:.8rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+    .field { margin-bottom:16px; }
+    input[type="password"], input[type="text"] {
+      background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+      color:var(--text); padding:12px 16px; font-size:1rem; width:100%; outline:none;
+      font-family:'Inter',sans-serif;
+    }
+    input:focus { border-color:var(--accent); }
+    .btn {
+      background:var(--accent); color:#000; border:none; border-radius:8px;
+      padding:13px 24px; font-weight:700; cursor:pointer; font-size:1rem;
+      width:100%; margin-top:4px; font-family:'Inter',sans-serif;
+    }
+    .btn:hover { opacity:.9; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-secondary { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
+    .btn-green { background:var(--green); color:#000; }
+    .error-msg { color:var(--red); font-size:.85rem; margin-top:10px; min-height:20px; }
+
+    /* ── Admin UI ── */
+    #admin-ui { padding:20px; max-width:960px; margin:0 auto; padding-bottom:100px; }
+    .admin-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 0; border-bottom:1px solid var(--border); margin-bottom:20px;
+      flex-wrap:wrap; gap:12px;
+    }
+    .admin-header h1 { font-size:1.3rem; font-weight:700; }
+    .header-actions { display:flex; gap:8px; }
+
+    .import-hint {
+      background:rgba(240,180,41,.06); border:1px solid rgba(240,180,41,.2);
+      border-radius:var(--radius); padding:14px 16px; margin-bottom:20px;
+      font-size:.875rem; color:var(--muted); line-height:1.5;
+    }
+    .import-hint strong { color:var(--accent); }
+
+    /* ── Date bar ── */
+    .date-bar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+    .date-btn {
+      background:var(--surface2); border:1px solid var(--border);
+      color:var(--muted); border-radius:8px; padding:8px 16px;
+      cursor:pointer; font-size:.85rem; font-weight:600; font-family:'Inter',sans-serif;
+      transition:all .15s;
+    }
+    .date-btn.active { background:var(--accent); color:#000; border-color:var(--accent); }
+    .date-btn .dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--green); margin-left:5px; vertical-align:middle; }
+
+    /* ── Match cards ── */
+    .match-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:16px; overflow:hidden; }
+    .match-header { background:var(--surface2); padding:12px 16px; font-weight:700; font-size:.95rem; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .match-num { background:var(--mid); border-radius:4px; padding:2px 8px; font-size:.75rem; color:var(--muted); font-weight:600; }
+    .match-teams { flex:1; }
+    .match-group { color:var(--muted); font-size:.8rem; font-weight:400; }
+
+    table.pred-table { width:100%; border-collapse:collapse; }
+    .pred-table th {
+      background:rgba(255,255,255,.03); color:var(--muted); font-size:.75rem;
+      font-weight:600; text-transform:uppercase; letter-spacing:.05em;
+      padding:8px 14px; text-align:left; border-bottom:1px solid var(--border);
+    }
+    .pred-table th.center { text-align:center; }
+    .pred-table td { padding:7px 14px; border-bottom:1px solid rgba(255,255,255,.04); font-size:.88rem; vertical-align:middle; }
+    .pred-table tr:last-child td { border-bottom:none; }
+    .pred-table td.score-cell { text-align:center; width:80px; }
+
+    .score-input {
+      background:var(--surface2); border:1px solid var(--border); border-radius:6px;
+      color:var(--text); padding:6px 0; font-size:1rem; font-weight:700;
+      width:52px; text-align:center; outline:none; font-family:'Inter',sans-serif;
+    }
+    .score-input:focus { border-color:var(--accent); }
+    .pred-table tr.filled td { background:rgba(34,197,94,.05); }
+    .pred-table tr.partial td { background:rgba(240,180,41,.05); }
+
+    /* ── Save bar ── */
+    .save-bar {
+      position:fixed; bottom:0; left:0; right:0;
+      background:rgba(8,18,30,.95); backdrop-filter:blur(8px);
+      border-top:1px solid var(--border); padding:14px 24px;
+      display:flex; gap:14px; align-items:center; z-index:100;
+    }
+    .save-status { flex:1; font-size:.875rem; color:var(--muted); }
+  </style>
+</head>
+<body>
+
+<!-- ── PIN screen ── -->
+<div class="screen" id="pin-screen">
+  <div class="card">
+    <h2>🔐 Admin · Polla Pocheche</h2>
+    <p>Panel de predicciones. Solo tú tienes este link.</p>
+    <div class="field">
+      <label class="field-label">PIN</label>
+      <input type="password" id="pin-input" placeholder="••••" maxlength="30" autocomplete="off"
+             onkeydown="if(event.key==='Enter')checkPin()">
+    </div>
+    <button class="btn" onclick="checkPin()">Entrar</button>
+    <div class="error-msg" id="pin-error"></div>
+  </div>
+</div>
+
+<!-- ── Token screen ── -->
+<div class="screen" id="token-screen" style="display:none">
+  <div class="card">
+    <h2>🔑 GitHub Token</h2>
+    <p>Tu Personal Access Token de GitHub. Se usa para guardar predicciones en el repo. Solo existe en esta pestaña — desaparece al cerrarla.</p>
+    <div class="field">
+      <label class="field-label">Token</label>
+      <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+             onkeydown="if(event.key==='Enter')checkToken()">
+    </div>
+    <button class="btn" onclick="checkToken()">Continuar</button>
+    <div class="error-msg" id="token-error"></div>
+  </div>
+</div>
+
+<!-- ── Admin UI ── -->
+<div id="admin-ui" style="display:none">
+  <div class="admin-header">
+    <h1>⚽ Predicciones · Polla Pocheche</h1>
+    <div class="header-actions">
+      <button class="btn btn-secondary" style="width:auto;margin:0;padding:10px 16px;font-size:.875rem"
+              onclick="triggerImport()">📥 Importar Excel</button>
+      <input type="file" id="import-file" accept=".xlsx" style="display:none" onchange="importFromExcel(this)">
+    </div>
+  </div>
+
+  <div class="import-hint" id="import-hint">
+    💡 <strong>Primera vez:</strong> Si ya tienes predicciones en el Excel, haz clic en <strong>"Importar Excel"</strong> para migrarlas automáticamente. Después presiona <strong>"Guardar todo"</strong>.
+  </div>
+
+  <div id="loading-data" style="text-align:center;padding:60px 20px;color:var(--muted)">
+    <div style="font-size:2rem;margin-bottom:12px">⏳</div>
+    <div id="loading-msg">Cargando datos...</div>
+  </div>
+  <div class="date-bar" id="date-bar" style="display:none"></div>
+  <div id="matches-container"></div>
+</div>
+
+<!-- ── Save bar (fixed bottom) ── -->
+<div class="save-bar" id="save-bar" style="display:none">
+  <div class="save-status" id="save-status">Cargando...</div>
+  <button class="btn btn-green" style="width:auto;margin:0;padding:12px 32px"
+          id="save-btn" onclick="saveAll()">💾 Guardar todo</button>
+</div>
+
+<script>
+const PIN      = '2026';
+const REPO     = 'andreslindarte/polla-mundialista-pocheche';
+const EXCEL_URL= 'https://raw.githubusercontent.com/andreslindarte/polla-mundialista-pocheche/main/Quiniela_Mundial_2026_v2.xlsx';
+const PRED_FILE= 'predicciones.json';
+
+let MATCHES = [], PARTICIPANTS = [], predStore = {}, currentDate = '';
+
+// ─────────────────────────────────────────────────────────
+// AUTH
+// ─────────────────────────────────────────────────────────
+function checkPin() {
+  const val = document.getElementById('pin-input').value;
+  if (val === PIN) {
+    document.getElementById('pin-screen').style.display = 'none';
+    // Siempre mostrar token screen — si ya hay uno guardado, pre-llenamos el campo
+    const saved = sessionStorage.getItem('ghToken');
+    if (saved) document.getElementById('token-input').value = saved;
+    document.getElementById('token-screen').style.display = 'flex';
+  } else {
+    document.getElementById('pin-error').textContent = 'PIN incorrecto.';
+    document.getElementById('pin-input').value = '';
+    document.getElementById('pin-input').focus();
+  }
+}
+
+function checkToken() {
+  const val = document.getElementById('token-input').value.trim();
+  if (!val) {
+    document.getElementById('token-error').textContent = 'Ingresa el token antes de continuar.';
+    return;
+  }
+  sessionStorage.setItem('ghToken', val);
+  document.getElementById('token-screen').style.display = 'none';
+  startAdmin(val);
+}
+
+// ─────────────────────────────────────────────────────────
+// LOAD DATA
+// ─────────────────────────────────────────────────────────
+async function startAdmin(token) {
+  document.getElementById('admin-ui').style.display = 'block';
+  document.getElementById('save-bar').style.display = 'flex';
+  document.getElementById('loading-msg').textContent = 'Cargando fixture desde GitHub...';
+  setStatus('Cargando...');
+
+  try {
+    const m = EXCEL_URL.match(/raw\.githubusercontent\.com\/([^/]+\/[^/]+)\/[^/]+\/(.+)/);
+    const exUrl = `https://api.github.com/repos/${m[1]}/contents/${m[2]}`;
+    const res = await fetch(exUrl, { headers:{ 'Accept':'application/vnd.github.v3.raw' }, cache:'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const buf = await res.arrayBuffer();
+    parseFixture(XLSX.read(buf, { type:'array' }));
+  } catch(e) {
+    document.getElementById('loading-msg').textContent = '⚠️ Error al cargar fixture: ' + e.message + '. Usa "Importar Excel" para continuar.';
+    setStatus('Sin fixture. Importa el Excel manualmente.');
+  }
+
+  setStatus('Cargando predicciones existentes...');
+  await loadPredictions(token);
+  buildUI();
+}
+
+function parseFixture(wb) {
+  const wsP = wb.Sheets['Participantes'];
+  const wsF = wb.Sheets['Fixture'];
+  if (!wsP || !wsF) { setStatus('⚠️ Formato de Excel no reconocido.'); return; }
+
+  const pArr = XLSX.utils.sheet_to_json(wsP, { header:1, defval:'' });
+  PARTICIPANTS = [];
+  for (let r = 4; r < pArr.length; r++) {
+    const n = String(pArr[r][1]||'').trim();
+    if (n && n !== 'Participante') PARTICIPANTS.push(n);
+  }
+
+  const _MON = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const fArr = XLSX.utils.sheet_to_json(wsF, { header:1, defval:'' });
+  MATCHES = [];
+  for (let r = 4; r < fArr.length; r++) {
+    const row = fArr[r];
+    const n = parseInt(row[0]);
+    if (isNaN(n) || n < 1) continue;
+    const home = String(row[2]||'').trim(), away = String(row[5]||'').trim();
+    if (!home || !away) continue;
+    const rawDate = row[6];
+    let date;
+    const dNum = Number(rawDate);
+    if (!isNaN(dNum) && dNum > 1000) {
+      const d = new Date((dNum - 25569) * 86400 * 1000);
+      date = `${d.getUTCDate()} ${_MON[d.getUTCMonth()]}`;
+    } else {
+      date = String(rawDate||'').trim();
+    }
+    MATCHES.push({ n, group:String(row[1]).trim(), home, away, date });
+  }
+  const _MORD = { ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12 };
+  MATCHES.sort((a,b) => {
+    const k = d => { const [dy,mo] = d.toLowerCase().split(' '); return (_MORD[mo]||0)*100+(parseInt(dy)||0); };
+    return k(a.date) - k(b.date) || a.n - b.n;
+  });
+}
+
+async function loadPredictions(token) {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${PRED_FILE}`, {
+      headers:{ 'Authorization':`Bearer ${token}`, 'Accept':'application/vnd.github.v3.raw' },
+      cache:'no-store'
+    });
+    if (res.ok) {
+      const json = await res.json();
+      predStore = (typeof json === 'object' && !Array.isArray(json)) ? json : {};
+    }
+  } catch(e) { predStore = {}; }
+}
+
+// ─────────────────────────────────────────────────────────
+// BUILD UI
+// ─────────────────────────────────────────────────────────
+function buildUI() {
+  document.getElementById('loading-data').style.display = 'none';
+  document.getElementById('date-bar').style.display = 'flex';
+  const dates = [...new Set(MATCHES.map(m => m.date))];
+  const bar = document.getElementById('date-bar');
+  bar.innerHTML = dates.map(d => {
+    const hasAny = MATCHES.filter(m => m.date === d).some(m =>
+      PARTICIPANTS.some(name => (predStore[name]||{})[m.n])
+    );
+    return `<button class="date-btn" onclick="showDate('${d}')">
+      ${d.toUpperCase()}${hasAny ? '<span class="dot"></span>' : ''}
+    </button>`;
+  }).join('');
+  if (dates.length) showDate(dates[0]);
+  updateStatus();
+}
+
+function showDate(date) {
+  currentDate = date;
+  document.querySelectorAll('.date-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim().startsWith(date.toUpperCase()));
+  });
+  const dayMatches = MATCHES.filter(m => m.date === date);
+  document.getElementById('matches-container').innerHTML = dayMatches.map(renderMatchCard).join('');
+}
+
+function renderMatchCard(match) {
+  const rows = PARTICIPANTS.map((name, pi) => {
+    const pred = (predStore[name]||{})[match.n];
+    const gl = pred != null ? pred.gl : '';
+    const gv = pred != null ? pred.gv : '';
+    const cls = pred != null ? 'filled' : '';
+    return `<tr class="${cls}" id="row-${match.n}-${pi}">
+      <td>${name}</td>
+      <td class="score-cell">
+        <input class="score-input" type="number" min="0" max="30"
+               data-match="${match.n}" data-pi="${pi}" data-side="gl"
+               value="${gl}" oninput="onInput(this)" onwheel="this.blur()">
+      </td>
+      <td class="score-cell">
+        <input class="score-input" type="number" min="0" max="30"
+               data-match="${match.n}" data-pi="${pi}" data-side="gv"
+               value="${gv}" oninput="onInput(this)" onwheel="this.blur()">
+      </td>
+    </tr>`;
+  }).join('');
+  return `<div class="match-card">
+    <div class="match-header">
+      <span class="match-num">#${match.n}</span>
+      <span class="match-teams">${match.home} <span style="color:var(--muted);font-weight:400">vs</span> ${match.away}</span>
+      <span class="match-group">Grupo ${match.group}</span>
+    </div>
+    <table class="pred-table">
+      <thead><tr>
+        <th>Participante</th>
+        <th class="center">${match.home}</th>
+        <th class="center">${match.away}</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+function onInput(input) {
+  const matchN = parseInt(input.dataset.match);
+  const pi     = parseInt(input.dataset.pi);
+  const name   = PARTICIPANTS[pi];
+  const row    = document.getElementById(`row-${matchN}-${pi}`);
+  const glEl   = row.querySelector('[data-side="gl"]');
+  const gvEl   = row.querySelector('[data-side="gv"]');
+  const gl = glEl.value.trim(), gv = gvEl.value.trim();
+
+  if (!predStore[name]) predStore[name] = {};
+  if (gl !== '' && gv !== '' && !isNaN(parseInt(gl)) && !isNaN(parseInt(gv))) {
+    predStore[name][matchN] = { gl:parseInt(gl), gv:parseInt(gv) };
+    row.className = 'filled';
+  } else {
+    delete predStore[name][matchN];
+    row.className = (gl !== '' || gv !== '') ? 'partial' : '';
+  }
+  updateStatus();
+}
+
+function updateStatus() {
+  let total = 0, filled = 0;
+  PARTICIPANTS.forEach(name => MATCHES.forEach(m => {
+    total++;
+    if ((predStore[name]||{})[m.n] != null) filled++;
+  }));
+  setStatus(`${filled} de ${total} predicciones ingresadas`);
+}
+
+function setStatus(msg) {
+  document.getElementById('save-status').textContent = msg;
+}
+
+// ─────────────────────────────────────────────────────────
+// SAVE TO GITHUB
+// ─────────────────────────────────────────────────────────
+async function saveAll() {
+  const token = sessionStorage.getItem('ghToken');
+  if (!token) { alert('Token no encontrado. Recarga la página.'); return; }
+
+  const btn = document.getElementById('save-btn');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  setStatus('Subiendo a GitHub...');
+
+  try {
+    // Get SHA of existing file (needed to update; absent for first create)
+    let sha = null;
+    const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${PRED_FILE}`, {
+      headers:{ 'Authorization':`Bearer ${token}`, 'Accept':'application/vnd.github.v3+json' }
+    });
+    if (getRes.ok) {
+      const cur = await getRes.json();
+      sha = cur.sha;
+    }
+
+    const jsonStr = JSON.stringify(predStore, null, 2);
+    const content = btoa(unescape(encodeURIComponent(jsonStr)));
+    const body = { message:`Actualizar predicciones · ${new Date().toLocaleString('es-CO')}`, content };
+    if (sha) body.sha = sha;
+
+    const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${PRED_FILE}`, {
+      method:'PUT',
+      headers:{
+        'Authorization':`Bearer ${token}`,
+        'Accept':'application/vnd.github.v3+json',
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(body)
+    });
+
+    if (putRes.ok) {
+      setStatus('✅ Guardado. La web principal se actualiza en ~1 min.');
+      document.getElementById('import-hint').style.display = 'none';
+      // Refresh date dots
+      buildDateDots();
+    } else {
+      const err = await putRes.json();
+      setStatus('❌ Error: ' + (err.message || putRes.status));
+    }
+  } catch(e) {
+    setStatus('❌ Error de red: ' + e.message);
+  }
+  btn.textContent = '💾 Guardar todo'; btn.disabled = false;
+}
+
+function buildDateDots() {
+  document.querySelectorAll('.date-btn').forEach(b => {
+    const dateText = b.textContent.trim().replace('●','').trim();
+    const date = dateText.toLowerCase().replace(' ', ' ');
+    // Re-check if any predictions exist for this date
+    const matches = MATCHES.filter(m => m.date.toUpperCase() === dateText.split('\n')[0].trim());
+    const hasAny = matches.some(m => PARTICIPANTS.some(name => (predStore[name]||{})[m.n]));
+    const dot = b.querySelector('.dot');
+    if (hasAny && !dot) {
+      const s = document.createElement('span');
+      s.className = 'dot'; b.appendChild(s);
+    } else if (!hasAny && dot) dot.remove();
+  });
+}
+
+// ─────────────────────────────────────────────────────────
+// IMPORT FROM EXCEL (one-time migration)
+// ─────────────────────────────────────────────────────────
+function triggerImport() {
+  document.getElementById('import-file').click();
+}
+
+function importFromExcel(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const wb = XLSX.read(e.target.result, { type:'array' });
+    const wsPR = wb.Sheets['Predicciones'];
+    if (!wsPR) { alert('No se encontró la hoja "Predicciones" en el Excel.'); return; }
+    const prArr = XLSX.utils.sheet_to_json(wsPR, { header:1, defval:'' });
+    let imported = 0;
+    for (let r = 5; r < prArr.length; r++) {
+      const row = prArr[r];
+      const n = parseInt(row[0]);
+      if (isNaN(n) || n < 1) continue;
+      PARTICIPANTS.forEach((name, p) => {
+        const bc = 3 + p * 2;
+        const gl = row[bc], gv = row[bc+1];
+        if (gl !== '' && gv !== '' && !isNaN(Number(gl)) && !isNaN(Number(gv))) {
+          if (!predStore[name]) predStore[name] = {};
+          predStore[name][n] = { gl:Number(gl), gv:Number(gv) };
+          imported++;
+        }
+      });
+    }
+    showDate(currentDate);
+    updateStatus();
+    alert(`✅ ${imported} predicciones importadas.\nRevisa los datos y presiona "Guardar todo" para subir a GitHub.`);
+  };
+  reader.readAsArrayBuffer(file);
+  input.value = '';
+}
+</script>
+</body>
+</html>
