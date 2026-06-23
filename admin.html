@@ -40,7 +40,7 @@
     .error-msg { color:var(--red); font-size:.85rem; margin-top:10px; min-height:20px; }
 
     /* ── Admin UI ── */
-    #admin-ui { padding:20px; max-width:960px; margin:0 auto; padding-bottom:100px; }
+    #admin-ui { padding:20px; max-width:1100px; margin:0 auto; padding-bottom:100px; }
     .admin-header {
       display:flex; align-items:center; justify-content:space-between;
       padding:16px 0; border-bottom:1px solid var(--border); margin-bottom:20px;
@@ -51,10 +51,23 @@
 
     .import-hint {
       background:rgba(240,180,41,.06); border:1px solid rgba(240,180,41,.2);
-      border-radius:var(--radius); padding:14px 16px; margin-bottom:20px;
+      border-radius:var(--radius); padding:14px 16px; margin-bottom:16px;
       font-size:.875rem; color:var(--muted); line-height:1.5;
     }
     .import-hint strong { color:var(--accent); }
+
+    /* ── Phase nav ── */
+    .phase-nav {
+      display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;
+    }
+    .phase-btn {
+      background:var(--surface2); border:1px solid var(--border); color:var(--muted);
+      border-radius:8px; padding:8px 18px; cursor:pointer; font-size:.8rem;
+      font-weight:700; font-family:'Inter',sans-serif; letter-spacing:.04em;
+      transition:all .15s; text-transform:uppercase;
+    }
+    .phase-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .phase-btn.active { background:var(--accent); color:#000; border-color:var(--accent); }
 
     /* ── Date bar ── */
     .date-bar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
@@ -78,12 +91,12 @@
     .pred-table th {
       background:rgba(255,255,255,.03); color:var(--muted); font-size:.75rem;
       font-weight:600; text-transform:uppercase; letter-spacing:.05em;
-      padding:8px 14px; text-align:left; border-bottom:1px solid var(--border);
+      padding:8px 10px; text-align:left; border-bottom:1px solid var(--border);
     }
     .pred-table th.center { text-align:center; }
-    .pred-table td { padding:7px 14px; border-bottom:1px solid rgba(255,255,255,.04); font-size:.88rem; vertical-align:middle; }
+    .pred-table td { padding:7px 10px; border-bottom:1px solid rgba(255,255,255,.04); font-size:.88rem; vertical-align:middle; }
     .pred-table tr:last-child td { border-bottom:none; }
-    .pred-table td.score-cell { text-align:center; width:80px; }
+    .pred-table td.score-cell { text-align:center; width:70px; }
 
     .score-input {
       background:var(--surface2); border:1px solid var(--border); border-radius:6px;
@@ -93,6 +106,13 @@
     .score-input:focus { border-color:var(--accent); }
     .pred-table tr.filled td { background:rgba(34,197,94,.05); }
     .pred-table tr.partial td { background:rgba(240,180,41,.05); }
+
+    .ko-select {
+      background:var(--surface2); border:1px solid var(--border); border-radius:6px;
+      color:var(--text); padding:6px 8px; font-size:.8rem; font-family:'Inter',sans-serif;
+      outline:none; width:100%; cursor:pointer; max-width:175px;
+    }
+    .ko-select:focus { border-color:var(--accent); }
 
     /* ── Save bar ── */
     .save-bar {
@@ -151,6 +171,15 @@
     💡 <strong>Primera vez:</strong> Si ya tienes predicciones en el Excel, haz clic en <strong>"Importar Excel"</strong> para migrarlas automáticamente. Después presiona <strong>"Guardar todo"</strong>.
   </div>
 
+  <div class="phase-nav" id="phase-nav" style="display:none">
+    <button class="phase-btn active" data-phase="grupos"  onclick="switchAdminPhase('grupos')">FASE DE GRUPOS</button>
+    <button class="phase-btn" data-phase="r32"     onclick="switchAdminPhase('r32')">16AVOS DE FINAL</button>
+    <button class="phase-btn" data-phase="r16"     onclick="switchAdminPhase('r16')">OCTAVOS DE FINAL</button>
+    <button class="phase-btn" data-phase="cuartos" onclick="switchAdminPhase('cuartos')">CUARTOS DE FINAL</button>
+    <button class="phase-btn" data-phase="semi"    onclick="switchAdminPhase('semi')">SEMIFINAL</button>
+    <button class="phase-btn" data-phase="final"   onclick="switchAdminPhase('final')">GRAN FINAL</button>
+  </div>
+
   <div id="loading-data" style="text-align:center;padding:60px 20px;color:var(--muted)">
     <div style="font-size:2rem;margin-bottom:12px">⏳</div>
     <div id="loading-msg">Cargando datos...</div>
@@ -172,7 +201,53 @@ const REPO     = 'andreslindarte/polla-mundialista-pocheche';
 const EXCEL_URL= 'https://raw.githubusercontent.com/andreslindarte/polla-mundialista-pocheche/main/Quiniela_Mundial_2026_v2.xlsx';
 const PRED_FILE= 'predicciones.json';
 
-let MATCHES = [], PARTICIPANTS = [], predStore = {}, currentDate = '';
+const FIXTURE_R32 = [
+  { n:73, date:'28 jun', homeSlot:'2º Grupo A',      awaySlot:'2º Grupo B' },
+  { n:74, date:'29 jun', homeSlot:'Alemania',          awaySlot:'3º A/B/C/D/F' },
+  { n:75, date:'29 jun', homeSlot:'1º Grupo F',        awaySlot:'2º Grupo C' },
+  { n:76, date:'29 jun', homeSlot:'1º Grupo C',        awaySlot:'2º Grupo F' },
+  { n:77, date:'30 jun', homeSlot:'1º Grupo I',        awaySlot:'3º C/D/F/G/H' },
+  { n:78, date:'30 jun', homeSlot:'2º Grupo E',        awaySlot:'2º Grupo I' },
+  { n:79, date:'30 jun', homeSlot:'México',            awaySlot:'3º C/E/F/H/I' },
+  { n:80, date:'1 jul',  homeSlot:'1º Grupo L',        awaySlot:'3º E/H/I/J/K' },
+  { n:81, date:'1 jul',  homeSlot:'Estados Unidos',    awaySlot:'3º B/E/F/I/J' },
+  { n:82, date:'1 jul',  homeSlot:'1º Grupo G',        awaySlot:'3º A/E/H/I/J' },
+  { n:83, date:'2 jul',  homeSlot:'2º Grupo K',        awaySlot:'2º Grupo L' },
+  { n:84, date:'2 jul',  homeSlot:'1º Grupo H',        awaySlot:'2º Grupo J' },
+  { n:85, date:'2 jul',  homeSlot:'1º Grupo B',        awaySlot:'3º E/F/G/I/J' },
+  { n:86, date:'3 jul',  homeSlot:'Argentina',         awaySlot:'2º Grupo H' },
+  { n:87, date:'3 jul',  homeSlot:'1º Grupo K',        awaySlot:'3º D/E/I/J/L' },
+  { n:88, date:'3 jul',  homeSlot:'2º Grupo D',        awaySlot:'2º Grupo G' },
+];
+
+const FIXTURE_R16 = [
+  { n:89, date:'4 jul', homeSlot:'Gan. P74', awaySlot:'Gan. P77' },
+  { n:90, date:'4 jul', homeSlot:'Gan. P73', awaySlot:'Gan. P75' },
+  { n:91, date:'5 jul', homeSlot:'Gan. P76', awaySlot:'Gan. P78' },
+  { n:92, date:'5 jul', homeSlot:'Gan. P79', awaySlot:'Gan. P80' },
+  { n:93, date:'6 jul', homeSlot:'Gan. P83', awaySlot:'Gan. P84' },
+  { n:94, date:'6 jul', homeSlot:'Gan. P81', awaySlot:'Gan. P82' },
+  { n:95, date:'7 jul', homeSlot:'Gan. P86', awaySlot:'Gan. P88' },
+  { n:96, date:'7 jul', homeSlot:'Gan. P85', awaySlot:'Gan. P87' },
+];
+const FIXTURE_CUARTOS = [
+  { n:97,  date:'9 jul',  homeSlot:'Gan. P89',  awaySlot:'Gan. P90' },
+  { n:98,  date:'10 jul', homeSlot:'Gan. P93',  awaySlot:'Gan. P94' },
+  { n:99,  date:'11 jul', homeSlot:'Gan. P91',  awaySlot:'Gan. P92' },
+  { n:100, date:'11 jul', homeSlot:'Gan. P95',  awaySlot:'Gan. P96' },
+];
+const FIXTURE_SEMI = [
+  { n:101, date:'14 jul', homeSlot:'Gan. P97',  awaySlot:'Gan. P98' },
+  { n:102, date:'15 jul', homeSlot:'Gan. P99',  awaySlot:'Gan. P100' },
+];
+const FIXTURE_FINAL = [
+  { n:103, date:'18 jul', homeSlot:'Per. P101', awaySlot:'Per. P102' },
+  { n:104, date:'19 jul', homeSlot:'Gan. P101', awaySlot:'Gan. P102' },
+];
+
+let MATCHES = [], PARTICIPANTS = [];
+let predStore = { grupos:{}, r32:{}, r16:{}, cuartos:{}, semi:{}, final:{} };
+let currentDate = '', adminPhase = 'grupos';
 
 // ─────────────────────────────────────────────────────────
 // AUTH
@@ -181,7 +256,6 @@ function checkPin() {
   const val = document.getElementById('pin-input').value;
   if (val === PIN) {
     document.getElementById('pin-screen').style.display = 'none';
-    // Siempre mostrar token screen — si ya hay uno guardado, pre-llenamos el campo
     const saved = sessionStorage.getItem('ghToken');
     if (saved) document.getElementById('token-input').value = saved;
     document.getElementById('token-screen').style.display = 'flex';
@@ -274,11 +348,18 @@ async function loadPredictions(token) {
       headers:{ 'Authorization':`Bearer ${token}`, 'Accept':'application/vnd.github.v3.raw' },
       cache:'no-store'
     });
-    if (res.ok) {
-      const json = await res.json();
-      predStore = (typeof json === 'object' && !Array.isArray(json)) ? json : {};
+    if (!res.ok) return;
+    const json = await res.json();
+    if (typeof json !== 'object' || Array.isArray(json)) return;
+    const PHASE_KEYS = ['grupos','r32','r16','cuartos','semi','final'];
+    const isNew = Object.keys(json).some(k => PHASE_KEYS.includes(k));
+    if (isNew) {
+      predStore = { grupos:{}, r32:{}, r16:{}, cuartos:{}, semi:{}, final:{}, ...json };
+    } else {
+      // Old flat format — migrate to grupos
+      predStore = { grupos: json, r32:{}, r16:{}, cuartos:{}, semi:{}, final:{} };
     }
-  } catch(e) { predStore = {}; }
+  } catch(e) { predStore = { grupos:{}, r32:{}, r16:{}, cuartos:{}, semi:{}, final:{} }; }
 }
 
 // ─────────────────────────────────────────────────────────
@@ -287,17 +368,61 @@ async function loadPredictions(token) {
 function buildUI() {
   document.getElementById('loading-data').style.display = 'none';
   document.getElementById('date-bar').style.display = 'flex';
+  document.getElementById('phase-nav').style.display = 'flex';
+  switchAdminPhase('grupos');
+}
+
+function switchAdminPhase(phase) {
+  adminPhase = phase;
+  document.querySelectorAll('.phase-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.phase === phase);
+  });
+  if (phase === 'grupos') {
+    buildGroupsUI();
+  } else {
+    buildKOUI(phase);
+  }
+}
+
+function buildGroupsUI() {
   const dates = [...new Set(MATCHES.map(m => m.date))];
+  const phaseStore = predStore.grupos || {};
   const bar = document.getElementById('date-bar');
   bar.innerHTML = dates.map(d => {
     const hasAny = MATCHES.filter(m => m.date === d).some(m =>
-      PARTICIPANTS.some(name => (predStore[name]||{})[m.n])
+      PARTICIPANTS.some(name => (phaseStore[name]||{})[m.n])
     );
     return `<button class="date-btn" onclick="showDate('${d}')">
       ${d.toUpperCase()}${hasAny ? '<span class="dot"></span>' : ''}
     </button>`;
   }).join('');
   if (dates.length) showDate(dates[0]);
+  updateStatus();
+}
+
+function getKOFixture(phase) {
+  return phase === 'r32' ? FIXTURE_R32 : phase === 'r16' ? FIXTURE_R16
+       : phase === 'cuartos' ? FIXTURE_CUARTOS : phase === 'semi' ? FIXTURE_SEMI
+       : FIXTURE_FINAL;
+}
+
+function buildKOUI(phase) {
+  const fixture = getKOFixture(phase);
+  const dates = [...new Set(fixture.map(m => m.date))];
+  const phaseStore = predStore[phase] || {};
+  const bar = document.getElementById('date-bar');
+  bar.innerHTML = dates.map(d => {
+    const hasAny = fixture.filter(m => m.date === d).some(m =>
+      PARTICIPANTS.some(name => {
+        const p = (phaseStore[name]||{})[m.n];
+        return p && p.gl90 !== undefined && p.gv90 !== undefined && p.avanza;
+      })
+    );
+    return `<button class="date-btn" onclick="showKODate('${d}')">
+      ${d.toUpperCase()}${hasAny ? '<span class="dot"></span>' : ''}
+    </button>`;
+  }).join('');
+  if (dates.length) showKODate(dates[0]);
   updateStatus();
 }
 
@@ -310,9 +435,20 @@ function showDate(date) {
   document.getElementById('matches-container').innerHTML = dayMatches.map(renderMatchCard).join('');
 }
 
+function showKODate(date) {
+  currentDate = date;
+  document.querySelectorAll('.date-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim().startsWith(date.toUpperCase()));
+  });
+  const fixture = getKOFixture(adminPhase);
+  const dayMatches = fixture.filter(m => m.date === date);
+  document.getElementById('matches-container').innerHTML = dayMatches.map(m => renderKOMatchCard(m, adminPhase)).join('');
+}
+
 function renderMatchCard(match) {
+  const phaseStore = predStore.grupos || {};
   const rows = PARTICIPANTS.map((name, pi) => {
-    const pred = (predStore[name]||{})[match.n];
+    const pred = (phaseStore[name]||{})[match.n];
     const gl = pred != null ? pred.gl : '';
     const gv = pred != null ? pred.gv : '';
     const cls = pred != null ? 'filled' : '';
@@ -347,6 +483,84 @@ function renderMatchCard(match) {
   </div>`;
 }
 
+function renderKOMatchCard(match, phase) {
+  const phaseStore = predStore[phase] || {};
+  const rows = PARTICIPANTS.map((name, pi) => {
+    const pred = (phaseStore[name]||{})[match.n] || {};
+    const gl90  = pred.gl90  !== undefined ? pred.gl90  : '';
+    const gv90  = pred.gv90  !== undefined ? pred.gv90  : '';
+    const avanza= pred.avanza || '';
+    const gl120 = pred.gl120 !== undefined ? pred.gl120 : '';
+    const gv120 = pred.gv120 !== undefined ? pred.gv120 : '';
+    const pen   = pred.penales === true;
+    const hasMins = gl90 !== '' && gv90 !== '' && avanza;
+    const cls = hasMins ? 'filled' : (gl90 !== '' || gv90 !== '') ? 'partial' : '';
+    return `<tr class="${cls}" id="kov-${match.n}-${pi}">
+      <td>${name}</td>
+      <td class="score-cell">
+        <input class="score-input" type="number" min="0" max="30" style="width:46px"
+               data-match="${match.n}" data-pi="${pi}" data-field="gl90" data-phase="${phase}"
+               value="${gl90}" oninput="onKOInput(this)" onwheel="this.blur()">
+        <div style="color:var(--muted);font-size:.65rem;text-align:center;margin-top:2px">90'</div>
+      </td>
+      <td class="score-cell">
+        <input class="score-input" type="number" min="0" max="30" style="width:46px"
+               data-match="${match.n}" data-pi="${pi}" data-field="gv90" data-phase="${phase}"
+               value="${gv90}" oninput="onKOInput(this)" onwheel="this.blur()">
+        <div style="color:var(--muted);font-size:.65rem;text-align:center;margin-top:2px">90'</div>
+      </td>
+      <td>
+        <select class="ko-select" data-match="${match.n}" data-pi="${pi}" data-field="avanza" data-phase="${phase}"
+                onchange="onKOInput(this)">
+          <option value="">¿Quién avanza?</option>
+          <option value="${match.homeSlot}" ${avanza===match.homeSlot?'selected':''}>⬅ ${match.homeSlot}</option>
+          <option value="${match.awaySlot}" ${avanza===match.awaySlot?'selected':''}>➡ ${match.awaySlot}</option>
+        </select>
+      </td>
+      <td class="score-cell">
+        <input class="score-input" type="number" min="0" max="30" style="width:46px"
+               data-match="${match.n}" data-pi="${pi}" data-field="gl120" data-phase="${phase}"
+               value="${gl120}" oninput="onKOInput(this)" onwheel="this.blur()" placeholder="—">
+        <div style="color:var(--muted);font-size:.65rem;text-align:center;margin-top:2px">120'</div>
+      </td>
+      <td class="score-cell">
+        <input class="score-input" type="number" min="0" max="30" style="width:46px"
+               data-match="${match.n}" data-pi="${pi}" data-field="gv120" data-phase="${phase}"
+               value="${gv120}" oninput="onKOInput(this)" onwheel="this.blur()" placeholder="—">
+        <div style="color:var(--muted);font-size:.65rem;text-align:center;margin-top:2px">120'</div>
+      </td>
+      <td style="text-align:center;min-width:58px">
+        <label style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer">
+          <input type="checkbox" data-match="${match.n}" data-pi="${pi}" data-field="penales" data-phase="${phase}"
+                 ${pen?'checked':''} onchange="onKOInput(this)"
+                 style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer">
+          <span style="color:var(--muted);font-size:.65rem">Pen.</span>
+        </label>
+      </td>
+    </tr>`;
+  }).join('');
+
+  return `<div class="match-card">
+    <div class="match-header">
+      <span class="match-num">#${match.n}</span>
+      <span class="match-teams">${match.homeSlot} <span style="color:var(--muted);font-weight:400">vs</span> ${match.awaySlot}</span>
+      <span class="match-group" style="color:var(--accent)">${match.date}</span>
+    </div>
+    <table class="pred-table">
+      <thead><tr>
+        <th>Participante</th>
+        <th class="center">Local 90'</th>
+        <th class="center">Visit. 90'</th>
+        <th>Avanza</th>
+        <th class="center">Local 120'</th>
+        <th class="center">Visit. 120'</th>
+        <th class="center">Pen.</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
 function onInput(input) {
   const matchN = parseInt(input.dataset.match);
   const pi     = parseInt(input.dataset.pi);
@@ -356,24 +570,68 @@ function onInput(input) {
   const gvEl   = row.querySelector('[data-side="gv"]');
   const gl = glEl.value.trim(), gv = gvEl.value.trim();
 
-  if (!predStore[name]) predStore[name] = {};
+  if (!predStore.grupos[name]) predStore.grupos[name] = {};
   if (gl !== '' && gv !== '' && !isNaN(parseInt(gl)) && !isNaN(parseInt(gv))) {
-    predStore[name][matchN] = { gl:parseInt(gl), gv:parseInt(gv) };
+    predStore.grupos[name][matchN] = { gl:parseInt(gl), gv:parseInt(gv) };
     row.className = 'filled';
   } else {
-    delete predStore[name][matchN];
+    delete predStore.grupos[name][matchN];
     row.className = (gl !== '' || gv !== '') ? 'partial' : '';
   }
   updateStatus();
 }
 
+function onKOInput(el) {
+  const matchN = parseInt(el.dataset.match);
+  const pi     = parseInt(el.dataset.pi);
+  const name   = PARTICIPANTS[pi];
+  const phase  = el.dataset.phase;
+  const field  = el.dataset.field;
+
+  if (!predStore[phase]) predStore[phase] = {};
+  if (!predStore[phase][name]) predStore[phase][name] = {};
+  if (!predStore[phase][name][matchN]) predStore[phase][name][matchN] = {};
+
+  const pred = predStore[phase][name][matchN];
+  if (field === 'penales') {
+    pred.penales = el.checked;
+  } else if (field === 'avanza') {
+    pred.avanza = el.value;
+  } else {
+    const v = el.value.trim();
+    if (v !== '' && !isNaN(parseInt(v))) {
+      pred[field] = parseInt(v);
+    } else {
+      delete pred[field];
+    }
+  }
+
+  const row = document.getElementById(`kov-${matchN}-${pi}`);
+  const hasMins = pred.gl90 !== undefined && pred.gv90 !== undefined && pred.avanza;
+  row.className = hasMins ? 'filled' : (pred.gl90 !== undefined || pred.gv90 !== undefined) ? 'partial' : '';
+  updateStatus();
+}
+
 function updateStatus() {
-  let total = 0, filled = 0;
-  PARTICIPANTS.forEach(name => MATCHES.forEach(m => {
-    total++;
-    if ((predStore[name]||{})[m.n] != null) filled++;
-  }));
-  setStatus(`${filled} de ${total} predicciones ingresadas`);
+  if (adminPhase === 'grupos') {
+    const phaseStore = predStore.grupos || {};
+    let total = 0, filled = 0;
+    PARTICIPANTS.forEach(name => MATCHES.forEach(m => {
+      total++;
+      if ((phaseStore[name]||{})[m.n] != null) filled++;
+    }));
+    setStatus(`Grupos: ${filled} de ${total} predicciones ingresadas`);
+  } else {
+    const fixture = getKOFixture(adminPhase);
+    const phaseStore = predStore[adminPhase] || {};
+    let total = 0, filled = 0;
+    PARTICIPANTS.forEach(name => fixture.forEach(m => {
+      total++;
+      const p = (phaseStore[name]||{})[m.n];
+      if (p && p.gl90 !== undefined && p.gv90 !== undefined && p.avanza) filled++;
+    }));
+    setStatus(`${adminPhase.toUpperCase()}: ${filled} de ${total} predicciones completas`);
+  }
 }
 
 function setStatus(msg) {
@@ -392,7 +650,6 @@ async function saveAll() {
   setStatus('Subiendo a GitHub...');
 
   try {
-    // Get SHA of existing file (needed to update; absent for first create)
     let sha = null;
     const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${PRED_FILE}`, {
       headers:{ 'Authorization':`Bearer ${token}`, 'Accept':'application/vnd.github.v3+json' }
@@ -420,7 +677,6 @@ async function saveAll() {
     if (putRes.ok) {
       setStatus('✅ Guardado. La web principal se actualiza en ~1 min.');
       document.getElementById('import-hint').style.display = 'none';
-      // Refresh date dots
       buildDateDots();
     } else {
       const err = await putRes.json();
@@ -433,16 +689,19 @@ async function saveAll() {
 }
 
 function buildDateDots() {
+  const fixture = adminPhase === 'grupos' ? MATCHES : getKOFixture(adminPhase);
+  const phaseStore = predStore[adminPhase] || {};
   document.querySelectorAll('.date-btn').forEach(b => {
-    const dateText = b.textContent.trim().replace('●','').trim();
-    const date = dateText.toLowerCase().replace(' ', ' ');
-    // Re-check if any predictions exist for this date
-    const matches = MATCHES.filter(m => m.date.toUpperCase() === dateText.split('\n')[0].trim());
-    const hasAny = matches.some(m => PARTICIPANTS.some(name => (predStore[name]||{})[m.n]));
+    const dateText = b.textContent.trim().replace('●','').replace('\n','').trim();
+    const matches = fixture.filter(m => m.date.toUpperCase() === dateText);
+    const hasAny = matches.some(m => PARTICIPANTS.some(name => {
+      if (adminPhase === 'grupos') return (phaseStore[name]||{})[m.n];
+      const p = (phaseStore[name]||{})[m.n];
+      return p && p.gl90 !== undefined && p.gv90 !== undefined && p.avanza;
+    }));
     const dot = b.querySelector('.dot');
     if (hasAny && !dot) {
-      const s = document.createElement('span');
-      s.className = 'dot'; b.appendChild(s);
+      const s = document.createElement('span'); s.className = 'dot'; b.appendChild(s);
     } else if (!hasAny && dot) dot.remove();
   });
 }
@@ -472,13 +731,13 @@ function importFromExcel(input) {
         const bc = 3 + p * 2;
         const gl = row[bc], gv = row[bc+1];
         if (gl !== '' && gv !== '' && !isNaN(Number(gl)) && !isNaN(Number(gv))) {
-          if (!predStore[name]) predStore[name] = {};
-          predStore[name][n] = { gl:Number(gl), gv:Number(gv) };
+          if (!predStore.grupos[name]) predStore.grupos[name] = {};
+          predStore.grupos[name][n] = { gl:Number(gl), gv:Number(gv) };
           imported++;
         }
       });
     }
-    showDate(currentDate);
+    if (adminPhase === 'grupos') showDate(currentDate);
     updateStatus();
     alert(`✅ ${imported} predicciones importadas.\nRevisa los datos y presiona "Guardar todo" para subir a GitHub.`);
   };
