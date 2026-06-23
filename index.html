@@ -545,7 +545,7 @@ function avatarImg(name, cls) {
 
 async function fetchLiveResults() {
   try {
-    const url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260627&limit=100';
+    const url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200';
     const res = await fetch(url, { cache:'no-store' });
     if (!res.ok) return false;
     const json = await res.json();
@@ -602,6 +602,7 @@ async function launchApp() {
   const liveEl = document.getElementById('last-updated');
   liveEl.textContent = 'Obteniendo resultados en vivo...';
   const liveCount = await fetchLiveResults();
+  refreshGroupDots();
   const time = new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
   if (liveCount === false) {
     liveEl.textContent = 'Actualizado ' + time;
@@ -671,6 +672,19 @@ function buildGroupSelector() {
     const label = d.toUpperCase();
     return `<button class="grp-btn" id="date-btn-${i}" onclick="showDate('${d}')">${label}${dot}</button>`;
   }).join('');
+}
+
+function refreshGroupDots() {
+  const { matches, fixture } = DATA;
+  const dates = [...new Set(matches.map(m => m.date))];
+  dates.forEach((d, i) => {
+    const btn = document.getElementById(`date-btn-${i}`);
+    if (!btn) return;
+    const played = matches.filter(m => m.date === d && fixture[m.n]).length;
+    const existingDot = btn.querySelector('.grp-dot');
+    if (played > 0 && !existingDot) btn.insertAdjacentHTML('beforeend', '<span class="grp-dot"></span>');
+    else if (played === 0 && existingDot) existingDot.remove();
+  });
 }
 
 function showDate(date) {
