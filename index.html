@@ -168,6 +168,41 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
 .chip { background:var(--surface2); border:1px solid var(--border); border-radius:20px; padding:5px 14px; font-size:.8rem; font-weight:500; color:var(--muted); }
 .chip strong { color:var(--text); font-weight:700; }
 
+/* ── GROUP STANDINGS ── */
+.standings-section { margin-top:32px; }
+.standings-title { font-family:'Barlow Condensed',sans-serif; font-size:1.2rem; font-weight:800; letter-spacing:.05em; margin-bottom:16px; }
+.standings-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
+.standings-group { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.standings-group-hdr { background:var(--mid); padding:7px 14px; font-family:'Barlow Condensed',sans-serif; font-size:.88rem; font-weight:700; letter-spacing:.1em; color:var(--accent); }
+.standings-table { width:100%; border-collapse:collapse; font-size:.76rem; }
+.standings-table th { padding:4px 5px; text-align:center; color:var(--muted); font-weight:600; font-size:.7rem; background:rgba(255,255,255,.03); border-bottom:1px solid var(--border); }
+.standings-table th.s-team { text-align:left; padding-left:10px; }
+.standings-table td { padding:6px 5px; text-align:center; border-bottom:1px solid var(--border); }
+.standings-table td.s-team { text-align:left; padding-left:10px; white-space:nowrap; }
+.standings-table tr:last-child td { border-bottom:none; }
+.standings-table tr.standings-qual { border-left:3px solid var(--accent); }
+.s-pts { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:.88rem; color:var(--accent); }
+.s-pos { color:var(--green); font-weight:600; }
+.s-neg { color:var(--red); font-weight:600; }
+
+/* ── BRACKET ── */
+.bkt-title { font-family:'Barlow Condensed',sans-serif; font-size:1.2rem; font-weight:800; letter-spacing:.05em; margin-bottom:16px; }
+.bkt-wrap { overflow-x:auto; padding-bottom:20px; }
+.bkt-rounds { display:flex; gap:3px; align-items:stretch; }
+.bkt-col { flex:0 0 155px; display:flex; flex-direction:column; }
+.bkt-col-hdr { text-align:center; font-family:'Barlow Condensed',sans-serif; font-size:.78rem; font-weight:700; letter-spacing:.07em; color:var(--accent); background:var(--mid); padding:5px 4px; border-radius:5px 5px 0 0; margin-bottom:2px; flex-shrink:0; }
+.bkt-slot { display:flex; align-items:center; padding:2px 1px; box-sizing:border-box; }
+.bkt-match { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:5px; overflow:hidden; }
+.bkt-empty { height:32px; }
+.bkt-hdr { font-size:.62rem; color:var(--muted); padding:2px 6px; background:rgba(255,255,255,.03); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:4px; }
+.bkt-badge { font-size:.58rem; background:rgba(240,180,41,.2); color:var(--accent); border-radius:3px; padding:0 3px; }
+.bkt-team { display:flex; align-items:center; padding:4px 6px; font-size:.7rem; gap:3px; border-bottom:1px solid var(--border); }
+.bkt-team:last-child { border-bottom:none; }
+.bkt-nm { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+.bkt-sc { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:.85rem; margin-left:2px; flex-shrink:0; }
+.bkt-win { color:var(--accent); font-weight:700; background:rgba(240,180,41,.08); }
+.bkt-lose { color:var(--muted); }
+
 /* ── GROUP VIEW ── */
 .group-selector { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px; }
 .grp-btn {
@@ -304,6 +339,7 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
   <div class="tab-bar">
     <div class="tab active" onclick="switchTab('ranking')">🏆 Ranking</div>
     <div class="tab" onclick="switchTab('partidos')">📅 Por fecha</div>
+    <div class="tab" onclick="switchTab('bracket')">🏟 Bracket</div>
   </div>
 
   <main>
@@ -327,12 +363,15 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
         </thead>
         <tbody id="rank-tbody"></tbody>
       </table>
+      <div id="group-standings"></div>
     </div>
 
     <div class="panel" id="panel-partidos">
       <div class="group-selector" id="group-selector"></div>
       <div id="group-detail"></div>
     </div>
+
+    <div class="panel" id="panel-bracket"></div>
   </main>
 </div>
 
@@ -386,6 +425,152 @@ const FIXTURE_FINAL = [
   { n:103, date:'18 jul', venue:'Miami',                 homeSlot:'Per. P101',    awaySlot:'Per. P102' },
   { n:104, date:'19 jul', venue:'Nueva York NJ',         homeSlot:'Gan. P101',    awaySlot:'Gan. P102' },
 ];
+const ALL_FIXTURE = [...FIXTURE_R32,...FIXTURE_R16,...FIXTURE_CUARTOS,...FIXTURE_SEMI,...FIXTURE_FINAL];
+
+// ── CÓDIGOS DE BANDERA (nombre en español → ISO 2 letras) ──
+const FLAG_CODES = {
+  'Argentina':'ar','Brasil':'br','Uruguay':'uy','Colombia':'co','Ecuador':'ec',
+  'Paraguay':'py','Chile':'cl','Venezuela':'ve','Bolivia':'bo','Perú':'pe',
+  'México':'mx','Estados Unidos':'us','Canadá':'ca','Costa Rica':'cr','Panamá':'pa',
+  'Honduras':'hn','El Salvador':'sv','Jamaica':'jm','Trinidad y Tobago':'tt',
+  'Guatemala':'gt','Cuba':'cu','Haití':'ht',
+  'Alemania':'de','España':'es','Francia':'fr','Portugal':'pt',
+  'Países Bajos':'nl','Bélgica':'be','Inglaterra':'gb-eng','Croacia':'hr',
+  'Suiza':'ch','Serbia':'rs','Austria':'at','Dinamarca':'dk','Turquía':'tr',
+  'Escocia':'gb-sct','Eslovaquia':'sk','Hungría':'hu','Polonia':'pl',
+  'Rumanía':'ro','Eslovenia':'si','Albania':'al','Georgia':'ge','Ucrania':'ua',
+  'Suecia':'se','Noruega':'no','Islandia':'is','Gales':'gb-wls','Rep. Checa':'cz',
+  'Marruecos':'ma','Senegal':'sn','Nigeria':'ng','Ghana':'gh','Costa de Marfil':'ci',
+  'Camerún':'cm','Egipto':'eg','Argelia':'dz','Túnez':'tn','Sudáfrica':'za',
+  'Mali':'ml','Zambia':'zm','Tanzania':'tz','Cabo Verde':'cv','Comoras':'km',
+  'Japón':'jp','Corea del Sur':'kr','Arabia Saudita':'sa','Australia':'au',
+  'Irán':'ir','Catar':'qa','Irak':'iq','Indonesia':'id','Uzbekistán':'uz',
+  'China':'cn','Tailandia':'th','Jordania':'jo','Nueva Zelanda':'nz',
+  'Israel':'il','Serbia':'rs','Eslovenia':'si',
+};
+
+function flagImg(team) {
+  const code = FLAG_CODES[team];
+  if (!code) return '';
+  return `<img src="https://flagcdn.com/20x15/${code}.png" style="height:13px;width:auto;margin-right:4px;vertical-align:middle;border-radius:1px" loading="lazy" onerror="this.style.display='none'">`;
+}
+
+// ── TABLA DE GRUPOS ─────────────────────────────────────────
+function renderGroupStandings() {
+  const { matches, fixture } = DATA;
+  const groups = {};
+  matches.forEach(m => {
+    const g = m.group;
+    if (!g) return;
+    if (!groups[g]) groups[g] = {};
+    [m.home, m.away].forEach(t => { if (!groups[g][t]) groups[g][t] = {pj:0,pg:0,pe:0,pp:0,gf:0,gc:0,pts:0}; });
+    const res = fixture[m.n];
+    if (!res) return;
+    const {gl, gv} = res;
+    groups[g][m.home].pj++; groups[g][m.away].pj++;
+    groups[g][m.home].gf += gl; groups[g][m.home].gc += gv;
+    groups[g][m.away].gf += gv; groups[g][m.away].gc += gl;
+    if (gl > gv)      { groups[g][m.home].pg++; groups[g][m.home].pts += 3; groups[g][m.away].pp++; }
+    else if (gl < gv) { groups[g][m.away].pg++; groups[g][m.away].pts += 3; groups[g][m.home].pp++; }
+    else              { groups[g][m.home].pe++; groups[g][m.home].pts++; groups[g][m.away].pe++; groups[g][m.away].pts++; }
+  });
+  const sortedGroups = Object.keys(groups).sort();
+  if (!sortedGroups.length) { document.getElementById('group-standings').innerHTML = ''; return; }
+  document.getElementById('group-standings').innerHTML = `
+    <div class="standings-section">
+      <h3 class="standings-title">Tabla de grupos</h3>
+      <div class="standings-grid">
+        ${sortedGroups.map(g => {
+          const teams = Object.entries(groups[g])
+            .map(([name,s]) => ({name,...s,dif:s.gf-s.gc}))
+            .sort((a,b) => b.pts-a.pts || b.dif-a.dif || b.gf-a.gf);
+          return `<div class="standings-group">
+            <div class="standings-group-hdr">Grupo ${g}</div>
+            <table class="standings-table">
+              <thead><tr><th class="s-team">Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>DIF</th><th>Pts</th></tr></thead>
+              <tbody>${teams.map((t,i) => `
+                <tr${i<2?' class="standings-qual"':''}>
+                  <td class="s-team">${flagImg(t.name)}${t.name}</td>
+                  <td>${t.pj}</td><td>${t.pg}</td><td>${t.pe}</td><td>${t.pp}</td>
+                  <td>${t.gf}</td><td>${t.gc}</td>
+                  <td class="${t.dif>0?'s-pos':t.dif<0?'s-neg':''}">${t.dif>0?'+':''}${t.dif}</td>
+                  <td class="s-pts">${t.pts}</td>
+                </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+// ── BRACKET ELIMINATORIO ─────────────────────────────────────
+function resolveSlot(slot) {
+  if (!slot) return '?';
+  const gm = slot.match(/^Gan\.\s*P(\d+)/);
+  const pm = slot.match(/^Per\.\s*P(\d+)/);
+  if (!gm && !pm) return slot;
+  const n = parseInt((gm||pm)[1]);
+  const phase = FIXTURE_R32.find(f=>f.n===n)?'r32':FIXTURE_R16.find(f=>f.n===n)?'r16'
+              : FIXTURE_CUARTOS.find(f=>f.n===n)?'cuartos':FIXTURE_SEMI.find(f=>f.n===n)?'semi':'final';
+  const fm = ALL_FIXTURE.find(f=>f.n===n);
+  if (!fm) return slot;
+  const res = DATA.fixtureKO[phase]?.[n];
+  if (!res || !res.avanza) return slot;
+  const winner = res.avanza==='home' ? fm.homeSlot : fm.awaySlot;
+  const loser  = res.avanza==='home' ? fm.awaySlot : fm.homeSlot;
+  return resolveSlot(pm ? loser : winner);
+}
+
+function bktMatchCard(m) {
+  if (!m) return '<div class="bkt-empty"></div>';
+  const phase = FIXTURE_R32.find(f=>f.n===m.n)?'r32':FIXTURE_R16.find(f=>f.n===m.n)?'r16'
+              : FIXTURE_CUARTOS.find(f=>f.n===m.n)?'cuartos':FIXTURE_SEMI.find(f=>f.n===m.n)?'semi':'final';
+  const res = DATA.fixtureKO[phase]?.[m.n];
+  const home = resolveSlot(m.homeSlot);
+  const away = resolveSlot(m.awaySlot);
+  const hW = res && res.avanza==='home', aW = res && res.avanza==='away';
+  const suffix = res && res.penales ? '<span class="bkt-badge">PEN</span>'
+               : res && res.gl120 !== null ? '<span class="bkt-badge">PT</span>' : '';
+  return `<div class="bkt-match">
+    <div class="bkt-hdr">P${m.n} · ${m.date} ${suffix}</div>
+    <div class="bkt-team${hW?' bkt-win':res?' bkt-lose':''}">
+      ${flagImg(home)}<span class="bkt-nm" title="${home}">${home}</span>${res?`<span class="bkt-sc">${res.gl90}</span>`:''}
+    </div>
+    <div class="bkt-team${aW?' bkt-win':res?' bkt-lose':''}">
+      ${flagImg(away)}<span class="bkt-nm" title="${away}">${away}</span>${res?`<span class="bkt-sc">${res.gv90}</span>`:''}
+    </div>
+  </div>`;
+}
+
+function renderBracket() {
+  const R32_ORDER = [74,77,73,75, 83,84,81,82, 76,78,79,80, 85,86,87,88];
+  const R16_ORDER = [89,90,93,94, 91,92,95,96];
+  const QF_ORDER  = [97,98,99,100];
+  const SF_ORDER  = [101,102];
+  const F_ORDER   = [104,103];
+  const makeSlots = (nums, fix) => nums.map(n => fix.find(f=>f.n===n));
+  const rounds = [
+    { label:'16avos',      matches:makeSlots(R32_ORDER, FIXTURE_R32),     n:16 },
+    { label:'Octavos',     matches:makeSlots(R16_ORDER, FIXTURE_R16),     n:8  },
+    { label:'Cuartos',     matches:makeSlots(QF_ORDER,  FIXTURE_CUARTOS), n:4  },
+    { label:'Semifinal',   matches:makeSlots(SF_ORDER,  FIXTURE_SEMI),    n:2  },
+    { label:'Final / 3°',  matches:makeSlots(F_ORDER,   FIXTURE_FINAL),   n:2  },
+  ];
+  const totalH = 16 * 82;
+  document.getElementById('panel-bracket').innerHTML = `
+    <div class="bkt-title">Cuadro Eliminatorio — Mundial 2026</div>
+    <div class="bkt-wrap">
+      <div class="bkt-rounds" style="min-height:${totalH}px">
+        ${rounds.map(r => `
+          <div class="bkt-col">
+            <div class="bkt-col-hdr">${r.label}</div>
+            ${r.matches.map(m => `<div class="bkt-slot" style="height:${totalH/r.n}px">${bktMatchCard(m)}</div>`).join('')}
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
 // Ejemplo:
 // const EXCEL_URL = 'https://raw.githubusercontent.com/TU_USUARIO/polla-pocheche/main/Quiniela_Mundial_2026_v2.xlsx';
 
@@ -859,9 +1044,11 @@ async function launchApp() {
 }
 
 function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['ranking','partidos'][i] === tab));
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['ranking','partidos','bracket'][i] === tab));
   document.getElementById('panel-ranking').classList.toggle('active', tab === 'ranking');
   document.getElementById('panel-partidos').classList.toggle('active', tab === 'partidos');
+  document.getElementById('panel-bracket').classList.toggle('active', tab === 'bracket');
+  if (tab === 'bracket') renderBracket();
 }
 
 // ── PHASE SWITCHING ────────────────────────────────────────
@@ -900,6 +1087,7 @@ function getPhaseConfig(phase) {
 
 // ── KNOCKOUT RANKING ───────────────────────────────────────
 function renderKnockoutRanking(fixture, phaseKeys, label) {
+  document.getElementById('group-standings').innerHTML = '';
   // Combine stats across all keys in this phase tab
   const { participants } = DATA;
   const combined = participants.map((p,i) => ({ name:p.name, pts:0, exacto:0, exactoComp:0, avance:0, prorroga:0, penales:0, miss:0 }));
@@ -948,13 +1136,13 @@ function renderKnockoutRanking(fixture, phaseKeys, label) {
 
   document.getElementById('rank-thead-row').innerHTML = `
     <th style="width:46px">#</th><th>Participante</th><th>Pts</th>
-    <th>Únicos</th><th>Compartidos</th><th>Avances</th><th>Sin acierto</th>`;
+    <th>Únicos</th><th>Compartidos</th>`;
   document.getElementById('rank-tbody').innerHTML = ranked.map((p,i) => `
     <tr>
       <td><span class="rank-num ${i<3?'r'+(i+1):''}">${i+1}</span></td>
       <td class="pred-name">${avatarImg(p.name,'rank-avatar')}${p.name}</td>
       <td><span class="pts-badge">${p.pts}</span></td>
-      <td>${p.exacto}</td><td>${p.exactoComp}</td><td>${p.avance}</td><td>${p.miss}</td>
+      <td>${p.exacto}</td><td>${p.exactoComp}</td>
     </tr>`).join('');
 }
 
@@ -1120,6 +1308,7 @@ function renderRanking() {
       <td><span class="pts-badge">${p.pts}</span></td>
       <td>${p.solo}</td><td>${p.shared}</td><td>${p.miss}</td>
     </tr>`).join('');
+  renderGroupStandings();
 }
 
 let currentDate = '';
