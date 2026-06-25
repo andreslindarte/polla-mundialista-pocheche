@@ -505,11 +505,59 @@ function renderGroupStandings() {
 }
 
 // ── BRACKET ELIMINATORIO ─────────────────────────────────────
-function resolveSlot(slot) {
+
+// Aplica el mapa de grupos a los fixtures (actualiza home/away con nombres reales)
+function applyGroupStandingsToFixtures() {
+  const slotMap = buildSlotMap();
+  ALL_FIXTURE.forEach(m => {
+    if (slotMap[m.homeSlot]) m.home = slotMap[m.homeSlot];
+    if (slotMap[m.awaySlot]) m.away = slotMap[m.awaySlot];
+  });
+}
+
+// Construye un mapa "1º Grupo A" → equipo real desde las standings actuales
+function buildSlotMap() {
+  const { matches, fixture } = DATA;
+  const groups = {};
+  matches.forEach(m => {
+    const g = m.group;
+    if (!g) return;
+    if (!groups[g]) groups[g] = {};
+    [m.home, m.away].forEach(t => { if (!groups[g][t]) groups[g][t] = {pj:0,pg:0,pe:0,pp:0,gf:0,gc:0,pts:0}; });
+    const res = fixture[m.n];
+    if (!res) return;
+    const {gl, gv} = res;
+    groups[g][m.home].pj++; groups[g][m.away].pj++;
+    groups[g][m.home].gf += gl; groups[g][m.home].gc += gv;
+    groups[g][m.away].gf += gv; groups[g][m.away].gc += gl;
+    if (gl > gv)      { groups[g][m.home].pg++; groups[g][m.home].pts += 3; groups[g][m.away].pp++; }
+    else if (gl < gv) { groups[g][m.away].pg++; groups[g][m.away].pts += 3; groups[g][m.home].pp++; }
+    else              { groups[g][m.home].pe++; groups[g][m.home].pts++; groups[g][m.away].pe++; groups[g][m.away].pts++; }
+  });
+  const slotMap = {};
+  Object.entries(groups).forEach(([g, teams]) => {
+    const sorted = Object.entries(teams)
+      .map(([name, s]) => ({name, ...s, dif: s.gf - s.gc}))
+      .sort((a, b) => b.pts - a.pts || b.dif - a.dif || b.gf - a.gf);
+    sorted.forEach((t, i) => {
+      const pos = ['1º','2º','3º','4º'][i];
+      if (pos) slotMap[`${pos} Grupo ${g}`] = t.name;
+    });
+  });
+  return slotMap;
+}
+
+// Resuelve un slot a nombre real de equipo
+// slotMap proviene de las standings de grupos
+// Los fixtures de ESPN ya actualizan fixture.home / fixture.away directamente
+function resolveSlot(slot, slotMap = {}) {
   if (!slot) return '?';
+  // Prioridad 1: mapa de posiciones de grupo ("1º Grupo A" → "Argentina")
+  if (slotMap[slot]) return slotMap[slot];
+  // Prioridad 2: ganador/perdedor de partido eliminatorio
   const gm = slot.match(/^Gan\.\s*P(\d+)/);
   const pm = slot.match(/^Per\.\s*P(\d+)/);
-  if (!gm && !pm) return slot;
+  if (!gm && !pm) return slot; // nombre fijo ("Alemania") o slot irresuelto
   const n = parseInt((gm||pm)[1]);
   const phase = FIXTURE_R32.find(f=>f.n===n)?'r32':FIXTURE_R16.find(f=>f.n===n)?'r16'
               : FIXTURE_CUARTOS.find(f=>f.n===n)?'cuartos':FIXTURE_SEMI.find(f=>f.n===n)?'semi':'final';
@@ -517,18 +565,23 @@ function resolveSlot(slot) {
   if (!fm) return slot;
   const res = DATA.fixtureKO[phase]?.[n];
   if (!res || !res.avanza) return slot;
-  const winner = res.avanza==='home' ? fm.homeSlot : fm.awaySlot;
-  const loser  = res.avanza==='home' ? fm.awaySlot : fm.homeSlot;
-  return resolveSlot(pm ? loser : winner);
+  // Usar home/away reales si ESPN ya los resolvió, si no usar homeSlot/awaySlot
+  const winnerSlot = res.avanza==='home' ? (fm.home || fm.homeSlot) : (fm.away || fm.awaySlot);
+  const loserSlot  = res.avanza==='home' ? (fm.away || fm.awaySlot) : (fm.home || fm.homeSlot);
+  // Si el slot resuelto es ya un nombre de equipo (no "Gan. P..." ni "Xº Grupo Y"), devolverlo directo
+  const resolved = pm ? loserSlot : winnerSlot;
+  if (!resolved.match(/^(Gan\.|Per\.|\dº Grupo)/)) return resolved;
+  return resolveSlot(resolved, slotMap);
 }
 
-function bktMatchCard(m) {
+function bktMatchCard(m, slotMap = {}) {
   if (!m) return '<div class="bkt-empty"></div>';
   const phase = FIXTURE_R32.find(f=>f.n===m.n)?'r32':FIXTURE_R16.find(f=>f.n===m.n)?'r16'
               : FIXTURE_CUARTOS.find(f=>f.n===m.n)?'cuartos':FIXTURE_SEMI.find(f=>f.n===m.n)?'semi':'final';
   const res = DATA.fixtureKO[phase]?.[m.n];
-  const home = resolveSlot(m.homeSlot);
-  const away = resolveSlot(m.awaySlot);
+  // ESPN actualiza m.home / m.away cuando identifica los equipos reales
+  const home = m.home || resolveSlot(m.homeSlot, slotMap);
+  const away = m.away || resolveSlot(m.awaySlot, slotMap);
   const hW = res && res.avanza==='home', aW = res && res.avanza==='away';
   const suffix = res && res.penales ? '<span class="bkt-badge">PEN</span>'
                : res && res.gl120 !== null ? '<span class="bkt-badge">PT</span>' : '';
@@ -544,6 +597,7 @@ function bktMatchCard(m) {
 }
 
 function renderBracket() {
+  const slotMap = buildSlotMap();
   const R32_ORDER = [74,77,73,75, 83,84,81,82, 76,78,79,80, 85,86,87,88];
   const R16_ORDER = [89,90,93,94, 91,92,95,96];
   const QF_ORDER  = [97,98,99,100];
@@ -565,7 +619,7 @@ function renderBracket() {
         ${rounds.map(r => `
           <div class="bkt-col">
             <div class="bkt-col-hdr">${r.label}</div>
-            ${r.matches.map(m => `<div class="bkt-slot" style="height:${totalH/r.n}px">${bktMatchCard(m)}</div>`).join('')}
+            ${r.matches.map(m => `<div class="bkt-slot" style="height:${totalH/r.n}px">${bktMatchCard(m, slotMap)}</div>`).join('')}
           </div>`).join('')}
       </div>
     </div>`;
@@ -1029,6 +1083,7 @@ async function launchApp() {
   const liveCount = await fetchLiveResults();
   refreshGroupDots();
   await fetchKnockoutData();
+  applyGroupStandingsToFixtures();
   const time = new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
   if (liveCount === false) {
     liveEl.textContent = 'Actualizado ' + time;
@@ -1041,6 +1096,7 @@ async function launchApp() {
   renderRanking();
   const firstDate = DATA.matches[0]?.date || '';
   showDate(firstDate);
+  if (document.getElementById('panel-bracket').classList.contains('active')) renderBracket();
 }
 
 function switchTab(tab) {
