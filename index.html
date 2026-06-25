@@ -539,6 +539,9 @@ function buildSlotMap() {
     const sorted = Object.entries(teams)
       .map(([name, s]) => ({name, ...s, dif: s.gf - s.gc}))
       .sort((a, b) => b.pts - a.pts || b.dif - a.dif || b.gf - a.gf);
+    // Solo resolver si el grupo está cerrado: 4 equipos × 3 partidos = 12 apariciones
+    const totalPJ = sorted.reduce((sum, t) => sum + t.pj, 0);
+    if (totalPJ < 12) return;
     sorted.forEach((t, i) => {
       const pos = ['1º','2º','3º','4º'][i];
       if (pos) slotMap[`${pos} Grupo ${g}`] = t.name;

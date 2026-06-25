@@ -162,6 +162,8 @@
     <h1>⚽ Predicciones · Polla Pocheche</h1>
     <div class="header-actions">
       <button class="btn btn-secondary" style="width:auto;margin:0;padding:10px 16px;font-size:.875rem"
+              onclick="reloadFixture()" id="reload-btn">↻ Actualizar</button>
+      <button class="btn btn-secondary" style="width:auto;margin:0;padding:10px 16px;font-size:.875rem"
               onclick="triggerImport()">📥 Importar Excel</button>
       <input type="file" id="import-file" accept=".xlsx" style="display:none" onchange="importFromExcel(this)">
     </div>
@@ -281,6 +283,26 @@ function checkToken() {
 // ─────────────────────────────────────────────────────────
 // LOAD DATA
 // ─────────────────────────────────────────────────────────
+async function reloadFixture() {
+  const btn = document.getElementById('reload-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '↻ Actualizando...'; }
+  try {
+    const m = EXCEL_URL.match(/raw\.githubusercontent\.com\/([^/]+\/[^/]+)\/[^/]+\/(.+)/);
+    const exUrl = `https://api.github.com/repos/${m[1]}/contents/${m[2]}`;
+    const res = await fetch(exUrl, { headers:{ 'Accept':'application/vnd.github.v3.raw' }, cache:'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const buf = await res.arrayBuffer();
+    parseFixture(XLSX.read(buf, { type:'array' }));
+    applyGroupStandingsToFixtures();
+    switchAdminPhase(adminPhase);
+    setStatus('Fixture actualizado ✓');
+  } catch(e) {
+    setStatus('⚠️ Error al actualizar: ' + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '↻ Actualizar'; }
+  }
+}
+
 async function startAdmin(token) {
   document.getElementById('admin-ui').style.display = 'block';
   document.getElementById('save-bar').style.display = 'flex';
@@ -392,6 +414,9 @@ function buildSlotMap() {
     const sorted = Object.entries(teams)
       .map(([name, s]) => ({name, ...s, dif: s.gf - s.gc}))
       .sort((a, b) => b.pts - a.pts || b.dif - a.dif || b.gf - a.gf);
+    // Solo resolver si el grupo está cerrado: 4 equipos × 3 partidos = 12 apariciones
+    const totalPJ = sorted.reduce((sum, t) => sum + t.pj, 0);
+    if (totalPJ < 12) return;
     sorted.forEach((t, i) => {
       const pos = ['1º','2º','3º','4º'][i];
       if (pos) slotMap[`${pos} Grupo ${g}`] = t.name;
