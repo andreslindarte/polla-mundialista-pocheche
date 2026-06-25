@@ -244,8 +244,9 @@ const FIXTURE_FINAL = [
   { n:103, date:'18 jul', homeSlot:'Per. P101', awaySlot:'Per. P102' },
   { n:104, date:'19 jul', homeSlot:'Gan. P101', awaySlot:'Gan. P102' },
 ];
+const ALL_FIXTURE = [...FIXTURE_R32,...FIXTURE_R16,...FIXTURE_CUARTOS,...FIXTURE_SEMI,...FIXTURE_FINAL];
 
-let MATCHES = [], PARTICIPANTS = [];
+let MATCHES = [], PARTICIPANTS = [], FIXTURE_SCORES = {};
 let predStore = { grupos:{}, r32:{}, r16:{}, cuartos:{}, semi:{}, final:{} };
 let currentDate = '', adminPhase = 'grupos';
 
@@ -300,6 +301,7 @@ async function startAdmin(token) {
 
   setStatus('Cargando predicciones existentes...');
   await loadPredictions(token);
+  applyGroupStandingsToFixtures();
   buildUI();
 }
 
@@ -334,6 +336,9 @@ function parseFixture(wb) {
       date = String(rawDate||'').trim();
     }
     MATCHES.push({ n, group:String(row[1]).trim(), home, away, date });
+    const gl = row[3], gv = row[4];
+    FIXTURE_SCORES[n] = (gl !== '' && gv !== '' && !isNaN(Number(gl)) && !isNaN(Number(gv)))
+      ? { gl:Number(gl), gv:Number(gv) } : null;
   }
   const _MORD = { ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12 };
   MATCHES.sort((a,b) => {
@@ -360,6 +365,47 @@ async function loadPredictions(token) {
       predStore = { grupos: json, r32:{}, r16:{}, cuartos:{}, semi:{}, final:{} };
     }
   } catch(e) { predStore = { grupos:{}, r32:{}, r16:{}, cuartos:{}, semi:{}, final:{} }; }
+}
+
+// ─────────────────────────────────────────────────────────
+// RESOLUCIÓN DE EQUIPOS DESDE GRUPOS CERRADOS
+// ─────────────────────────────────────────────────────────
+function buildSlotMap() {
+  const groups = {};
+  MATCHES.forEach(m => {
+    const g = m.group;
+    if (!g) return;
+    if (!groups[g]) groups[g] = {};
+    [m.home, m.away].forEach(t => { if (!groups[g][t]) groups[g][t] = {pj:0,pg:0,pe:0,pp:0,gf:0,gc:0,pts:0}; });
+    const res = FIXTURE_SCORES[m.n];
+    if (!res) return;
+    const {gl, gv} = res;
+    groups[g][m.home].pj++; groups[g][m.away].pj++;
+    groups[g][m.home].gf += gl; groups[g][m.home].gc += gv;
+    groups[g][m.away].gf += gv; groups[g][m.away].gc += gl;
+    if (gl > gv)      { groups[g][m.home].pg++; groups[g][m.home].pts += 3; groups[g][m.away].pp++; }
+    else if (gl < gv) { groups[g][m.away].pg++; groups[g][m.away].pts += 3; groups[g][m.home].pp++; }
+    else              { groups[g][m.home].pe++; groups[g][m.home].pts++; groups[g][m.away].pe++; groups[g][m.away].pts++; }
+  });
+  const slotMap = {};
+  Object.entries(groups).forEach(([g, teams]) => {
+    const sorted = Object.entries(teams)
+      .map(([name, s]) => ({name, ...s, dif: s.gf - s.gc}))
+      .sort((a, b) => b.pts - a.pts || b.dif - a.dif || b.gf - a.gf);
+    sorted.forEach((t, i) => {
+      const pos = ['1º','2º','3º','4º'][i];
+      if (pos) slotMap[`${pos} Grupo ${g}`] = t.name;
+    });
+  });
+  return slotMap;
+}
+
+function applyGroupStandingsToFixtures() {
+  const slotMap = buildSlotMap();
+  ALL_FIXTURE.forEach(m => {
+    if (slotMap[m.homeSlot]) m.home = slotMap[m.homeSlot];
+    if (slotMap[m.awaySlot]) m.away = slotMap[m.awaySlot];
+  });
 }
 
 // ─────────────────────────────────────────────────────────
@@ -513,8 +559,8 @@ function renderKOMatchCard(match, phase) {
         <select class="ko-select" data-match="${match.n}" data-pi="${pi}" data-field="avanza" data-phase="${phase}"
                 onchange="onKOInput(this)">
           <option value="">¿Quién avanza?</option>
-          <option value="${match.homeSlot}" ${avanza===match.homeSlot?'selected':''}>⬅ ${match.homeSlot}</option>
-          <option value="${match.awaySlot}" ${avanza===match.awaySlot?'selected':''}>➡ ${match.awaySlot}</option>
+          <option value="${match.homeSlot}" ${avanza===match.homeSlot?'selected':''}>⬅ ${match.home||match.homeSlot}</option>
+          <option value="${match.awaySlot}" ${avanza===match.awaySlot?'selected':''}>➡ ${match.away||match.awaySlot}</option>
         </select>
       </td>
       <td class="score-cell">
@@ -543,7 +589,7 @@ function renderKOMatchCard(match, phase) {
   return `<div class="match-card">
     <div class="match-header">
       <span class="match-num">#${match.n}</span>
-      <span class="match-teams">${match.homeSlot} <span style="color:var(--muted);font-weight:400">vs</span> ${match.awaySlot}</span>
+      <span class="match-teams">${match.home||match.homeSlot} <span style="color:var(--muted);font-weight:400">vs</span> ${match.away||match.awaySlot}</span>
       <span class="match-group" style="color:var(--accent)">${match.date}</span>
     </div>
     <table class="pred-table">
