@@ -582,9 +582,8 @@ function bktMatchCard(m, slotMap = {}) {
   const phase = FIXTURE_R32.find(f=>f.n===m.n)?'r32':FIXTURE_R16.find(f=>f.n===m.n)?'r16'
               : FIXTURE_CUARTOS.find(f=>f.n===m.n)?'cuartos':FIXTURE_SEMI.find(f=>f.n===m.n)?'semi':'final';
   const res = DATA.fixtureKO[phase]?.[m.n];
-  // ESPN actualiza m.home / m.away cuando identifica los equipos reales
-  const home = m.home || resolveSlot(m.homeSlot, slotMap);
-  const away = m.away || resolveSlot(m.awaySlot, slotMap);
+  const home = resolveSlot(m.homeSlot, slotMap);
+  const away = resolveSlot(m.awaySlot, slotMap);
   const hW = res && res.avanza==='home', aW = res && res.avanza==='away';
   const suffix = res && res.penales ? '<span class="bkt-badge">PEN</span>'
                : res && res.gl120 !== null ? '<span class="bkt-badge">PT</span>' : '';
@@ -601,29 +600,28 @@ function bktMatchCard(m, slotMap = {}) {
 
 function renderBracket() {
   const slotMap = buildSlotMap();
-  const R32_ORDER = [74,77,73,75, 83,84,81,82, 76,78,79,80, 85,86,87,88];
-  const R16_ORDER = [89,90,93,94, 91,92,95,96];
-  const QF_ORDER  = [97,98,99,100];
-  const SF_ORDER  = [101,102];
-  const F_ORDER   = [104,103];
-  const makeSlots = (nums, fix) => nums.map(n => fix.find(f=>f.n===n));
-  const rounds = [
-    { label:'16avos',      matches:makeSlots(R32_ORDER, FIXTURE_R32),     n:16 },
-    { label:'Octavos',     matches:makeSlots(R16_ORDER, FIXTURE_R16),     n:8  },
-    { label:'Cuartos',     matches:makeSlots(QF_ORDER,  FIXTURE_CUARTOS), n:4  },
-    { label:'Semifinal',   matches:makeSlots(SF_ORDER,  FIXTURE_SEMI),    n:2  },
-    { label:'Final / 3°',  matches:makeSlots(F_ORDER,   FIXTURE_FINAL),   n:2  },
-  ];
-  const totalH = 16 * 82;
+  const find = n => ALL_FIXTURE.find(f => f.n === n);
+  const totalH = 8 * 82;
+  const makeCol = (nums, slots, label) => {
+    const slotH = totalH / slots;
+    return `<div class="bkt-col">
+      <div class="bkt-col-hdr">${label}</div>
+      ${nums.map(n => `<div class="bkt-slot" style="height:${slotH}px">${bktMatchCard(find(n), slotMap)}</div>`).join('')}
+    </div>`;
+  };
   document.getElementById('panel-bracket').innerHTML = `
     <div class="bkt-title">Cuadro Eliminatorio — Mundial 2026</div>
     <div class="bkt-wrap">
       <div class="bkt-rounds" style="min-height:${totalH}px">
-        ${rounds.map(r => `
-          <div class="bkt-col">
-            <div class="bkt-col-hdr">${r.label}</div>
-            ${r.matches.map(m => `<div class="bkt-slot" style="height:${totalH/r.n}px">${bktMatchCard(m, slotMap)}</div>`).join('')}
-          </div>`).join('')}
+        ${makeCol([74,77,73,75, 83,84,81,82], 8, '16avos')}
+        ${makeCol([89,90,93,94],               4, 'Octavos')}
+        ${makeCol([97,98],                     2, 'Cuartos')}
+        ${makeCol([101],                       1, 'Semi')}
+        ${makeCol([104,103],                   2, 'Final / 3°')}
+        ${makeCol([102],                       1, 'Semi')}
+        ${makeCol([99,100],                    2, 'Cuartos')}
+        ${makeCol([91,92,95,96],               4, 'Octavos')}
+        ${makeCol([76,78,79,80, 86,88,85,87],  8, '16avos')}
       </div>
     </div>`;
 }
