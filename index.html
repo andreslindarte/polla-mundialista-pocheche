@@ -484,8 +484,10 @@ function renderGroupStandings() {
           const teams = Object.entries(groups[g])
             .map(([name,s]) => ({name,...s,dif:s.gf-s.gc}))
             .sort((a,b) => b.pts-a.pts || b.dif-a.dif || b.gf-a.gf);
+          const totalPJ = teams.reduce((s,t) => s+t.pj, 0);
+          const closed = totalPJ >= 12;
           return `<div class="standings-group">
-            <div class="standings-group-hdr">Grupo ${g}</div>
+            <div class="standings-group-hdr">Grupo ${g}${closed?' ✅':''}</div>
             <table class="standings-table">
               <thead><tr><th class="s-team">Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>DIF</th><th>Pts</th></tr></thead>
               <tbody>${teams.map((t,i) => `
