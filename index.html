@@ -186,20 +186,20 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
 .s-neg { color:var(--red); font-weight:600; }
 
 /* ── BRACKET ── */
-.bkt-title { font-family:'Barlow Condensed',sans-serif; font-size:1.2rem; font-weight:800; letter-spacing:.05em; margin-bottom:16px; }
-.bkt-wrap { overflow-x:auto; padding-bottom:20px; }
-.bkt-rounds { display:flex; gap:3px; align-items:stretch; }
-.bkt-col { flex:0 0 155px; display:flex; flex-direction:column; }
-.bkt-col-hdr { text-align:center; font-family:'Barlow Condensed',sans-serif; font-size:.78rem; font-weight:700; letter-spacing:.07em; color:var(--accent); background:var(--mid); padding:5px 4px; border-radius:5px 5px 0 0; margin-bottom:2px; flex-shrink:0; }
-.bkt-slot { display:flex; align-items:center; padding:2px 1px; box-sizing:border-box; }
-.bkt-match { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:5px; overflow:hidden; }
-.bkt-empty { height:32px; }
-.bkt-hdr { font-size:.62rem; color:var(--muted); padding:2px 6px; background:rgba(255,255,255,.03); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:4px; }
-.bkt-badge { font-size:.58rem; background:rgba(240,180,41,.2); color:var(--accent); border-radius:3px; padding:0 3px; }
-.bkt-team { display:flex; align-items:center; padding:4px 6px; font-size:.7rem; gap:3px; border-bottom:1px solid var(--border); }
+.bkt-title { font-family:'Barlow Condensed',sans-serif; font-size:1.2rem; font-weight:800; letter-spacing:.05em; margin-bottom:12px; }
+.bkt-wrap { overflow-x:auto; padding-bottom:12px; }
+.bkt-rounds { display:flex; gap:2px; align-items:stretch; width:100%; min-height:520px; height:calc(100vh - 230px); max-height:800px; }
+.bkt-col { flex:1; display:flex; flex-direction:column; min-width:110px; }
+.bkt-col-hdr { text-align:center; font-family:'Barlow Condensed',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.07em; color:var(--accent); background:var(--mid); padding:4px 2px; border-radius:4px 4px 0 0; margin-bottom:1px; flex-shrink:0; }
+.bkt-slot { flex:1; display:flex; align-items:center; padding:1px; box-sizing:border-box; min-height:0; }
+.bkt-match { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+.bkt-empty { height:24px; }
+.bkt-hdr { font-size:.58rem; color:var(--muted); padding:1px 5px; background:rgba(255,255,255,.03); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:3px; }
+.bkt-badge { font-size:.55rem; background:rgba(240,180,41,.2); color:var(--accent); border-radius:3px; padding:0 3px; }
+.bkt-team { display:flex; align-items:center; padding:3px 5px; font-size:.68rem; gap:2px; border-bottom:1px solid var(--border); }
 .bkt-team:last-child { border-bottom:none; }
 .bkt-nm { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
-.bkt-sc { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:.85rem; margin-left:2px; flex-shrink:0; }
+.bkt-sc { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:.82rem; margin-left:2px; flex-shrink:0; }
 .bkt-win { color:var(--accent); font-weight:700; background:rgba(240,180,41,.08); }
 .bkt-lose { color:var(--muted); }
 
@@ -603,27 +603,23 @@ function bktMatchCard(m, slotMap = {}) {
 function renderBracket() {
   const slotMap = buildSlotMap();
   const find = n => ALL_FIXTURE.find(f => f.n === n);
-  const totalH = 8 * 82;
-  const makeCol = (nums, slots, label) => {
-    const slotH = totalH / slots;
-    return `<div class="bkt-col">
-      <div class="bkt-col-hdr">${label}</div>
-      ${nums.map(n => `<div class="bkt-slot" style="height:${slotH}px">${bktMatchCard(find(n), slotMap)}</div>`).join('')}
-    </div>`;
-  };
+  const makeCol = (nums, label) => `<div class="bkt-col">
+    <div class="bkt-col-hdr">${label}</div>
+    ${nums.map(n => `<div class="bkt-slot">${bktMatchCard(find(n), slotMap)}</div>`).join('')}
+  </div>`;
   document.getElementById('panel-bracket').innerHTML = `
     <div class="bkt-title">Cuadro Eliminatorio — Mundial 2026</div>
     <div class="bkt-wrap">
-      <div class="bkt-rounds" style="min-height:${totalH}px">
-        ${makeCol([74,77,73,75, 83,84,81,82], 8, '16avos')}
-        ${makeCol([89,90,93,94],               4, 'Octavos')}
-        ${makeCol([97,98],                     2, 'Cuartos')}
-        ${makeCol([101],                       1, 'Semi')}
-        ${makeCol([104,103],                   2, 'Final / 3°')}
-        ${makeCol([102],                       1, 'Semi')}
-        ${makeCol([99,100],                    2, 'Cuartos')}
-        ${makeCol([91,92,95,96],               4, 'Octavos')}
-        ${makeCol([76,78,79,80, 86,88,85,87],  8, '16avos')}
+      <div class="bkt-rounds">
+        ${makeCol([74,77,73,75, 83,84,81,82], '16avos')}
+        ${makeCol([89,90,93,94],               'Octavos')}
+        ${makeCol([97,98],                     'Cuartos')}
+        ${makeCol([101],                       'Semi')}
+        ${makeCol([104,103],                   'Final / 3°')}
+        ${makeCol([102],                       'Semi')}
+        ${makeCol([99,100],                    'Cuartos')}
+        ${makeCol([91,92,95,96],               'Octavos')}
+        ${makeCol([76,78,79,80, 86,88,85,87],  '16avos')}
       </div>
     </div>`;
 }
