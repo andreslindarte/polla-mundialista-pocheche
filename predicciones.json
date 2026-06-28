@@ -3464,6 +3464,21 @@
         "gv90": 2,
         "avanza": "2º Grupo B"
       }
+    },
+    "Leonardo Fabio": {
+      "73": {
+        "gl90": 0,
+        "gv90": 2,
+        "avanza": "2º Grupo B",
+        "prorroga": true
+      }
+    },
+    "Juan Camilo": {
+      "73": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "2º Grupo B"
+      }
     }
   },
   "r16": {},
