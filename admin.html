@@ -561,8 +561,7 @@ function renderKOMatchCard(match, phase) {
     const gl90  = pred.gl90  !== undefined ? pred.gl90  : '';
     const gv90  = pred.gv90  !== undefined ? pred.gv90  : '';
     const avanza= pred.avanza || '';
-    const gl120 = pred.gl120 !== undefined ? pred.gl120 : '';
-    const gv120 = pred.gv120 !== undefined ? pred.gv120 : '';
+    const pror  = pred.prorroga === true;
     const pen   = pred.penales === true;
     const hasMins = gl90 !== '' && gv90 !== '' && avanza;
     const cls = hasMins ? 'filled' : (gl90 !== '' || gv90 !== '') ? 'partial' : '';
@@ -572,13 +571,11 @@ function renderKOMatchCard(match, phase) {
         <input class="score-input" type="number" min="0" max="30" style="width:46px"
                data-match="${match.n}" data-pi="${pi}" data-field="gl90" data-phase="${phase}"
                value="${gl90}" oninput="onKOInput(this)" onwheel="this.blur()">
-        <div style="color:var(--muted);font-size:.65rem;text-align:center;margin-top:2px">90'</div>
       </td>
       <td class="score-cell">
         <input class="score-input" type="number" min="0" max="30" style="width:46px"
                data-match="${match.n}" data-pi="${pi}" data-field="gv90" data-phase="${phase}"
                value="${gv90}" oninput="onKOInput(this)" onwheel="this.blur()">
-        <div style="color:var(--muted);font-size:.65rem;text-align:center;margin-top:2px">90'</div>
       </td>
       <td>
         <select class="ko-select" data-match="${match.n}" data-pi="${pi}" data-field="avanza" data-phase="${phase}"
@@ -588,17 +585,13 @@ function renderKOMatchCard(match, phase) {
           <option value="${match.awaySlot}" ${avanza===match.awaySlot?'selected':''}>➡ ${match.away||match.awaySlot}</option>
         </select>
       </td>
-      <td class="score-cell">
-        <input class="score-input" type="number" min="0" max="30" style="width:46px"
-               data-match="${match.n}" data-pi="${pi}" data-field="gl120" data-phase="${phase}"
-               value="${gl120}" oninput="onKOInput(this)" onwheel="this.blur()" placeholder="—">
-        <div style="color:var(--muted);font-size:.65rem;text-align:center;margin-top:2px">120'</div>
-      </td>
-      <td class="score-cell">
-        <input class="score-input" type="number" min="0" max="30" style="width:46px"
-               data-match="${match.n}" data-pi="${pi}" data-field="gv120" data-phase="${phase}"
-               value="${gv120}" oninput="onKOInput(this)" onwheel="this.blur()" placeholder="—">
-        <div style="color:var(--muted);font-size:.65rem;text-align:center;margin-top:2px">120'</div>
+      <td style="text-align:center;min-width:58px">
+        <label style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer">
+          <input type="checkbox" data-match="${match.n}" data-pi="${pi}" data-field="prorroga" data-phase="${phase}"
+                 ${pror?'checked':''} onchange="onKOInput(this)"
+                 style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer">
+          <span style="color:var(--muted);font-size:.65rem">120'</span>
+        </label>
       </td>
       <td style="text-align:center;min-width:58px">
         <label style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer">
@@ -620,11 +613,10 @@ function renderKOMatchCard(match, phase) {
     <table class="pred-table">
       <thead><tr>
         <th>Participante</th>
-        <th class="center">Local 90'</th>
-        <th class="center">Visit. 90'</th>
+        <th class="center">Local</th>
+        <th class="center">Visitante</th>
         <th>Avanza</th>
-        <th class="center">Local 120'</th>
-        <th class="center">Visit. 120'</th>
+        <th class="center">120'</th>
         <th class="center">Pen.</th>
       </tr></thead>
       <tbody>${rows}</tbody>
@@ -664,8 +656,8 @@ function onKOInput(el) {
   if (!predStore[phase][name][matchN]) predStore[phase][name][matchN] = {};
 
   const pred = predStore[phase][name][matchN];
-  if (field === 'penales') {
-    pred.penales = el.checked;
+  if (field === 'penales' || field === 'prorroga') {
+    pred[field] = el.checked;
   } else if (field === 'avanza') {
     pred.avanza = el.value;
   } else {
