@@ -1290,19 +1290,20 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
     const penStr = pred.penales ? 'Sí' : 'No';
 
     let pts = null, scoreClass = 'pending';
+    const hit = real ? hitters.includes(i) : false;
+    const predProrVal = pred.prorroga === true;
     if (real) {
       pts = 0;
-      const hit = hitters.includes(i);
       if (hit) { pts += hitters.length === 1 ? 3 : 1; scoreClass = hitters.length === 1 ? 'exact' : 'shared'; }
       else scoreClass = 'miss';
       if (real.avanza && predSide === real.avanza) pts += 1;
-      const predPror = pred.prorroga === true;
-      if (hit && realPror === predPror) pts += 1;
+      if (hit && realPror === predProrVal) pts += 1;
       if (real.penales && pred.penales) pts += 1;
     }
 
     const advReal = real?.avanza;
     const advClass = !real ? 'pending' : predSide === advReal ? 'correct' : 'wrong';
+    const prorClass = !real ? 'pending' : (hit && realPror === predProrVal) ? 'correct' : (hit ? 'wrong' : '');
     const pillClass = pts === null ? 'pnd' : pts >= 4 ? 'p6' : pts >= 2 ? 'p2' : pts === 1 ? 'p1' : 'p0';
     const pillVal = pts === null ? '—' : pts + ' pts';
 
@@ -1310,7 +1311,7 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
       <td class="pred-name">${avatarImg(p.name,'pred-avatar')}${p.name}</td>
       <td><span class="pred-score ${scoreClass}">${score90}</span></td>
       <td><span class="kpred-adv ${advClass}">${advName}</span></td>
-      <td>${prorStr}</td>
+      <td><span class="kpred-adv ${prorClass}">${prorStr}</span></td>
       <td>${penStr}</td>
       <td><span class="pts-pill ${pillClass}">${pillVal}</span></td>
     </tr>`;
