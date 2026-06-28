@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
@@ -384,22 +384,22 @@ const PREDICTIONS_URL = 'https://raw.githubusercontent.com/andreslindarte/polla-
 
 // ── FIXTURE ELIMINATORIAS (hardcoded) ──────────────────────
 const FIXTURE_R32 = [
-  { n:73,  date:'28 jun', venue:'Los Ángeles',          homeSlot:'2º Grupo A',   awaySlot:'2º Grupo B' },
-  { n:74,  date:'29 jun', venue:'Boston',               homeSlot:'Alemania',     awaySlot:'3º A/B/C/D/F' },
-  { n:75,  date:'29 jun', venue:'Monterrey',            homeSlot:'1º Grupo F',   awaySlot:'2º Grupo C' },
-  { n:76,  date:'29 jun', venue:'Houston',              homeSlot:'1º Grupo C',   awaySlot:'2º Grupo F' },
-  { n:77,  date:'30 jun', venue:'Nueva York',           homeSlot:'1º Grupo I',   awaySlot:'3º C/D/F/G/H' },
-  { n:78,  date:'30 jun', venue:'Dallas',               homeSlot:'2º Grupo E',   awaySlot:'2º Grupo I' },
-  { n:79,  date:'30 jun', venue:'Ciudad de México',     homeSlot:'México',       awaySlot:'3º C/E/F/H/I' },
-  { n:80,  date:'1 jul',  venue:'Atlanta',              homeSlot:'1º Grupo L',   awaySlot:'3º E/H/I/J/K' },
-  { n:81,  date:'1 jul',  venue:'San Francisco',        homeSlot:'Estados Unidos',awaySlot:'3º B/E/F/I/J' },
-  { n:82,  date:'1 jul',  venue:'Seattle',              homeSlot:'1º Grupo G',   awaySlot:'3º A/E/H/I/J' },
-  { n:83,  date:'2 jul',  venue:'Toronto',              homeSlot:'2º Grupo K',   awaySlot:'2º Grupo L' },
-  { n:84,  date:'2 jul',  venue:'Los Ángeles',          homeSlot:'1º Grupo H',   awaySlot:'2º Grupo J' },
-  { n:85,  date:'2 jul',  venue:'Vancouver',            homeSlot:'1º Grupo B',   awaySlot:'3º E/F/G/I/J' },
-  { n:86,  date:'3 jul',  venue:'Miami',                homeSlot:'Argentina',    awaySlot:'2º Grupo H' },
-  { n:87,  date:'3 jul',  venue:'Kansas City',          homeSlot:'1º Grupo K',   awaySlot:'3º D/E/I/J/L' },
-  { n:88,  date:'3 jul',  venue:'Dallas',               homeSlot:'2º Grupo D',   awaySlot:'2º Grupo G' },
+  { n:73,  date:'28 jun', venue:'Los Ángeles',          homeSlot:'2º Grupo A',    awaySlot:'2º Grupo B',    home:'Sudáfrica',       away:'Canadá' },
+  { n:74,  date:'29 jun', venue:'Boston',               homeSlot:'Alemania',      awaySlot:'3º A/B/C/D/F',  home:'Alemania',        away:'Paraguay' },
+  { n:75,  date:'29 jun', venue:'Monterrey',            homeSlot:'1º Grupo F',    awaySlot:'2º Grupo C',    home:'Países Bajos',    away:'Marruecos' },
+  { n:76,  date:'29 jun', venue:'Houston',              homeSlot:'1º Grupo C',    awaySlot:'2º Grupo F',    home:'Brasil',          away:'Japón' },
+  { n:77,  date:'30 jun', venue:'Nueva York',           homeSlot:'1º Grupo I',    awaySlot:'3º C/D/F/G/H',  home:'Francia',         away:'Suecia' },
+  { n:78,  date:'30 jun', venue:'Dallas',               homeSlot:'2º Grupo E',    awaySlot:'2º Grupo I',    home:'Costa de Marfil', away:'Noruega' },
+  { n:79,  date:'30 jun', venue:'Ciudad de México',     homeSlot:'México',        awaySlot:'3º C/E/F/H/I',  home:'México',          away:'Ecuador' },
+  { n:80,  date:'1 jul',  venue:'Atlanta',              homeSlot:'1º Grupo L',    awaySlot:'3º E/H/I/J/K',  home:'Inglaterra',      away:'Rep. D. Congo' },
+  { n:81,  date:'1 jul',  venue:'San Francisco',        homeSlot:'Estados Unidos', awaySlot:'3º B/E/F/I/J', home:'Estados Unidos',  away:'Bosnia-Herzegovina' },
+  { n:82,  date:'1 jul',  venue:'Seattle',              homeSlot:'1º Grupo G',    awaySlot:'3º A/E/H/I/J',  home:'Bélgica',         away:'Senegal' },
+  { n:83,  date:'2 jul',  venue:'Toronto',              homeSlot:'2º Grupo K',    awaySlot:'2º Grupo L',    home:'Portugal',        away:'Croacia' },
+  { n:84,  date:'2 jul',  venue:'Los Ángeles',          homeSlot:'1º Grupo H',    awaySlot:'2º Grupo J',    home:'España',          away:'Austria' },
+  { n:85,  date:'2 jul',  venue:'Vancouver',            homeSlot:'1º Grupo B',    awaySlot:'3º E/F/G/I/J',  home:'Suiza',           away:'Argelia' },
+  { n:86,  date:'3 jul',  venue:'Miami',                homeSlot:'Argentina',     awaySlot:'2º Grupo H',    home:'Argentina',       away:'Cabo Verde' },
+  { n:87,  date:'3 jul',  venue:'Kansas City',          homeSlot:'1º Grupo K',    awaySlot:'3º D/E/I/J/L',  home:'Colombia',        away:'Ghana' },
+  { n:88,  date:'3 jul',  venue:'Dallas',               homeSlot:'2º Grupo D',    awaySlot:'2º Grupo G',    home:'Australia',       away:'Egipto' },
 ];
 const FIXTURE_R16 = [
   { n:89,  date:'4 jul',  venue:'Filadelfia',           homeSlot:'Gan. P74',     awaySlot:'Gan. P77' },
@@ -584,8 +584,8 @@ function bktMatchCard(m, slotMap = {}) {
   const phase = FIXTURE_R32.find(f=>f.n===m.n)?'r32':FIXTURE_R16.find(f=>f.n===m.n)?'r16'
               : FIXTURE_CUARTOS.find(f=>f.n===m.n)?'cuartos':FIXTURE_SEMI.find(f=>f.n===m.n)?'semi':'final';
   const res = DATA.fixtureKO[phase]?.[m.n];
-  const home = resolveSlot(m.homeSlot, slotMap);
-  const away = resolveSlot(m.awaySlot, slotMap);
+  const home = m.home || resolveSlot(m.homeSlot, slotMap);
+  const away = m.away || resolveSlot(m.awaySlot, slotMap);
   const hW = res && res.avanza==='home', aW = res && res.avanza==='away';
   const suffix = res && res.penales ? '<span class="bkt-badge">PEN</span>'
                : res && res.gl120 !== null ? '<span class="bkt-badge">PT</span>' : '';
