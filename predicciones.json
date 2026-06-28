@@ -3433,8 +3433,8 @@
     "Andres Jesús": {
       "73": {
         "gl90": 0,
-        "avanza": "2º Grupo B",
-        "gv90": 1
+        "gv90": 1,
+        "avanza": "2º Grupo B"
       }
     },
     "Maria Camila": {
@@ -3465,19 +3465,11 @@
         "avanza": "2º Grupo B"
       }
     },
-    "Leonardo Fabio": {
+    "Jaime Andres": {
       "73": {
-        "gl90": 0,
-        "gv90": 2,
-        "avanza": "2º Grupo B",
-        "prorroga": true
-      }
-    },
-    "Juan Camilo": {
-      "73": {
-        "gl90": 2,
-        "gv90": 3,
-        "avanza": "2º Grupo B"
+        "avanza": "2º Grupo A",
+        "gl90": 1,
+        "gv90": 0
       }
     }
   },
