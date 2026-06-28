@@ -3406,9 +3406,14 @@
       "73": {
         "gl90": 1,
         "gv90": 3,
-        "avanza": "2º Grupo B",
-        "gl120": 1,
-        "gv120": 3
+        "avanza": "2º Grupo B"
+      }
+    },
+    "Gloria Isabel": {
+      "73": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "2º Grupo B"
       }
     }
   },
