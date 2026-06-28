@@ -3440,13 +3440,15 @@
     "Maria Camila": {
       "73": {
         "gl90": 1,
-        "gv90": 3
+        "gv90": 3,
+        "avanza": "2º Grupo B"
       }
     },
     "Andrea Carolina": {
       "73": {
         "gl90": 0,
-        "gv90": 2
+        "gv90": 2,
+        "avanza": "2º Grupo B"
       }
     }
   },
