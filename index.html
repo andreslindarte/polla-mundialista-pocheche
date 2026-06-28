@@ -1054,8 +1054,9 @@ function computeKnockoutScores(phaseFixture, phaseKey) {
         else                         { pts += 1; stats[p].exactoComp++; }
       } else { stats[p].miss++; }
 
-      // Bonus: equipo que avanza
-      if (real.avanza && pred.avanza === real.avanza) { pts += 1; stats[p].avance++; }
+      // Bonus: equipo que avanza (pred.avanza puede ser 'home'/'away' o el nombre del slot)
+      const predSide = pred.avanza === m.homeSlot ? 'home' : pred.avanza === m.awaySlot ? 'away' : pred.avanza;
+      if (real.avanza && predSide === real.avanza) { pts += 1; stats[p].avance++; }
 
       // Bonus: marcador a 120' (solo si hubo prórroga real)
       if (real.gl120 !== null && pred.gl120 != null && pred.gv120 != null &&
@@ -1276,7 +1277,8 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
 
     const score90 = `${pred.gl90 ?? '?'}–${pred.gv90 ?? '?'}`;
     const score120 = pred.gl120 != null ? `${pred.gl120}–${pred.gv120}` : '—';
-    const advName = pred.avanza === 'home' ? home : pred.avanza === 'away' ? away : '—';
+    const predSide = pred.avanza === match.homeSlot ? 'home' : pred.avanza === match.awaySlot ? 'away' : pred.avanza;
+    const advName = predSide === 'home' ? home : predSide === 'away' ? away : '—';
     const penStr = pred.penales ? 'Sí' : 'No';
 
     let pts = null, scoreClass = 'pending';
@@ -1285,7 +1287,7 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
       const hit90 = hitters90.includes(i);
       if (hit90) { pts += hitters90.length === 1 ? 3 : 1; scoreClass = hitters90.length === 1 ? 'exact' : 'shared'; }
       else scoreClass = 'miss';
-      if (real.avanza && pred.avanza === real.avanza) pts += 1;
+      if (real.avanza && predSide === real.avanza) pts += 1;
       if (real.gl120 !== null && pred.gl120 != null && pred.gl120 === real.gl120 && pred.gv120 === real.gv120) pts += 1;
       if (real.penales && pred.penales) pts += 1;
     }
