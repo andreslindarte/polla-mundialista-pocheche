@@ -3422,7 +3422,8 @@
       "76": {
         "gl90": 3,
         "gv90": 1,
-        "avanza": "1º Grupo C"
+        "avanza": "1º Grupo C",
+        "prorroga": false
       }
     },
     "Gloria Isabel": {
@@ -3459,6 +3460,23 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "2º Grupo B"
+      },
+      "74": {
+        "gl90": 4,
+        "gv90": 1,
+        "avanza": "Alemania"
+      },
+      "75": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "1º Grupo F",
+        "penales": true
+      },
+      "76": {
+        "gl90": 0,
+        "gv90": 0,
+        "avanza": "1º Grupo C",
+        "penales": true
       }
     },
     "Andres Jesús": {
@@ -3482,7 +3500,8 @@
         "gl90": 2,
         "gv90": 2,
         "avanza": "2º Grupo F",
-        "penales": true
+        "penales": true,
+        "prorroga": false
       }
     },
     "Maria Camila": {
@@ -3512,6 +3531,22 @@
         "gl90": 0,
         "gv90": 2,
         "avanza": "2º Grupo B"
+      },
+      "74": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Alemania"
+      },
+      "75": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo F"
+      },
+      "76": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo C",
+        "prorroga": true
       }
     },
     "Cesar Lindarte": {
