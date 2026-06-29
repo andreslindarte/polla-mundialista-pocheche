@@ -284,6 +284,15 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
   padding:2px 8px; border-radius:4px; background:rgba(240,180,41,.12); color:var(--accent);
   margin-left:8px;
 }
+.pk-result {
+  display:inline-flex; align-items:center; gap:4px; margin-left:10px;
+  font-family:'Barlow Condensed',sans-serif; font-size:1.4rem; font-weight:800; color:#60a5fa;
+}
+.pk-label {
+  font-size:.65rem; font-weight:700; letter-spacing:.08em;
+  background:rgba(96,165,250,.15); color:#60a5fa;
+  border-radius:3px; padding:1px 5px;
+}
 
 @media (max-width:560px) {
   .podium { flex-direction:column; align-items:center; }
@@ -994,23 +1003,30 @@ async function fetchKnockoutData() {
       if (!completed) continue;
 
       // Determinar cómo terminó
-      const isAET = statusName.includes('AET') || statusName.includes('ET');
-      const isPK  = statusName.includes('PK')  || statusName.includes('SHOOTOUT');
+      const statusDesc = event.status?.type?.description || '';
+      const isPK  = statusName.includes('PK') || statusName.includes('SHOOTOUT') ||
+                    statusName.includes('Pen') || statusDesc.toLowerCase().includes('pen');
+      const isAET = isPK || statusName.includes('AET') || statusName.includes('ET');
 
       // Scores: ESPN usa score final del partido (incluye ET si aplica)
       const gl90raw = parseInt(homeC.score);
       const gv90raw = parseInt(awayC.score);
 
-      // Intentar obtener marcador a 90' de los linescores (primeras 2 mitades)
+      // Obtener marcadores a 90', 120' y resultado de penales desde linescores
       const lines = comp.linescores || [];
       let gl90 = gl90raw, gv90 = gv90raw, gl120 = null, gv120 = null;
-      if (isAET && lines.length >= 4) {
+      let pkHome = null, pkAway = null;
+      if (lines.length >= 4) {
         const h1h = parseInt(lines[0]?.homeScore||0), h1a = parseInt(lines[0]?.awayScore||0);
         const h2h = parseInt(lines[1]?.homeScore||0), h2a = parseInt(lines[1]?.awayScore||0);
         const e1h = parseInt(lines[2]?.homeScore||0), e1a = parseInt(lines[2]?.awayScore||0);
         const e2h = parseInt(lines[3]?.homeScore||0), e2a = parseInt(lines[3]?.awayScore||0);
         gl90 = h1h+h2h; gv90 = h1a+h2a;
         gl120 = gl90+e1h+e2h; gv120 = gv90+e1a+e2a;
+        if (isPK && lines.length >= 5) {
+          pkHome = parseInt(lines[4]?.homeScore||0);
+          pkAway = parseInt(lines[4]?.awayScore||0);
+        }
       }
 
       // Quién avanzó (winner)
@@ -1022,7 +1038,7 @@ async function fetchKnockoutData() {
                   : FIXTURE_CUARTOS.find(f=>f.n===fixture.n) ? 'cuartos'
                   : FIXTURE_SEMI.find(f=>f.n===fixture.n) ? 'semi' : 'final';
       if (!DATA.fixtureKO[phase]) DATA.fixtureKO[phase] = {};
-      DATA.fixtureKO[phase][fixture.n] = { gl90, gv90, gl120, gv120, penales: isPK, avanza };
+      DATA.fixtureKO[phase][fixture.n] = { gl90, gv90, gl120, gv120, penales: isPK, pkHome, pkAway, avanza };
     }
   } catch(e) { /* fallo silencioso */ }
 }
@@ -1271,18 +1287,21 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
   let scoreHtml;
   if (real) {
     const whenLabel = real.penales ? '+ Penales' : real.gl120 !== null ? '+ Prórroga' : '90\'';
+    const pkLine = (real.penales && real.pkHome !== null)
+      ? `<div class="pk-result">${real.pkHome}–${real.pkAway} <span class="pk-label">PEN</span></div>` : '';
     scoreHtml = `
       <div class="score-num real">${real.gl90}</div>
       <div class="score-sep-big">–</div>
       <div class="score-num real">${real.gv90}</div>
       ${real.gl120 !== null ? `<div style="font-size:.8rem;color:var(--muted);margin-left:4px">(${real.gl120}–${real.gv120})</div>` : ''}
-      <span class="match-when-badge">${whenLabel}</span>`;
+      <span class="match-when-badge">${whenLabel}</span>
+      ${pkLine}`;
   } else {
     scoreHtml = `<div class="score-num pending">–</div><div class="score-sep-big">:</div><div class="score-num pending">–</div>`;
   }
 
-  // Resultado final: prórroga usa 120', si no 90'
-  const realPror = real ? real.gl120 !== null : false;
+  // Resultado final: prórroga usa 120', si no 90'; penales implica ET
+  const realPror = real ? (real.gl120 !== null || real.penales) : false;
   const finalGL = real ? (realPror ? real.gl120 : real.gl90) : null;
   const finalGV = real ? (realPror ? real.gv120 : real.gv90) : null;
 
