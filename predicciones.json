@@ -3615,6 +3615,22 @@
         "avanza": "2º Grupo A",
         "gl90": 1,
         "gv90": 0
+      },
+      "74": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Alemania"
+      },
+      "75": {
+        "gl90": 1,
+        "gv90": 1,
+        "penales": true,
+        "avanza": "1º Grupo F"
+      },
+      "76": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo C"
       }
     },
     "Juan Camilo": {
