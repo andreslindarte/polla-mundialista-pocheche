@@ -3600,6 +3600,24 @@
         "gl90": 1,
         "gv90": 0
       }
+    },
+    "Juan Camilo": {
+      "74": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Alemania"
+      },
+      "75": {
+        "avanza": "1º Grupo F",
+        "gl90": 2,
+        "gv90": 1,
+        "prorroga": true
+      },
+      "76": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "1º Grupo C"
+      }
     }
   },
   "r16": {},
