@@ -584,8 +584,10 @@ function bktMatchCard(m, slotMap = {}) {
   const phase = FIXTURE_R32.find(f=>f.n===m.n)?'r32':FIXTURE_R16.find(f=>f.n===m.n)?'r16'
               : FIXTURE_CUARTOS.find(f=>f.n===m.n)?'cuartos':FIXTURE_SEMI.find(f=>f.n===m.n)?'semi':'final';
   const res = DATA.fixtureKO[phase]?.[m.n];
-  const home = m.home || resolveSlot(m.homeSlot, slotMap);
-  const away = m.away || resolveSlot(m.awaySlot, slotMap);
+  const koSlotH = m.homeSlot?.startsWith('Gan.') || m.homeSlot?.startsWith('Per.');
+  const koSlotA = m.awaySlot?.startsWith('Gan.') || m.awaySlot?.startsWith('Per.');
+  const home = koSlotH ? resolveSlot(m.homeSlot, slotMap) : (m.home || m.homeSlot);
+  const away = koSlotA ? resolveSlot(m.awaySlot, slotMap) : (m.away || m.awaySlot);
   const hW = res && res.avanza==='home', aW = res && res.avanza==='away';
   const suffix = res && res.penales ? '<span class="bkt-badge">PEN</span>'
                : res && res.gl120 !== null ? '<span class="bkt-badge">PT</span>' : '';
