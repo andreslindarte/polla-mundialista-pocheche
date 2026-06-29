@@ -88,7 +88,9 @@ header {
 header h1 { font-family:'Barlow Condensed',sans-serif; font-size:1.35rem; font-weight:800; letter-spacing:.06em; }
 header h1 span { color:var(--accent); }
 .header-right { display:flex; align-items:center; gap:10px; }
-.last-updated { font-size:.75rem; color:var(--muted); }
+.last-updated { font-size:.75rem; color:var(--muted); max-width:260px; overflow:hidden; white-space:nowrap; display:inline-block; vertical-align:middle; }
+.last-updated.ticker span { display:inline-block; animation:ticker 18s linear infinite; padding-left:100%; }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 .reload-btn {
   background:rgba(255,255,255,.08); border:1px solid var(--border);
   color:var(--text); border-radius:6px; padding:6px 14px;
@@ -1082,6 +1084,25 @@ function computeKnockoutScores(phaseFixture, phaseKey) {
 // ══════════════════════════════════════════════════════════
 // RENDER
 // ══════════════════════════════════════════════════════════
+function buildLiveStatus() {
+  const time = new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
+  const grp = DATA.matches.filter(m => DATA.fixture[m.n]).length;
+  const r32 = Object.keys(DATA.fixtureKO.r32 || {}).length;
+  const r16 = Object.keys(DATA.fixtureKO.r16 || {}).length;
+  const qf  = Object.keys(DATA.fixtureKO.cuartos || {}).length;
+  const sf  = Object.keys(DATA.fixtureKO.semi || {}).length;
+  const fin = DATA.fixtureKO.final || {};
+  const parts = [];
+  parts.push(`Grupos: ${grp}/72`);
+  if (r32 > 0 || r16 > 0) parts.push(`16avos: ${r32}/16`);
+  if (r16 > 0 || qf > 0) parts.push(`Octavos: ${r16}/8`);
+  if (qf > 0 || sf > 0) parts.push(`Cuartos: ${qf}/4`);
+  if (sf > 0) parts.push(`Semis: ${sf}/2`);
+  if (fin[103]) parts.push('3er puesto ✓');
+  if (fin[104]) parts.push('Final ✓');
+  return `🟢 ${parts.join(' · ')} · ${time}`;
+}
+
 async function launchApp() {
   document.getElementById('loading-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
@@ -1089,18 +1110,12 @@ async function launchApp() {
 
   const liveEl = document.getElementById('last-updated');
   liveEl.textContent = 'Obteniendo resultados en vivo...';
-  const liveCount = await fetchLiveResults();
+  await fetchLiveResults();
   refreshGroupDots();
   await fetchKnockoutData();
   applyGroupStandingsToFixtures();
-  const time = new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
-  if (liveCount === false) {
-    liveEl.textContent = 'Actualizado ' + time;
-  } else if (liveCount === 0) {
-    liveEl.textContent = '🟡 Sin resultados nuevos · ' + time;
-  } else {
-    liveEl.textContent = `🟢 ${liveCount} resultados en vivo · ${time}`;
-  }
+  liveEl.classList.add('ticker');
+  liveEl.innerHTML = `<span>${buildLiveStatus()}</span>`;
 
   switchPhase('elim1');
 }
