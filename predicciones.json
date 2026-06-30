@@ -3624,6 +3624,16 @@
         "gv90": 1,
         "avanza": "1º Grupo C"
       },
+      "77": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo I"
+      },
+      "78": {
+        "gl90": 0,
+        "gv90": 1,
+        "avanza": "2º Grupo I"
+      },
       "79": {
         "avanza": "3º C/E/F/H/I",
         "penales": true,
@@ -3692,6 +3702,21 @@
         "gv90": 1,
         "avanza": "1º Grupo C",
         "penales": true
+      },
+      "77": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo I"
+      },
+      "78": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "2º Grupo E"
+      },
+      "79": {
+        "gl90": 0,
+        "gv90": 1,
+        "avanza": "3º C/E/F/H/I"
       }
     },
     "Laura Valentina": {
@@ -3714,6 +3739,23 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "1º Grupo C"
+      },
+      "77": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo I"
+      },
+      "78": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "2º Grupo I",
+        "prorroga": true
+      },
+      "79": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "México",
+        "penales": true
       }
     },
     "Jaime Andres": {
@@ -3738,6 +3780,21 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "1º Grupo C"
+      },
+      "77": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo I"
+      },
+      "78": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "2º Grupo I"
+      },
+      "79": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "México"
       }
     },
     "Juan Camilo": {
@@ -3799,6 +3856,22 @@
         "gl90": 1,
         "gv90": 0,
         "avanza": "1º Grupo C"
+      },
+      "77": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "1º Grupo I"
+      },
+      "78": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "2º Grupo I"
+      },
+      "79": {
+        "gl90": 1,
+        "avanza": "3º C/E/F/H/I",
+        "gv90": 2,
+        "prorroga": true
       }
     }
   },
