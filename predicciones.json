@@ -3424,6 +3424,22 @@
         "gv90": 1,
         "avanza": "1º Grupo C",
         "prorroga": false
+      },
+      "77": {
+        "gl90": 4,
+        "gv90": 1,
+        "avanza": "3º C/D/F/G/H"
+      },
+      "78": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "2º Grupo I"
+      },
+      "79": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "3º C/E/F/H/I",
+        "prorroga": true
       }
     },
     "Gloria Isabel": {
@@ -3518,6 +3534,23 @@
         "avanza": "2º Grupo F",
         "penales": true,
         "prorroga": false
+      },
+      "77": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo I"
+      },
+      "78": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "2º Grupo I",
+        "prorroga": true
+      },
+      "79": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "3º C/E/F/H/I",
+        "prorroga": true
       }
     },
     "Maria Camila": {
