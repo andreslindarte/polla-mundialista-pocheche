@@ -3502,7 +3502,8 @@
         "gl90": 1,
         "gv90": 1,
         "avanza": "1º Grupo F",
-        "penales": true
+        "penales": true,
+        "prorroga": true
       },
       "76": {
         "gl90": 0,
@@ -3679,7 +3680,8 @@
         "gl90": 1,
         "gv90": 1,
         "penales": true,
-        "avanza": "1º Grupo F"
+        "avanza": "1º Grupo F",
+        "prorroga": true
       },
       "76": {
         "gl90": 3,
