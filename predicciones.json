@@ -3485,6 +3485,22 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "1º Grupo C"
+      },
+      "77": {
+        "gl90": 4,
+        "gv90": 1,
+        "avanza": "1º Grupo I"
+      },
+      "78": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "2º Grupo I",
+        "penales": true
+      },
+      "79": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "México"
       }
     },
     "Martha Cenidia": {
@@ -3509,6 +3525,23 @@
         "gl90": 0,
         "gv90": 0,
         "avanza": "1º Grupo C",
+        "penales": true
+      },
+      "77": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "1º Grupo I"
+      },
+      "78": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "2º Grupo I",
+        "penales": true
+      },
+      "79": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "3º C/E/F/H/I",
         "penales": true
       }
     },
@@ -3710,6 +3743,21 @@
         "gl90": 3,
         "gv90": 2,
         "avanza": "1º Grupo C"
+      },
+      "77": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo I"
+      },
+      "78": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "2º Grupo I"
+      },
+      "79": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "México"
       }
     },
     "Leonardo Fabio": {
