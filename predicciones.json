@@ -3625,8 +3625,10 @@
         "avanza": "1º Grupo C"
       },
       "79": {
-        "avanza": "",
-        "penales": false
+        "avanza": "3º C/E/F/H/I",
+        "penales": true,
+        "gl90": 1,
+        "gv90": 1
       }
     },
     "Andrea Carolina": {
