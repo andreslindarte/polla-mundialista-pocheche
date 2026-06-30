@@ -3428,7 +3428,7 @@
       "77": {
         "gl90": 4,
         "gv90": 1,
-        "avanza": "3º C/D/F/G/H"
+        "avanza": "1º Grupo I"
       },
       "78": {
         "gl90": 1,
@@ -3573,6 +3573,10 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "1º Grupo C"
+      },
+      "79": {
+        "avanza": "",
+        "penales": false
       }
     },
     "Andrea Carolina": {
@@ -3596,6 +3600,23 @@
         "gv90": 1,
         "avanza": "1º Grupo C",
         "prorroga": true
+      },
+      "77": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo I",
+        "prorroga": false
+      },
+      "78": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "2º Grupo I"
+      },
+      "79": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "México",
+        "penales": true
       }
     },
     "Cesar Lindarte": {
