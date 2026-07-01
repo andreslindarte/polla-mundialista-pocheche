@@ -3495,6 +3495,21 @@
         "gv90": 1,
         "avanza": "México",
         "penales": true
+      },
+      "80": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "1º Grupo L"
+      },
+      "81": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Estados Unidos"
+      },
+      "82": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo G"
       }
     },
     "Freddy Ramón": {
@@ -3815,6 +3830,16 @@
         "gl90": 0,
         "gv90": 1,
         "avanza": "3º C/E/F/H/I"
+      },
+      "81": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "Estados Unidos"
+      },
+      "82": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "1º Grupo G"
       }
     },
     "Laura Valentina": {
@@ -3854,6 +3879,17 @@
         "gv90": 1,
         "avanza": "México",
         "penales": true
+      },
+      "80": {},
+      "81": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Estados Unidos"
+      },
+      "82": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo G"
       }
     },
     "Jaime Andres": {
