@@ -3440,6 +3440,22 @@
         "gv90": 2,
         "avanza": "3º C/E/F/H/I",
         "prorroga": true
+      },
+      "80": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "1º Grupo L"
+      },
+      "81": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Estados Unidos"
+      },
+      "82": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "3º A/E/H/I/J",
+        "prorroga": true
       }
     },
     "Gloria Isabel": {
