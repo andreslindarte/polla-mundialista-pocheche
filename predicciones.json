@@ -3956,7 +3956,19 @@
         "prorroga": true
       },
       "80": {
-        "avanza": ""
+        "avanza": "1º Grupo L",
+        "gl90": 2,
+        "gv90": 0
+      },
+      "81": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Estados Unidos"
+      },
+      "82": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo G"
       }
     }
   },
