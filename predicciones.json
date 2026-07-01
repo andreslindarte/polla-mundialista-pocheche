@@ -3517,6 +3517,22 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "México"
+      },
+      "80": {
+        "gl90": 4,
+        "gv90": 0,
+        "avanza": "1º Grupo L"
+      },
+      "81": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Estados Unidos"
+      },
+      "82": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "1º Grupo G",
+        "penales": true
       }
     },
     "Martha Cenidia": {
@@ -3559,6 +3575,23 @@
         "gv90": 1,
         "avanza": "3º C/E/F/H/I",
         "penales": true
+      },
+      "80": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo L"
+      },
+      "81": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Estados Unidos",
+        "penales": true
+      },
+      "82": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo G",
+        "prorroga": true
       }
     },
     "Andres Jesús": {
@@ -3601,6 +3634,22 @@
         "gv90": 2,
         "avanza": "3º C/E/F/H/I",
         "prorroga": true
+      },
+      "80": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "1º Grupo L"
+      },
+      "81": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Estados Unidos"
+      },
+      "82": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "1º Grupo G",
+        "penales": true
       }
     },
     "Maria Camila": {
@@ -3639,6 +3688,21 @@
         "penales": true,
         "gl90": 1,
         "gv90": 1
+      },
+      "80": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo L"
+      },
+      "81": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Estados Unidos"
+      },
+      "82": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "1º Grupo G"
       }
     },
     "Andrea Carolina": {
@@ -3679,6 +3743,24 @@
         "gv90": 1,
         "avanza": "México",
         "penales": true
+      },
+      "80": {
+        "gv90": 1,
+        "avanza": "1º Grupo L",
+        "gl90": 4
+      },
+      "81": {
+        "gv90": 1,
+        "avanza": "Estados Unidos",
+        "penales": true,
+        "gl90": 1,
+        "prorroga": false
+      },
+      "82": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo G",
+        "prorroga": true
       }
     },
     "Cesar Lindarte": {
@@ -3872,6 +3954,9 @@
         "avanza": "3º C/E/F/H/I",
         "gv90": 2,
         "prorroga": true
+      },
+      "80": {
+        "avanza": ""
       }
     }
   },
