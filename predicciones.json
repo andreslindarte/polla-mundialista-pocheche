@@ -3580,6 +3580,22 @@
         "gv90": 2,
         "avanza": "1º Grupo G",
         "penales": true
+      },
+      "83": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "2º Grupo L",
+        "penales": true
+      },
+      "84": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "1º Grupo H"
+      },
+      "85": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "1º Grupo B"
       }
     },
     "Martha Cenidia": {
@@ -3784,6 +3800,21 @@
         "gl90": 1,
         "gv90": 0,
         "avanza": "1º Grupo G"
+      },
+      "83": {
+        "gl90": 1,
+        "avanza": "2º Grupo L",
+        "gv90": 2
+      },
+      "84": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo H"
+      },
+      "85": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo B"
       }
     },
     "Andrea Carolina": {
