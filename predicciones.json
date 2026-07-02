@@ -3891,6 +3891,23 @@
         "gv90": 1,
         "avanza": "1º Grupo G",
         "prorroga": true
+      },
+      "83": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "2º Grupo K",
+        "penales": true
+      },
+      "84": {
+        "gv90": 0,
+        "gl90": 1,
+        "avanza": "1º Grupo H"
+      },
+      "85": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "1º Grupo B",
+        "penales": true
       }
     },
     "Cesar Lindarte": {
