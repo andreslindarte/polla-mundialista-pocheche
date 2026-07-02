@@ -3956,6 +3956,22 @@
         "gl90": 2,
         "avanza": "1º Grupo G",
         "gv90": 1
+      },
+      "83": {
+        "gl90": 2,
+        "gv90": 2,
+        "penales": true,
+        "avanza": "2º Grupo K"
+      },
+      "84": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo H"
+      },
+      "85": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo B"
       }
     },
     "Laura Valentina": {
@@ -4076,6 +4092,22 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "1º Grupo G"
+      },
+      "83": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "2º Grupo K",
+        "penales": true
+      },
+      "84": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "1º Grupo H"
+      },
+      "85": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo B"
       }
     },
     "Juan Camilo": {
