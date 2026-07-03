@@ -1057,10 +1057,10 @@ function computeKnockoutScores(phaseFixture, phaseKey) {
     const real = fixturePhase[m.n];
     if (!real) return;
 
-    // Resultado final: si hubo prórroga se usa marcador a 120', si no a 90'
-    const realPror = real.gl120 !== null;
-    const finalGL = realPror ? real.gl120 : real.gl90;
-    const finalGV = realPror ? real.gv120 : real.gv90;
+    // Resultado final: 120' si está disponible, si no gl90 (fallback para PK sin linescores)
+    const realPror = real.gl120 !== null || real.penales;
+    const finalGL = real.gl120 ?? real.gl90;
+    const finalGV = real.gv120 ?? real.gv90;
 
     // Paso 1: aciertos exactos contra marcador final
     const hitters = [];
@@ -1300,10 +1300,10 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
     scoreHtml = `<div class="score-num pending">–</div><div class="score-sep-big">:</div><div class="score-num pending">–</div>`;
   }
 
-  // Resultado final: prórroga usa 120', si no 90'; penales implica ET
+  // Resultado final: 120' si está disponible, si no gl90 (fallback para PK sin linescores)
   const realPror = real ? (real.gl120 !== null || real.penales) : false;
-  const finalGL = real ? (realPror ? real.gl120 : real.gl90) : null;
-  const finalGV = real ? (realPror ? real.gv120 : real.gv90) : null;
+  const finalGL = real ? (real.gl120 ?? real.gl90) : null;
+  const finalGV = real ? (real.gv120 ?? real.gv90) : null;
 
   // Hitters: comparar contra marcador final
   const hitters = real ? participants.map((_,i) => {
