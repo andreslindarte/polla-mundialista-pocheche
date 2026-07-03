@@ -87,6 +87,7 @@ header {
 .header-logo { font-size:1.5rem; }
 header h1 { font-family:'Barlow Condensed',sans-serif; font-size:1.35rem; font-weight:800; letter-spacing:.06em; }
 header h1 span { color:var(--accent); }
+.header-sub { font-size:.9rem; font-weight:400; color:var(--muted); }
 .header-right { display:flex; align-items:center; gap:10px; }
 .last-updated { font-size:.75rem; color:var(--muted); max-width:260px; overflow:hidden; white-space:nowrap; display:inline-block; vertical-align:middle; }
 .last-updated.ticker span { display:inline-block; animation:ticker 18s linear infinite; padding-left:100%; }
@@ -294,13 +295,47 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
   border-radius:3px; padding:1px 5px;
 }
 
-@media (max-width:560px) {
+@media (max-width:620px) {
+  /* ── HEADER ── */
+  header { height:auto; min-height:52px; padding:8px 14px 0; flex-wrap:wrap; gap:0; }
+  .header-left { flex:1; min-width:0; overflow:hidden; }
+  header h1 { font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .header-sub { display:none; }
+  /* Disuelve .header-right: sus hijos pasan a ser flex items directos del header */
+  .header-right { display:contents; }
+  .reload-btn { order:2; font-size:.72rem; padding:5px 10px; flex-shrink:0; }
+  .last-updated {
+    order:3; width:100%; max-width:none; display:block;
+    padding:4px 0 6px; font-size:.67rem;
+    border-top:1px solid rgba(255,255,255,.06); margin-top:5px;
+  }
+  /* ── PHASE NAV ── */
+  .phase-nav { flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    padding:8px 12px 0; gap:5px; scrollbar-width:none; }
+  .phase-nav::-webkit-scrollbar { display:none; }
+  .phase-btn { font-size:.75rem; padding:6px 10px; flex-shrink:0; white-space:nowrap; }
+  /* ── TABS ── */
+  .tab-bar { overflow-x:auto; -webkit-overflow-scrolling:touch; padding:0 12px; scrollbar-width:none; }
+  .tab-bar::-webkit-scrollbar { display:none; }
+  .tab { padding:12px 14px; font-size:.8rem; flex-shrink:0; }
+  /* ── CONTENT ── */
+  main { padding:14px 10px 80px; }
+  /* ── DATE SELECTOR ── */
+  .group-selector { flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    padding-bottom:4px; scrollbar-width:none; margin-bottom:18px; }
+  .group-selector::-webkit-scrollbar { display:none; }
+  .grp-btn { flex-shrink:0; font-size:.88rem; }
+  /* ── PODIUM ── */
   .podium { flex-direction:column; align-items:center; }
   .podium-slot { width:100%; max-width:280px; flex-direction:row; justify-content:space-between; }
+  /* ── MATCH CARDS ── */
   .match-scoreboard { grid-template-columns:1fr; grid-template-rows:auto auto auto; justify-items:center; }
   .score-box { order:-1; }
-  .phase-nav { padding:10px 12px 0; gap:4px; }
-  .phase-btn { font-size:.78rem; padding:7px 10px; }
+  .pred-table th, .pred-table td { padding:6px 7px; font-size:.71rem; }
+  .pred-name { font-size:.8rem; gap:5px; }
+  .pred-avatar { width:28px; height:28px; border-width:1px; }
+  .kpred-adv { font-size:.69rem; }
+  .pts-pill { font-size:.7rem; padding:2px 6px; }
 }
 </style>
 </head>
@@ -332,7 +367,7 @@ main { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
   <header>
     <div class="header-left">
       <span class="header-logo">⚽</span>
-      <h1>POLLA <span>MUNDIALISTA</span> <span style="font-size:.9rem;font-weight:400;color:var(--muted);">· Área Pocheche</span></h1>
+      <h1>POLLA <span>MUNDIALISTA</span> <span class="header-sub">· Área Pocheche</span></h1>
     </div>
     <div class="header-right">
       <span class="last-updated" id="last-updated"></span>
@@ -1058,7 +1093,7 @@ function computeKnockoutScores(phaseFixture, phaseKey) {
     if (!real) return;
 
     // Resultado final: 120' si está disponible, si no gl90 (fallback para PK sin linescores)
-    const realPror = real.gl120 !== null || real.penales;
+    const realPror = real.gl120 != null || real.penales;
     const finalGL = real.gl120 ?? real.gl90;
     const finalGV = real.gv120 ?? real.gv90;
 
@@ -1286,7 +1321,7 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
   // Score display
   let scoreHtml;
   if (real) {
-    const whenLabel = real.penales ? '+ Penales' : real.gl120 !== null ? '+ Prórroga' : '90\'';
+    const whenLabel = real.penales ? '+ Penales' : real.gl120 != null ? '+ Prórroga' : '90\'';
     const pkLine = (real.penales && real.pkHome !== null)
       ? `<div class="pk-result">${real.pkHome}–${real.pkAway} <span class="pk-label">PEN</span></div>` : '';
     scoreHtml = `
@@ -1301,7 +1336,7 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
   }
 
   // Resultado final: 120' si está disponible, si no gl90 (fallback para PK sin linescores)
-  const realPror = real ? (real.gl120 !== null || real.penales) : false;
+  const realPror = real ? (real.gl120 != null || real.penales) : false;
   const finalGL = real ? (real.gl120 ?? real.gl90) : null;
   const finalGV = real ? (real.gv120 ?? real.gv90) : null;
 
