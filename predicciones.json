@@ -3823,6 +3823,21 @@
         "gv90": 1,
         "avanza": "1º Grupo B",
         "prorroga": true
+      },
+      "86": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Argentina"
+      },
+      "87": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "1º Grupo K"
+      },
+      "88": {
+        "gl90": 0,
+        "gv90": 1,
+        "avanza": "2º Grupo G"
       }
     },
     "Maria Camila": {
