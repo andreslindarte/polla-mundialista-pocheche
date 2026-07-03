@@ -3474,6 +3474,21 @@
         "gv90": 1,
         "avanza": "1º Grupo B",
         "prorroga": true
+      },
+      "86": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Argentina"
+      },
+      "87": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "1º Grupo K"
+      },
+      "88": {
+        "gv90": 2,
+        "gl90": 1,
+        "avanza": "2º Grupo G"
       }
     },
     "Gloria Isabel": {
@@ -3544,6 +3559,17 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "1º Grupo B"
+      },
+      "86": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Argentina"
+      },
+      "88": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "2º Grupo G",
+        "prorroga": true
       }
     },
     "Freddy Ramón": {
@@ -3614,6 +3640,21 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "1º Grupo B"
+      },
+      "86": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Argentina"
+      },
+      "87": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "1º Grupo K"
+      },
+      "88": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "2º Grupo G"
       }
     },
     "Martha Cenidia": {
@@ -3690,6 +3731,23 @@
         "gv90": 1,
         "avanza": "1º Grupo B",
         "penales": true
+      },
+      "86": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Argentina"
+      },
+      "87": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "1º Grupo K"
+      },
+      "88": {
+        "gl90": 1,
+        "penales": false,
+        "avanza": "2º Grupo G",
+        "gv90": 2,
+        "prorroga": true
       }
     },
     "Andres Jesús": {
@@ -3833,6 +3891,22 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "1º Grupo B"
+      },
+      "86": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Argentina"
+      },
+      "87": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "1º Grupo K"
+      },
+      "88": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "2º Grupo G",
+        "penales": true
       }
     },
     "Andrea Carolina": {
@@ -4247,6 +4321,21 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "1º Grupo B"
+      },
+      "86": {
+        "gl90": 4,
+        "gv90": 1,
+        "avanza": "Argentina"
+      },
+      "87": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "1º Grupo K"
+      },
+      "88": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "2º Grupo G"
       }
     }
   },
