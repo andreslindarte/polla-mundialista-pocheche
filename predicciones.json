@@ -4545,7 +4545,8 @@
       "90": {
         "gl90": 0,
         "gv90": 1,
-        "avanza": "Gan. P75"
+        "avanza": "Gan. P75",
+        "penales": false
       }
     },
     "Laura Valentina": {
@@ -4558,6 +4559,19 @@
         "gl90": 0,
         "gv90": 2,
         "avanza": "Gan. P75"
+      }
+    },
+    "Cesar Lindarte": {
+      "89": {
+        "gl90": 0,
+        "gv90": 2,
+        "avanza": "Gan. P77"
+      },
+      "90": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P75",
+        "penales": true
       }
     }
   },
