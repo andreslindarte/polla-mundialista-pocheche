@@ -4510,6 +4510,31 @@
         "avanza": "Gan. P75",
         "prorroga": true
       }
+    },
+    "Martha Cenidia": {
+      "89": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Gan. P77"
+      },
+      "90": {
+        "gl90": 1,
+        "gv90": 2,
+        "prorroga": true,
+        "avanza": "Gan. P75"
+      }
+    },
+    "Juan David": {
+      "89": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "Gan. P77"
+      },
+      "90": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "Gan. P75"
+      }
     }
   },
   "cuartos": {},
