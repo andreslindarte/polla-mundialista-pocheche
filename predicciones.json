@@ -4573,6 +4573,18 @@
         "avanza": "Gan. P75",
         "penales": true
       }
+    },
+    "Jaime Andres": {
+      "89": {
+        "gl90": 0,
+        "gv90": 3,
+        "avanza": "Gan. P77"
+      },
+      "90": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P75"
+      }
     }
   },
   "cuartos": {},
