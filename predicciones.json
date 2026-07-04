@@ -4434,7 +4434,84 @@
       }
     }
   },
-  "r16": {},
+  "r16": {
+    "Andres Jesús": {
+      "89": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P77"
+      },
+      "90": {
+        "avanza": "Gan. P75",
+        "penales": true,
+        "gv90": 2,
+        "gl90": 2
+      }
+    },
+    "Freddy Ramón": {
+      "89": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "Gan. P77"
+      },
+      "90": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P73"
+      }
+    },
+    "Maria Camila": {
+      "89": {
+        "gl90": 0,
+        "gv90": 2,
+        "avanza": "Gan. P77"
+      },
+      "90": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P73",
+        "penales": true
+      }
+    },
+    "Gloria Isabel": {
+      "89": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P77",
+        "prorroga": true
+      },
+      "90": {
+        "gv90": 2,
+        "gl90": 1,
+        "avanza": "Gan. P75"
+      }
+    },
+    "Juan Camilo": {
+      "89": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "Gan. P77"
+      },
+      "90": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P75"
+      }
+    },
+    "Leonardo Fabio": {
+      "89": {
+        "gl90": 0,
+        "gv90": 3,
+        "avanza": "Gan. P77"
+      },
+      "90": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P75",
+        "prorroga": true
+      }
+    }
+  },
   "cuartos": {},
   "semi": {},
   "final": {}
