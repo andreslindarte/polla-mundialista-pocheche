@@ -4446,6 +4446,18 @@
         "penales": true,
         "gv90": 2,
         "gl90": 2
+      },
+      "91": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Gan. P76",
+        "prorroga": true
+      },
+      "92": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P80",
+        "penales": true
       }
     },
     "Freddy Ramón": {
@@ -4602,6 +4614,16 @@
         "gv90": 1,
         "avanza": "Gan. P75",
         "penales": false
+      },
+      "91": {
+        "gl90": 0,
+        "gv90": 1,
+        "avanza": "Gan. P78"
+      },
+      "92": {
+        "gl90": 0,
+        "gv90": 2,
+        "avanza": "Gan. P80"
       }
     },
     "Laura Valentina": {
@@ -4662,6 +4684,11 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Gan. P75"
+      },
+      "91": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P76"
       }
     }
   },
