@@ -4462,8 +4462,8 @@
       "93": {
         "avanza": "Gan. P83",
         "gl90": 1,
-        "gv90": 1,
-        "penales": true
+        "penales": true,
+        "gv90": 0
       },
       "94": {
         "avanza": "Gan. P82",
@@ -4628,8 +4628,8 @@
         "penales": true
       },
       "93": {
-        "gl90": 1,
-        "gv90": 2,
+        "gl90": 2,
+        "gv90": 1,
         "avanza": "Gan. P83"
       },
       "94": {
@@ -4697,8 +4697,8 @@
         "avanza": "Gan. P80"
       },
       "93": {
-        "gl90": 2,
-        "gv90": 1,
+        "gl90": 1,
+        "gv90": 2,
         "avanza": "Gan. P84",
         "prorroga": true
       },
