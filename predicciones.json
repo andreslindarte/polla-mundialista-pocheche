@@ -4467,9 +4467,9 @@
       },
       "94": {
         "avanza": "Gan. P82",
-        "prorroga": true,
+        "prorroga": false,
         "gl90": 1,
-        "gv90": 2
+        "gv90": 3
       }
     },
     "Freddy Ramón": {
