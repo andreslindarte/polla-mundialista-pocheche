@@ -4730,6 +4730,19 @@
         "gl90": 0,
         "gv90": 2,
         "avanza": "Gan. P80"
+      },
+      "93": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "Gan. P83",
+        "prorroga": false,
+        "penales": true
+      },
+      "94": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P82",
+        "prorroga": true
       }
     },
     "Laura Valentina": {
