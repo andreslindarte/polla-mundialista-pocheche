@@ -4461,9 +4461,9 @@
       },
       "93": {
         "avanza": "Gan. P83",
-        "gl90": 1,
         "penales": true,
-        "gv90": 0
+        "gv90": 2,
+        "gl90": 2
       },
       "94": {
         "avanza": "Gan. P82",
