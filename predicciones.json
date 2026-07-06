@@ -4541,6 +4541,11 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Gan. P75"
+      },
+      "92": {
+        "gl90": 1,
+        "gv90": 1,
+        "penales": true
       }
     },
     "Leonardo Fabio": {
