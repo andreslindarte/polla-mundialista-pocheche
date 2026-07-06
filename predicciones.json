@@ -4458,6 +4458,18 @@
         "gv90": 1,
         "avanza": "Gan. P80",
         "penales": true
+      },
+      "93": {
+        "avanza": "Gan. P83",
+        "gl90": 1,
+        "gv90": 1,
+        "penales": true
+      },
+      "94": {
+        "avanza": "Gan. P82",
+        "prorroga": true,
+        "gl90": 1,
+        "gv90": 2
       }
     },
     "Freddy Ramón": {
