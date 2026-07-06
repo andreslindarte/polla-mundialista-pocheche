@@ -4480,6 +4480,16 @@
         "gl90": 0,
         "gv90": 1,
         "avanza": "Gan. P80"
+      },
+      "93": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Gan. P84"
+      },
+      "94": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P81"
       }
     },
     "Maria Camila": {
@@ -4505,6 +4515,17 @@
         "gv90": 2,
         "avanza": "Gan. P80",
         "prorroga": true
+      },
+      "93": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Gan. P84"
+      },
+      "94": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P81",
+        "penales": true
       }
     },
     "Gloria Isabel": {
@@ -4529,6 +4550,17 @@
         "gv90": 2,
         "prorroga": true,
         "avanza": "Gan. P80"
+      },
+      "93": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "Gan. P84",
+        "penales": true
+      },
+      "94": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "Gan. P82"
       }
     },
     "Juan Camilo": {
@@ -4547,6 +4579,16 @@
         "gv90": 1,
         "penales": true,
         "avanza": "Gan. P79"
+      },
+      "93": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P84"
+      },
+      "94": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Gan. P81"
       }
     },
     "Leonardo Fabio": {
@@ -4572,6 +4614,16 @@
         "gv90": 2,
         "avanza": "Gan. P80",
         "penales": true
+      },
+      "93": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P83"
+      },
+      "94": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P82"
       }
     },
     "Martha Cenidia": {
@@ -4596,6 +4648,18 @@
         "gv90": 1,
         "avanza": "Gan. P79",
         "prorroga": true
+      },
+      "93": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P84",
+        "prorroga": true
+      },
+      "94": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P81",
+        "penales": true
       }
     },
     "Juan David": {
@@ -4619,6 +4683,18 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Gan. P80"
+      },
+      "93": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P84",
+        "prorroga": true
+      },
+      "94": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "Gan. P82",
+        "penales": true
       }
     },
     "Andrea Carolina": {
@@ -4666,6 +4742,17 @@
         "gv90": 2,
         "avanza": "Gan. P79",
         "prorroga": true
+      },
+      "93": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P83",
+        "penales": true
+      },
+      "94": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P81"
       }
     },
     "Cesar Lindarte": {
@@ -4690,6 +4777,16 @@
         "gv90": 0,
         "avanza": "Gan. P79",
         "prorroga": true
+      },
+      "93": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P83"
+      },
+      "94": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P82"
       }
     },
     "Jaime Andres": {
@@ -4713,6 +4810,17 @@
         "gv90": 2,
         "avanza": "Gan. P80",
         "prorroga": true
+      },
+      "93": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P84"
+      },
+      "94": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P82",
+        "penales": true
       }
     }
   },
