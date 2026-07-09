@@ -10,6 +10,7 @@
 <title>🏆 Polla Mundialista 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js" crossorigin="anonymous"></script>
 <style>
 :root{
   --bg:#030C1A; --surface:#071B30; --surface2:#0C2540;
@@ -365,13 +366,24 @@ function switchPhase(phase) {
   renderPhase(phase);
 }
 
+// ─── Twemoji helper ───────────────────────────────────
+function twparse(el) {
+  if (typeof twemoji !== 'undefined') {
+    twemoji.parse(el, {
+      base: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/',
+      folder: '72x72', ext: '.png'
+    });
+  }
+}
+
 // ─── Render Ranking ───────────────────────────────────
 function renderRanking() {
   // Podium
   const top3 = rankings.slice(0,3);
   const podOrder = top3.length >= 3 ? [1,0,2] : [0,1];
   const podCls   = top3.length >= 3 ? ['p2','p1','p3'] : ['p1','p2'];
-  document.getElementById('podium').innerHTML = podOrder.map((idx,i) => {
+  const podEl = document.getElementById('podium');
+  podEl.innerHTML = podOrder.map((idx,i) => {
     const p = top3[idx]; if (!p) return '';
     const medals = ['🥇','🥈','🥉'];
     return `<div class="pod-slot ${podCls[i]}">
@@ -383,9 +395,11 @@ function renderRanking() {
       <div class="pod-base"></div>
     </div>`;
   }).join('');
+  twparse(podEl);
 
   // Table
-  document.getElementById('rank-tbody').innerHTML = rankings.map((p,i) => `
+  const tbodyEl = document.getElementById('rank-tbody');
+  tbodyEl.innerHTML = rankings.map((p,i) => `
     <tr>
       <td><span class="rank-num ${i<3?'r'+(i+1):''}">${i+1}</span></td>
       <td class="rank-name">${p.name}</td>
@@ -399,16 +413,20 @@ function renderRanking() {
 
 // ─── Render Predictions ───────────────────────────────
 function renderPhase(phase) {
-  document.getElementById('phase-matches').innerHTML =
-    (PHASE_MATCHES[phase]||[]).map(n => renderMatchCard(n, phase)).join('');
+  const el = document.getElementById('phase-matches');
+  el.innerHTML = (PHASE_MATCHES[phase]||[]).map(n => renderMatchCard(n, phase)).join('');
+  twparse(el);
 }
 
 function renderMatchCard(n, phase) {
   const partido  = (D.partidos||{})[n]    || {};
   const result   = (D.resultados||{})[n]  || null;
-  const home = partido.home || `—`;
-  const away = partido.away || `—`;
+  const home = partido.home || '';
+  const away = partido.away || '';
   const date = partido.date || '';
+  const teamsHTML = (home && away)
+    ? `${home} <em>vs</em> ${away}`
+    : (home || away) || `<span class="muted" style="font-weight:400;font-size:.85em">Equipos por confirmar</span>`;
 
   // Result bar
   let resultHTML = '';
@@ -416,7 +434,7 @@ function renderMatchCard(n, phase) {
     const method = result.penales ? 'Penales' : result.prorroga ? 'Prórroga' : '';
     resultHTML = `<div class="result-bar">
       <span class="result-lbl">Resultado</span>
-      <span class="result-score">${home} <strong>${result.gl90}&thinsp;-&thinsp;${result.gv90}</strong> ${away}</span>
+      <span class="result-score">${home||'Local'} <strong>${result.gl90}&thinsp;-&thinsp;${result.gv90}</strong> ${away||'Visitante'}</span>
       ${method ? `<span class="result-badge">${method}</span>` : ''}
       ${result.winner ? `<span class="result-winner">✓ Avanza: ${result.winner}</span>` : ''}
     </div>`;
@@ -445,7 +463,7 @@ function renderMatchCard(n, phase) {
   return `<div class="match-card">
     <div class="match-hdr">
       <span class="match-n">P${n}</span>
-      <span class="match-teams">${home} <em>vs</em> ${away}</span>
+      <span class="match-teams">${teamsHTML}</span>
       <span class="match-dt">${date}</span>
     </div>
     ${resultHTML}

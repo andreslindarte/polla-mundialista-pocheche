@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Admin — Polla Mundialista 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js" crossorigin="anonymous"></script>
 <style>
 :root{
   --bg:#030C1A; --surface:#071B30; --surface2:#0C2540;
@@ -316,10 +317,20 @@ function removeParticipant(name) {
 }
 
 // ─── Phase rendering ────────────────────────────────
+function twparse(el) {
+  if (typeof twemoji !== 'undefined') {
+    twemoji.parse(el, {
+      base: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/',
+      folder: '72x72', ext: '.png'
+    });
+  }
+}
+
 function renderPhase(phase) {
   const matches = PHASE_MATCHES[phase] || [];
-  document.getElementById('adm-content').innerHTML =
-    matches.map(n => renderMatchCard(n, phase)).join('');
+  const el = document.getElementById('adm-content');
+  el.innerHTML = matches.map(n => renderMatchCard(n, phase)).join('');
+  twparse(el);
 }
 
 function renderMatchCard(n, phase) {
