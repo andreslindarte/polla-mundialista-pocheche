@@ -2,7 +2,11 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#030C1A"/>
 <title>🏆 Polla Mundialista 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,7 +29,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 /* ── Header ── */
 header{background:linear-gradient(135deg,#041020 0%,#0A2540 50%,#041020 100%);
-  border-bottom:2px solid var(--green);padding:0 16px;}
+  border-bottom:2px solid var(--green);padding:0 16px;
+  padding-top:env(safe-area-inset-top,0);}
 .hdr-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:14px 0;}
 .hdr-flag{font-size:2rem;}
 .hdr-title{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;
@@ -46,7 +51,11 @@ header{background:linear-gradient(135deg,#041020 0%,#0A2540 50%,#041020 100%);
 .mtab.active{color:var(--green);border-bottom-color:var(--green);}
 
 /* ── Container ── */
-.container{max-width:900px;margin:0 auto;padding:20px 16px 60px;}
+.container{max-width:900px;margin:0 auto;padding:20px 16px calc(60px + env(safe-area-inset-bottom,0));}
+
+/* ── Table scroll wrapper ── */
+.ptable-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -1px;}
+.ptable-wrap .ptable{min-width:360px;}
 
 /* ── Phase tabs ── */
 .phase-nav{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
@@ -146,9 +155,54 @@ header{background:linear-gradient(135deg,#041020 0%,#0A2540 50%,#041020 100%);
 .pts-guide-num{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--green);}
 
 @media(max-width:600px){
+  /* Header */
+  .hdr-stripes{display:none;}
+  .hdr-title{font-size:1.25rem;}
+  .hdr-flag{font-size:1.6rem;}
+  .hdr-sub{font-size:.65rem;}
+
+  /* Nav */
+  .mtab{padding:12px 14px;font-size:.75rem;letter-spacing:.05em;}
+
+  /* Container */
+  .container{padding:14px 12px calc(70px + env(safe-area-inset-bottom,0));}
+
+  /* Phase tabs */
+  .phase-nav{gap:6px;}
+  .ptab{padding:7px 11px;font-size:.7rem;}
+
+  /* Podium */
+  .podium{gap:4px;padding:14px 0 0;}
+  .pod-slot{min-width:0;flex:1;}
+  .pod-avatar{width:44px;height:44px;font-size:1.1rem;}
+  .p1 .pod-avatar{width:56px;height:56px;font-size:1.3rem;}
+  .pod-pts{font-size:1.8rem;}
+  .pod-name{font-size:.75rem;max-width:90px;}
+  .pod-pts-lbl{font-size:.6rem;}
+  .pod-medal{font-size:1.2rem;}
+
+  /* Ranking table */
   .rank-table th.hide-m,.rank-table td.hide-m{display:none;}
-  .match-teams{font-size:.88rem;}
-  .pod-slot{min-width:80px;}
+  .rank-table td,.rank-table th{padding:9px 10px;}
+  .rank-name{font-size:.88rem;}
+  .total-badge{font-size:1.1rem;}
+
+  /* Match card */
+  .match-hdr{padding:10px 12px;gap:6px;}
+  .match-teams{font-size:.85rem;flex-basis:100%;}
+  .match-n{font-size:.7rem;}
+  .match-dt{font-size:.75rem;margin-left:auto;}
+
+  /* Result bar */
+  .result-bar{padding:9px 12px;gap:8px;font-size:.82rem;}
+  .result-score{font-size:.85rem;}
+
+  /* Pred table */
+  .ptable th,.ptable td{padding:7px 9px;font-size:.82rem;}
+  .pts-pill{font-size:.7rem;padding:2px 7px;}
+
+  /* Points guide */
+  .pts-guide-item{font-size:.75rem;padding:7px 10px;}
 }
 </style>
 </head>
@@ -395,13 +449,15 @@ function renderMatchCard(n, phase) {
       <span class="match-dt">${date}</span>
     </div>
     ${resultHTML}
-    <table class="ptable">
-      <thead><tr>
-        <th>Participante</th><th class="tc">90'</th>
-        <th>Avanza</th><th class="tc">Método</th><th class="tc">Pts</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
+    <div class="ptable-wrap">
+      <table class="ptable">
+        <thead><tr>
+          <th>Participante</th><th class="tc">90'</th>
+          <th>Avanza</th><th class="tc">Método</th><th class="tc">Pts</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
   </div>`;
 }
 
