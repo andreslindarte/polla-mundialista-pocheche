@@ -21,8 +21,8 @@
       "date": "9 jul"
     },
     "98": {
-      "home": "España 🇪🇸",
-      "away": "Bélgica 🇧🇪",
+      "home": "",
+      "away": "",
       "date": "10 jul"
     },
     "99": {
@@ -92,12 +92,6 @@
         "gl90": 3,
         "gv90": 2,
         "avanza": "Francia 🇫🇷"
-      },
-      "98": {
-        "gl90": 1,
-        "gv90": 1,
-        "avanza": "España 🇪🇸",
-        "penales": true
       }
     },
     "Adri L": {
@@ -141,6 +135,22 @@
         "gv90": 1,
         "avanza": "Francia 🇫🇷",
         "prorroga": true
+      }
+    },
+    "Jesus David": {
+      "97": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Francia 🇫🇷",
+        "prorroga": true
+      }
+    },
+    "Maria Isabel": {
+      "97": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "Francia 🇫🇷",
+        "penales": true
       }
     }
   },
