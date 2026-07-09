@@ -92,6 +92,12 @@
         "gl90": 3,
         "gv90": 2,
         "avanza": "Francia 🇫🇷"
+      },
+      "98": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "España 🇪🇸",
+        "penales": true
       }
     },
     "Adri L": {
