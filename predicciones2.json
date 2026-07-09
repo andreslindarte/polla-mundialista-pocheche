@@ -1,5 +1,9 @@
 {
-  "participantes": [],
+  "participantes": [
+    "Robert", "Caro", "Adriana Maria", "Angie", "Sahayda",
+    "Adri L", "Andrés", "Ani", "Mario", "Jesus David",
+    "Sadys", "Maria Isabel", "Eugenia"
+  ],
   "partidos": {
     "97":  { "home": "", "away": "", "date": "9 jul"  },
     "98":  { "home": "", "away": "", "date": "10 jul" },
