@@ -248,6 +248,60 @@ const FIXTURE_FINAL = [
 ];
 const ALL_FIXTURE = [...FIXTURE_R32,...FIXTURE_R16,...FIXTURE_CUARTOS,...FIXTURE_SEMI,...FIXTURE_FINAL];
 
+const TEAM_MAP_ESPN = {
+  'Morocco':'Marruecos','Canada':'Canadá','Netherlands':'Países Bajos',
+  'Brazil':'Brasil','Japan':'Japón','France':'Francia','Sweden':'Suecia',
+  "Cote D'Ivoire":'Costa de Marfil','Ivory Coast':'Costa de Marfil',
+  'Norway':'Noruega','Mexico':'México','Ecuador':'Ecuador',
+  'England':'Inglaterra','Congo DR':'Rep. D. Congo','DR Congo':'Rep. D. Congo',
+  'United States':'Estados Unidos','Bosnia and Herzegovina':'Bosnia-Herzegovina',
+  'Belgium':'Bélgica','Senegal':'Senegal','Portugal':'Portugal','Croatia':'Croacia',
+  'Spain':'España','Austria':'Austria','Switzerland':'Suiza','Algeria':'Argelia',
+  'Argentina':'Argentina','Cape Verde':'Cabo Verde','Colombia':'Colombia',
+  'Ghana':'Ghana','Australia':'Australia','Egypt':'Egipto',
+  'South Africa':'Sudáfrica','Germany':'Alemania','Paraguay':'Paraguay',
+};
+
+async function resolveKOSlots() {
+  const dates = ['20260704','20260705','20260706','20260707',
+                 '20260709','20260710','20260711',
+                 '20260714','20260715','20260718','20260719'];
+  const winnerMap = {};
+  for (const d of dates) {
+    try {
+      const res = await fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${d}`,
+        { cache:'no-store' }
+      );
+      if (!res.ok) continue;
+      const json = await res.json();
+      for (const ev of (json.events||[])) {
+        if (!ev.status?.type?.completed) continue;
+        const comps = ev.competitions?.[0]?.competitors||[];
+        const hc = comps.find(c=>c.homeAway==='home');
+        const ac = comps.find(c=>c.homeAway==='away');
+        if (!hc||!ac) continue;
+        const espH = TEAM_MAP_ESPN[hc.team.displayName]||hc.team.displayName;
+        const espA = TEAM_MAP_ESPN[ac.team.displayName]||ac.team.displayName;
+        const fix = ALL_FIXTURE.find(f=>{
+          const ft = new Set([f.home,f.away].filter(Boolean));
+          return ft.size>=2 && ft.has(espH) && ft.has(espA);
+        });
+        if (!fix) continue;
+        const wc = comps.find(c=>c.winner)||
+                   (parseInt(hc.score||0)>=parseInt(ac.score||0)?hc:ac);
+        const lc = wc===hc?ac:hc;
+        winnerMap[`Gan. P${fix.n}`] = TEAM_MAP_ESPN[wc.team.displayName]||wc.team.displayName;
+        winnerMap[`Per. P${fix.n}`] = TEAM_MAP_ESPN[lc.team.displayName]||lc.team.displayName;
+      }
+    } catch(e) { /* silent */ }
+  }
+  [...FIXTURE_CUARTOS,...FIXTURE_SEMI,...FIXTURE_FINAL].forEach(m=>{
+    if (winnerMap[m.homeSlot]) m.home = winnerMap[m.homeSlot];
+    if (winnerMap[m.awaySlot]) m.away = winnerMap[m.awaySlot];
+  });
+}
+
 let MATCHES = [], PARTICIPANTS = [], FIXTURE_SCORES = {};
 let predStore = { grupos:{}, r32:{}, r16:{}, cuartos:{}, semi:{}, final:{} };
 let currentDate = '', adminPhase = 'grupos';
@@ -294,6 +348,7 @@ async function reloadFixture() {
     const buf = await res.arrayBuffer();
     parseFixture(XLSX.read(buf, { type:'array' }));
     applyGroupStandingsToFixtures();
+    await resolveKOSlots();
     switchAdminPhase(adminPhase);
     setStatus('Fixture actualizado ✓');
   } catch(e) {
@@ -324,6 +379,7 @@ async function startAdmin(token) {
   setStatus('Cargando predicciones existentes...');
   await loadPredictions(token);
   applyGroupStandingsToFixtures();
+  await resolveKOSlots();
   buildUI();
 }
 
