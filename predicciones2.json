@@ -83,7 +83,8 @@
       "97": {
         "gl90": 2,
         "gv90": 1,
-        "avanza": "Equipo Local (P97)"
+        "avanza": "Equipo Local (P97)",
+        "prorroga": false
       }
     },
     "Andrés": {
@@ -104,6 +105,13 @@
       "97": {
         "gl90": 3,
         "gv90": 0,
+        "avanza": "Equipo Local (P97)"
+      }
+    },
+    "Sahayda": {
+      "97": {
+        "gl90": 2,
+        "gv90": 1,
         "avanza": "Equipo Local (P97)"
       }
     }
