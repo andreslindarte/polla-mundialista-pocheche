@@ -146,14 +146,16 @@
     "Jesus David": {
       "97": {
         "gl90": 3,
-        "gv90": 2
+        "gv90": 2,
+        "avanza": "Francia 🇫🇷"
       }
     },
     "Maria Isabel": {
       "97": {
         "gl90": 2,
         "gv90": 2,
-        "penales": true
+        "penales": true,
+        "avanza": "Francia 🇫🇷"
       }
     }
   },
