@@ -142,6 +142,19 @@
         "avanza": "Francia 🇫🇷",
         "prorroga": true
       }
+    },
+    "Jesus David": {
+      "97": {
+        "gl90": 3,
+        "gv90": 2
+      }
+    },
+    "Maria Isabel": {
+      "97": {
+        "gl90": 2,
+        "gv90": 2,
+        "penales": true
+      }
     }
   },
   "semi": {},
