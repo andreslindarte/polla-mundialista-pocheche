@@ -1,21 +1,113 @@
 {
   "participantes": [
-    "Robert", "Caro", "Adriana Maria", "Angie", "Sahayda",
-    "Adri L", "Andrés", "Ani", "Mario", "Jesus David",
-    "Sadys", "Maria Isabel", "Eugenia"
+    "Robert",
+    "Caro",
+    "Adriana Maria",
+    "Angie",
+    "Sahayda",
+    "Adri L",
+    "Andrés",
+    "Ani",
+    "Mario",
+    "Jesus David",
+    "Sadys",
+    "Maria Isabel",
+    "Eugenia"
   ],
   "partidos": {
-    "97":  { "home": "", "away": "", "date": "9 jul"  },
-    "98":  { "home": "", "away": "", "date": "10 jul" },
-    "99":  { "home": "", "away": "", "date": "11 jul" },
-    "100": { "home": "", "away": "", "date": "11 jul" },
-    "101": { "home": "", "away": "", "date": "14 jul" },
-    "102": { "home": "", "away": "", "date": "15 jul" },
-    "103": { "home": "", "away": "", "date": "18 jul" },
-    "104": { "home": "", "away": "", "date": "19 jul" }
+    "97": {
+      "home": "Francia 🇫🇷",
+      "away": "Marruecos 🇲🇦",
+      "date": "9 jul"
+    },
+    "98": {
+      "home": "",
+      "away": "",
+      "date": "10 jul"
+    },
+    "99": {
+      "home": "",
+      "away": "",
+      "date": "11 jul"
+    },
+    "100": {
+      "home": "",
+      "away": "",
+      "date": "11 jul"
+    },
+    "101": {
+      "home": "",
+      "away": "",
+      "date": "14 jul"
+    },
+    "102": {
+      "home": "",
+      "away": "",
+      "date": "15 jul"
+    },
+    "103": {
+      "home": "",
+      "away": "",
+      "date": "18 jul"
+    },
+    "104": {
+      "home": "",
+      "away": "",
+      "date": "19 jul"
+    }
   },
   "resultados": {},
-  "cuartos": {},
+  "cuartos": {
+    "Angie": {
+      "97": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Equipo Local (P97)"
+      }
+    },
+    "Sadys": {
+      "97": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Equipo Local (P97)"
+      }
+    },
+    "Caro": {
+      "97": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Equipo Local (P97)"
+      }
+    },
+    "Robert": {
+      "97": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Equipo Local (P97)"
+      }
+    },
+    "Andrés": {
+      "97": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Equipo Local (P97)"
+      }
+    },
+    "Adri L": {
+      "97": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Equipo Local (P97)"
+      }
+    },
+    "Adriana Maria": {
+      "97": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Equipo Local (P97)"
+      }
+    }
+  },
   "semi": {},
   "tercero": {},
   "final": {}
