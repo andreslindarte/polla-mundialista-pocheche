@@ -62,28 +62,28 @@
       "97": {
         "gl90": 2,
         "gv90": 0,
-        "avanza": "Equipo Local (P97)"
+        "avanza": "Francia 🇫🇷"
       }
     },
     "Sadys": {
       "97": {
         "gl90": 2,
         "gv90": 0,
-        "avanza": "Equipo Local (P97)"
+        "avanza": "Francia 🇫🇷"
       }
     },
     "Caro": {
       "97": {
         "gl90": 3,
         "gv90": 1,
-        "avanza": "Equipo Local (P97)"
+        "avanza": "Francia 🇫🇷"
       }
     },
     "Robert": {
       "97": {
         "gl90": 2,
         "gv90": 1,
-        "avanza": "Equipo Local (P97)",
+        "avanza": "Francia 🇫🇷",
         "prorroga": false
       }
     },
@@ -91,41 +91,50 @@
       "97": {
         "gl90": 3,
         "gv90": 2,
-        "avanza": "Equipo Local (P97)"
+        "avanza": "Francia 🇫🇷"
       }
     },
     "Adri L": {
       "97": {
         "gl90": 2,
         "gv90": 1,
-        "avanza": "Equipo Local (P97)"
+        "avanza": "Francia 🇫🇷"
       }
     },
     "Adriana Maria": {
       "97": {
         "gl90": 3,
         "gv90": 0,
-        "avanza": "Equipo Local (P97)"
+        "avanza": "Francia 🇫🇷"
       }
     },
     "Sahayda": {
       "97": {
         "gl90": 2,
         "gv90": 1,
-        "avanza": "Equipo Local (P97)"
+        "avanza": "Francia 🇫🇷"
       }
     },
     "Mario": {
       "97": {
         "gl90": 2,
         "gv90": 1,
-        "avanza": "Equipo Local (P97)"
+        "avanza": "Francia 🇫🇷"
       }
     },
     "Ani": {
       "97": {
         "gl90": 3,
-        "gv90": 1
+        "gv90": 1,
+        "avanza": "Francia 🇫🇷"
+      }
+    },
+    "Eugenia": {
+      "97": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Francia 🇫🇷",
+        "prorroga": true
       }
     }
   },
