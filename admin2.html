@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin — Polla Mundialista 2026</title>
+<style>
+:root{
+  --bg:#030C1A; --surface:#071B30; --surface2:#0C2540;
+  --green:#009B55; --red:#CC0922; --blue:#003DA5;
+  --gold:#FBBF24; --text:#DCF0FF; --muted:#6A9ABF;
+  --border:rgba(0,155,85,.18); --radius:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Auth screens ── */
+.screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:36px;max-width:420px;width:100%;}
+.card h2{font-size:1.4rem;font-weight:700;margin-bottom:8px;}
+.card p{color:var(--muted);font-size:.88rem;margin-bottom:24px;line-height:1.5;}
+.field{margin-bottom:16px;}
+.field-label{display:block;font-size:.75rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+input[type="password"],input[type="text"],input[type="number"]{
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);padding:11px 14px;font-size:1rem;width:100%;outline:none;
+  font-family:'Inter',sans-serif;}
+input:focus{border-color:var(--green);}
+.btn{background:var(--green);color:#000;border:none;border-radius:8px;padding:12px 24px;
+  font-weight:700;cursor:pointer;font-size:.95rem;width:100%;margin-top:4px;font-family:'Inter',sans-serif;}
+.btn:hover{opacity:.9;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-sec{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-red{background:var(--red);color:#fff;}
+.btn-sm{width:auto;padding:8px 16px;font-size:.8rem;margin-top:0;}
+.err{color:var(--red);font-size:.85rem;margin-top:10px;min-height:18px;}
+
+/* ── Admin shell ── */
+#admin-ui{display:none;}
+.adm-header{background:var(--surface);border-bottom:2px solid var(--green);
+  padding:14px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.adm-title{font-size:1.1rem;font-weight:700;flex:1;}
+.adm-actions{display:flex;gap:8px;}
+
+/* ── Phase nav ── */
+.phase-nav{background:var(--surface2);border-bottom:1px solid var(--border);
+  padding:0 20px;display:flex;gap:0;overflow-x:auto;}
+.pnav-btn{background:none;border:none;color:var(--muted);font-family:'Inter',sans-serif;
+  font-weight:700;font-size:.75rem;letter-spacing:.07em;padding:13px 18px;cursor:pointer;
+  border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;}
+.pnav-btn:hover{color:var(--text);}
+.pnav-btn.active{color:var(--green);border-bottom-color:var(--green);}
+
+/* ── Content area ── */
+.adm-content{padding:20px;max-width:960px;margin:0 auto;padding-bottom:100px;}
+
+/* ── Participantes ── */
+.part-section{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+.part-section h3{font-size:.95rem;font-weight:700;margin-bottom:14px;color:var(--green);}
+.part-add{display:flex;gap:10px;margin-bottom:16px;}
+.part-add input{flex:1;}
+.part-add .btn{width:auto;padding:11px 20px;}
+.part-list{display:flex;flex-direction:column;gap:8px;}
+.part-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.part-item-name{flex:1;font-weight:600;}
+.part-del{background:none;border:1px solid rgba(204,9,34,.3);color:var(--red);
+  border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.75rem;font-weight:700;}
+.part-del:hover{background:rgba(204,9,34,.1);}
+.part-empty{color:var(--muted);font-size:.88rem;text-align:center;padding:20px;
+  border:1px dashed var(--border);border-radius:8px;}
+
+/* ── Match cards ── */
+.match-admin-card{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);margin-bottom:20px;overflow:hidden;}
+.mcard-hdr{background:var(--surface2);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.mcard-num{background:rgba(0,155,85,.2);color:var(--green);border-radius:6px;
+  padding:2px 9px;font-size:.75rem;font-weight:700;}
+.mcard-teams{flex:1;font-weight:700;}
+.mcard-date{color:var(--muted);font-size:.8rem;}
+
+.mcard-section{padding:16px;}
+.section-title{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--green);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+
+/* Team config */
+.team-config{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-bottom:4px;}
+.team-config .vs{text-align:center;color:var(--muted);font-weight:700;}
+.team-config input{font-weight:700;font-size:.95rem;}
+
+/* Results */
+.result-config{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;}
+.result-field{display:flex;flex-direction:column;gap:4px;}
+.result-field label{font-size:.7rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+.result-field input[type="number"]{width:70px;text-align:center;padding:8px 4px;}
+.result-field input[type="text"]{width:160px;}
+.check-group{display:flex;flex-direction:column;gap:6px;justify-content:flex-end;padding-bottom:2px;}
+.check-label{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.82rem;color:var(--muted);}
+.check-label input[type="checkbox"]{width:16px;height:16px;accent-color:var(--green);cursor:pointer;}
+
+/* Predictions table */
+.pred-table{width:100%;border-collapse:collapse;}
+.pred-table th{color:var(--muted);font-size:.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.05em;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.pred-table th.tc{text-align:center;}
+.pred-table td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:.87rem;vertical-align:middle;}
+.pred-table tr:last-child td{border-bottom:none;}
+.pred-table tr.filled td{background:rgba(0,155,85,.04);}
+.si{background:var(--surface2);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);padding:5px 0;font-size:.95rem;font-weight:700;
+  width:52px;text-align:center;outline:none;font-family:'Inter',sans-serif;}
+.si:focus{border-color:var(--green);}
+.ko-sel{background:var(--surface2);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);padding:5px 8px;font-size:.78rem;font-family:'Inter',sans-serif;
+  outline:none;min-width:140px;cursor:pointer;max-width:180px;}
+.ko-sel:focus{border-color:var(--green);}
+.cbx{width:18px;height:18px;accent-color:var(--green);cursor:pointer;}
+
+/* Save bar */
+.save-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(3,12,26,.95);
+  backdrop-filter:blur(8px);border-top:1px solid var(--border);
+  padding:14px 20px;display:flex;gap:14px;align-items:center;z-index:100;}
+.save-status{flex:1;font-size:.85rem;color:var(--muted);}
+.btn-save{background:var(--green);color:#000;border:none;border-radius:8px;
+  padding:12px 32px;font-weight:700;cursor:pointer;font-size:.9rem;font-family:'Inter',sans-serif;}
+.btn-save:disabled{opacity:.5;cursor:not-allowed;}
+</style>
+</head>
+<body>
+
+<!-- ── PIN ── -->
+<div class="screen" id="pin-screen">
+  <div class="card">
+    <h2>🏆 Admin · Polla Mundialista 2026</h2>
+    <p>Panel de administración. Ingresa el PIN para continuar.</p>
+    <div class="field">
+      <label class="field-label">PIN</label>
+      <input type="password" id="pin-input" placeholder="••••" autocomplete="off"
+             onkeydown="if(event.key==='Enter')checkPin()">
+    </div>
+    <button class="btn" onclick="checkPin()">Entrar</button>
+    <div class="err" id="pin-err"></div>
+  </div>
+</div>
+
+<!-- ── Token ── -->
+<div class="screen" id="token-screen" style="display:none">
+  <div class="card">
+    <h2>🔑 GitHub Token</h2>
+    <p>Personal Access Token para guardar en GitHub. Solo existe en esta pestaña.</p>
+    <div class="field">
+      <label class="field-label">Token</label>
+      <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+             onkeydown="if(event.key==='Enter')checkToken()">
+    </div>
+    <button class="btn" onclick="checkToken()">Continuar</button>
+    <div class="err" id="token-err"></div>
+  </div>
+</div>
+
+<!-- ── Admin UI ── -->
+<div id="admin-ui">
+  <div class="adm-header">
+    <span class="adm-title">⚽ Admin · Polla Mundialista 2026</span>
+    <div class="adm-actions">
+      <button class="btn btn-sec btn-sm" onclick="reloadData()">↻ Recargar</button>
+    </div>
+  </div>
+
+  <div class="phase-nav">
+    <button class="pnav-btn active" data-phase="participantes" onclick="switchSection('participantes')">PARTICIPANTES</button>
+    <button class="pnav-btn" data-phase="cuartos"       onclick="switchSection('cuartos')">CUARTOS</button>
+    <button class="pnav-btn" data-phase="semi"          onclick="switchSection('semi')">SEMIFINAL</button>
+    <button class="pnav-btn" data-phase="tercero"       onclick="switchSection('tercero')">3ER PUESTO</button>
+    <button class="pnav-btn" data-phase="final"         onclick="switchSection('final')">FINAL</button>
+  </div>
+
+  <div class="adm-content" id="adm-content">
+    <div style="text-align:center;padding:60px 20px;color:var(--muted)">Cargando...</div>
+  </div>
+</div>
+
+<!-- ── Save bar ── -->
+<div class="save-bar" id="save-bar" style="display:none">
+  <div class="save-status" id="save-status">Listo</div>
+  <button class="btn-save" id="save-btn" onclick="saveAll()">💾 Guardar todo</button>
+</div>
+
+<script>
+const PIN       = 'FIFA26';
+const REPO      = 'andreslindarte/polla-mundialista-pocheche';
+const PRED_FILE = 'predicciones2.json';
+
+const PHASE_MATCHES = {
+  cuartos: [97,98,99,100],
+  semi:    [101,102],
+  tercero: [103],
+  final:   [104],
+};
+const MATCH_DATES = {
+  97:'9 jul', 98:'10 jul', 99:'11 jul', 100:'11 jul',
+  101:'14 jul', 102:'15 jul', 103:'18 jul', 104:'19 jul'
+};
+const PHASES = ['cuartos','semi','tercero','final'];
+
+let D = { participantes:[], partidos:{}, resultados:{}, cuartos:{}, semi:{}, tercero:{}, final:{} };
+let currentSection = 'participantes';
+
+// ─── Auth ───────────────────────────────────────────
+function checkPin() {
+  if (document.getElementById('pin-input').value === PIN) {
+    document.getElementById('pin-screen').style.display = 'none';
+    const saved = sessionStorage.getItem('ghToken2');
+    if (saved) document.getElementById('token-input').value = saved;
+    document.getElementById('token-screen').style.display = 'flex';
+  } else {
+    document.getElementById('pin-err').textContent = 'PIN incorrecto.';
+    document.getElementById('pin-input').value = '';
+  }
+}
+
+function checkToken() {
+  const t = document.getElementById('token-input').value.trim();
+  if (!t) { document.getElementById('token-err').textContent = 'Ingresa el token.'; return; }
+  sessionStorage.setItem('ghToken2', t);
+  document.getElementById('token-screen').style.display = 'none';
+  startAdmin(t);
+}
+
+// ─── Load ───────────────────────────────────────────
+async function startAdmin(token) {
+  document.getElementById('admin-ui').style.display = 'block';
+  document.getElementById('save-bar').style.display  = 'flex';
+  setStatus('Cargando datos...');
+  await reloadData();
+}
+
+async function reloadData() {
+  try {
+    const token = sessionStorage.getItem('ghToken2');
+    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${PRED_FILE}`, {
+      headers:{ 'Authorization':`Bearer ${token}`, 'Accept':'application/vnd.github.v3.raw' },
+      cache:'no-store'
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    D = { participantes:[], partidos:{}, resultados:{}, cuartos:{}, semi:{}, tercero:{}, final:{}, ...json };
+    // Ensure partidos has all match numbers with default dates
+    Object.entries(MATCH_DATES).forEach(([n, date]) => {
+      if (!D.partidos[n]) D.partidos[n] = { home:'', away:'', date };
+      else if (!D.partidos[n].date) D.partidos[n].date = date;
+    });
+    PHASES.forEach(p => { if (!D[p]) D[p] = {}; });
+    setStatus('Datos cargados ✓');
+  } catch(e) {
+    setStatus('⚠️ Error al cargar: ' + e.message);
+  }
+  switchSection(currentSection);
+}
+
+// ─── Navigation ─────────────────────────────────────
+function switchSection(section) {
+  currentSection = section;
+  document.querySelectorAll('.pnav-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.phase === section));
+  if (section === 'participantes') renderParticipantes();
+  else renderPhase(section);
+}
+
+// ─── Participantes ──────────────────────────────────
+function renderParticipantes() {
+  const list = D.participantes || [];
+  document.getElementById('adm-content').innerHTML = `
+    <div class="part-section">
+      <h3>Participantes (${list.length})</h3>
+      <div class="part-add">
+        <input type="text" id="new-part" placeholder="Nombre del participante"
+               onkeydown="if(event.key==='Enter')addParticipant()">
+        <button class="btn btn-sm" onclick="addParticipant()">+ Agregar</button>
+      </div>
+      <div class="part-list" id="part-list">
+        ${list.length ? list.map(name => `
+          <div class="part-item">
+            <span class="part-item-name">${name}</span>
+            <button class="part-del" onclick="removeParticipant('${escHtml(name)}')">✕ Quitar</button>
+          </div>`).join('') : '<div class="part-empty">No hay participantes. Agrega uno arriba.</div>'}
+      </div>
+    </div>`;
+}
+
+function addParticipant() {
+  const inp = document.getElementById('new-part');
+  const name = inp.value.trim();
+  if (!name) return;
+  if (D.participantes.includes(name)) {
+    alert('Ya existe ese participante.');
+    return;
+  }
+  D.participantes.push(name);
+  inp.value = '';
+  renderParticipantes();
+  setStatus('Participante agregado — recuerda guardar.');
+}
+
+function removeParticipant(name) {
+  if (!confirm(`¿Quitar a "${name}"? Se borrarán sus predicciones.`)) return;
+  D.participantes = D.participantes.filter(n => n !== name);
+  PHASES.forEach(p => { delete (D[p]||{})[name]; });
+  renderParticipantes();
+  setStatus('Participante eliminado — recuerda guardar.');
+}
+
+// ─── Phase rendering ────────────────────────────────
+function renderPhase(phase) {
+  const matches = PHASE_MATCHES[phase] || [];
+  document.getElementById('adm-content').innerHTML =
+    matches.map(n => renderMatchCard(n, phase)).join('');
+}
+
+function renderMatchCard(n, phase) {
+  const partido  = D.partidos[n]   || { home:'', away:'', date: MATCH_DATES[n]||'' };
+  const result   = D.resultados[n] || {};
+  const home     = partido.home || '';
+  const away     = partido.away || '';
+  const homeOpt  = home || `Equipo Local (P${n})`;
+  const awayOpt  = away || `Equipo Visitante (P${n})`;
+
+  // Prediction rows
+  const rows = (D.participantes||[]).map((name, pi) => {
+    const pred = ((D[phase]||{})[name]||{})[n] || {};
+    const gl90  = pred.gl90  !== undefined ? pred.gl90  : '';
+    const gv90  = pred.gv90  !== undefined ? pred.gv90  : '';
+    const avanza = pred.avanza || '';
+    const pror   = pred.prorroga === true;
+    const pen    = pred.penales  === true;
+    const filled = gl90!==''&&gv90!==''&&avanza;
+    return `<tr class="${filled?'filled':''}">
+      <td>${name}</td>
+      <td class="tc"><input class="si" type="number" min="0" max="20"
+        data-n="${n}" data-pi="${pi}" data-phase="${phase}" data-f="gl90"
+        value="${gl90}" oninput="onPred(this)" onwheel="this.blur()"></td>
+      <td class="tc"><input class="si" type="number" min="0" max="20"
+        data-n="${n}" data-pi="${pi}" data-phase="${phase}" data-f="gv90"
+        value="${gv90}" oninput="onPred(this)" onwheel="this.blur()"></td>
+      <td><select class="ko-sel" data-n="${n}" data-pi="${pi}" data-phase="${phase}" data-f="avanza"
+          onchange="onPred(this)">
+        <option value="">¿Quién avanza?</option>
+        <option value="${homeOpt}" ${avanza===homeOpt?'selected':''}>⬅ ${homeOpt}</option>
+        <option value="${awayOpt}" ${avanza===awayOpt?'selected':''}>➡ ${awayOpt}</option>
+      </select></td>
+      <td class="tc"><input type="checkbox" class="cbx"
+        data-n="${n}" data-pi="${pi}" data-phase="${phase}" data-f="prorroga"
+        ${pror?'checked':''} onchange="onPred(this)"></td>
+      <td class="tc"><input type="checkbox" class="cbx"
+        data-n="${n}" data-pi="${pi}" data-phase="${phase}" data-f="penales"
+        ${pen?'checked':''} onchange="onPred(this)"></td>
+    </tr>`;
+  }).join('');
+
+  return `<div class="match-admin-card">
+    <div class="mcard-hdr">
+      <span class="mcard-num">P${n}</span>
+      <span class="mcard-teams">${home||'—'} vs ${away||'—'}</span>
+      <span class="mcard-date">${partido.date||MATCH_DATES[n]||''}</span>
+    </div>
+
+    <!-- Equipos -->
+    <div class="mcard-section">
+      <div class="section-title">Equipos del partido</div>
+      <div class="team-config">
+        <input type="text" placeholder="Equipo local" value="${escHtml(home)}"
+               oninput="onTeam(${n},'home',this.value)">
+        <span class="vs">vs</span>
+        <input type="text" placeholder="Equipo visitante" value="${escHtml(away)}"
+               oninput="onTeam(${n},'away',this.value)">
+      </div>
+    </div>
+
+    <!-- Resultado real -->
+    <div class="mcard-section">
+      <div class="section-title">Resultado real (llenar después del partido)</div>
+      <div class="result-config">
+        <div class="result-field">
+          <label>Goles ${homeOpt}</label>
+          <input type="number" class="si" min="0" max="20"
+            value="${result.gl90!==undefined?result.gl90:''}"
+            oninput="onResult(${n},'gl90',this.value)" onwheel="this.blur()">
+        </div>
+        <div class="result-field">
+          <label>Goles ${awayOpt}</label>
+          <input type="number" class="si" min="0" max="20"
+            value="${result.gv90!==undefined?result.gv90:''}"
+            oninput="onResult(${n},'gv90',this.value)" onwheel="this.blur()">
+        </div>
+        <div class="result-field">
+          <label>Quién avanzó</label>
+          <select class="ko-sel" onchange="onResult(${n},'winner',this.value)">
+            <option value="">Seleccionar</option>
+            <option value="${homeOpt}" ${result.winner===homeOpt?'selected':''}>⬅ ${homeOpt}</option>
+            <option value="${awayOpt}" ${result.winner===awayOpt?'selected':''}>➡ ${awayOpt}</option>
+          </select>
+        </div>
+        <div class="check-group">
+          <label class="check-label">
+            <input type="checkbox" class="cbx" ${result.prorroga?'checked':''}
+                   onchange="onResult(${n},'prorroga',this.checked)">
+            Prórroga (120')
+          </label>
+          <label class="check-label">
+            <input type="checkbox" class="cbx" ${result.penales?'checked':''}
+                   onchange="onResult(${n},'penales',this.checked)">
+            Penales
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Predicciones -->
+    <div class="mcard-section">
+      <div class="section-title">Predicciones de participantes</div>
+      ${D.participantes.length===0
+        ? '<p style="color:var(--muted);font-size:.85rem">Agrega participantes primero.</p>'
+        : `<table class="pred-table">
+        <thead><tr>
+          <th>Participante</th>
+          <th class="tc">${homeOpt.substring(0,10)}…</th>
+          <th class="tc">${awayOpt.substring(0,10)}…</th>
+          <th>Avanza</th>
+          <th class="tc">Prórr.</th>
+          <th class="tc">Pen.</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`}
+    </div>
+  </div>`;
+}
+
+// ─── Input handlers ─────────────────────────────────
+function onTeam(n, field, value) {
+  if (!D.partidos[n]) D.partidos[n] = { home:'', away:'', date: MATCH_DATES[n]||'' };
+  D.partidos[n][field] = value;
+  setStatus('Sin guardar…');
+}
+
+function onResult(n, field, value) {
+  if (!D.resultados[n]) D.resultados[n] = {};
+  const r = D.resultados[n];
+  if (field === 'gl90' || field === 'gv90') {
+    const v = parseInt(value);
+    if (isNaN(v) || value === '') { delete r[field]; }
+    else r[field] = v;
+  } else if (field === 'prorroga' || field === 'penales') {
+    r[field] = !!value;
+  } else {
+    r[field] = value || '';
+  }
+  setStatus('Sin guardar…');
+}
+
+function onPred(el) {
+  const n     = parseInt(el.dataset.n);
+  const pi    = parseInt(el.dataset.pi);
+  const phase = el.dataset.phase;
+  const field = el.dataset.f;
+  const name  = D.participantes[pi];
+  if (!name) return;
+  if (!D[phase]) D[phase] = {};
+  if (!D[phase][name]) D[phase][name] = {};
+  if (!D[phase][name][n]) D[phase][name][n] = {};
+  const pred = D[phase][name][n];
+
+  if (field === 'prorroga' || field === 'penales') {
+    pred[field] = el.checked;
+  } else if (field === 'avanza') {
+    pred.avanza = el.value;
+  } else {
+    const v = parseInt(el.value);
+    if (isNaN(v) || el.value === '') delete pred[field];
+    else pred[field] = v;
+  }
+
+  // Row highlight
+  const row = el.closest('tr');
+  if (row) {
+    const filled = pred.gl90!==undefined && pred.gv90!==undefined && pred.avanza;
+    row.className = filled ? 'filled' : '';
+  }
+  setStatus('Sin guardar…');
+}
+
+// ─── Save ───────────────────────────────────────────
+async function saveAll() {
+  const token = sessionStorage.getItem('ghToken2');
+  if (!token) { alert('Token no encontrado. Recarga la página.'); return; }
+
+  const btn = document.getElementById('save-btn');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  setStatus('Subiendo a GitHub...');
+
+  try {
+    // Get current SHA
+    let sha = null;
+    const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${PRED_FILE}`, {
+      headers:{ 'Authorization':`Bearer ${token}`, 'Accept':'application/vnd.github.v3+json' }
+    });
+    if (getRes.ok) { const cur = await getRes.json(); sha = cur.sha; }
+
+    const jsonStr = JSON.stringify(D, null, 2);
+    const content = btoa(unescape(encodeURIComponent(jsonStr)));
+    const body = {
+      message: `Admin Polla2 · ${new Date().toLocaleString('es-CO')}`,
+      content
+    };
+    if (sha) body.sha = sha;
+
+    const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${PRED_FILE}`, {
+      method:'PUT',
+      headers:{
+        'Authorization':`Bearer ${token}`,
+        'Accept':'application/vnd.github.v3+json',
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (putRes.ok) {
+      setStatus('✅ Guardado. La web se actualiza en ~1 min.');
+    } else {
+      const err = await putRes.json();
+      setStatus('❌ Error: ' + (err.message || putRes.status));
+    }
+  } catch(e) {
+    setStatus('❌ Error de red: ' + e.message);
+  }
+  btn.textContent = '💾 Guardar todo'; btn.disabled = false;
+}
+
+function setStatus(msg) {
+  const el = document.getElementById('save-status');
+  if (el) el.textContent = msg;
+}
+
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
