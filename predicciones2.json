@@ -222,7 +222,8 @@
       "98": {
         "gl90": 0,
         "gv90": 0,
-        "avanza": "Bélgica 🇧🇪"
+        "avanza": "Bélgica 🇧🇪",
+        "penales": true
       }
     }
   },
