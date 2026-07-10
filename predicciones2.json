@@ -132,6 +132,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Francia 🇫🇷"
+      },
+      "98": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "España 🇪🇸"
       }
     },
     "Adriana Maria": {
@@ -175,6 +180,11 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "Francia 🇫🇷"
+      },
+      "98": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "España 🇪🇸"
       }
     },
     "Eugenia": {
@@ -195,6 +205,11 @@
         "gl90": 3,
         "gv90": 2,
         "avanza": "Francia 🇫🇷"
+      },
+      "98": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "España 🇪🇸"
       }
     },
     "Maria Isabel": {
