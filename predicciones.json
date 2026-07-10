@@ -4977,6 +4977,12 @@
         "gl90": 3,
         "gv90": 2,
         "avanza": "Gan. P89"
+      },
+      "98": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P93",
+        "penales": true
       }
     },
     "Leonardo Fabio": {
@@ -4985,6 +4991,11 @@
         "gv90": 3,
         "avanza": "Gan. P89",
         "penales": true
+      },
+      "98": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Gan. P93"
       }
     },
     "Martha Cenidia": {
@@ -4993,6 +5004,11 @@
         "gv90": 2,
         "avanza": "Gan. P89",
         "penales": true
+      },
+      "98": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P93"
       }
     },
     "Juan David": {
@@ -5007,6 +5023,11 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "Gan. P89"
+      },
+      "98": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P93"
       }
     },
     "Laura Valentina": {
@@ -5014,6 +5035,11 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "Gan. P89"
+      },
+      "98": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Gan. P93"
       }
     },
     "Andrea Carolina": {
@@ -5021,6 +5047,11 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "Gan. P89"
+      },
+      "98": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "Gan. P93"
       }
     },
     "Jaime Andres": {
@@ -5028,6 +5059,18 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Gan. P89"
+      },
+      "98": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P93"
+      }
+    },
+    "Gloria Isabel": {
+      "98": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P93"
       }
     }
   },
