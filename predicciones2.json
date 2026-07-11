@@ -84,6 +84,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Noruega 🇳🇴"
+      },
+      "100": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Sadys": {
@@ -101,6 +106,11 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿"
+      },
+      "100": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Caro": {
@@ -119,6 +129,11 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "Noruega 🇳🇴"
+      },
+      "100": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Robert": {
@@ -137,6 +152,11 @@
         "gl90": 1,
         "gv90": 3,
         "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿"
+      },
+      "100": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Andrés": {
@@ -155,6 +175,11 @@
         "gl90": 1,
         "gv90": 0,
         "avanza": "Noruega 🇳🇴"
+      },
+      "100": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Adri L": {
@@ -189,6 +214,11 @@
         "gl90": 3,
         "gv90": 0,
         "avanza": "Noruega 🇳🇴"
+      },
+      "100": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Sahayda": {
@@ -223,6 +253,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Noruega 🇳🇴"
+      },
+      "100": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Suiza 🇨🇭"
       }
     },
     "Ani": {
@@ -258,6 +293,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Noruega 🇳🇴"
+      },
+      "100": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Jesus David": {
@@ -294,6 +334,11 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "Noruega 🇳🇴"
+      },
+      "100": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Argetina 🇦🇷"
       }
     }
   },
