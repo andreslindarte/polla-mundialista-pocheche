@@ -5101,6 +5101,16 @@
         "gl90": 1,
         "gv90": 0,
         "avanza": "Gan. P93"
+      },
+      "99": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Gan. P91"
+      },
+      "100": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Gan. P95"
       }
     },
     "Jaime Andres": {
