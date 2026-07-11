@@ -5071,6 +5071,11 @@
         "gl90": 1,
         "gv90": 0,
         "avanza": "Gan. P91"
+      },
+      "100": {
+        "gl90": 4,
+        "avanza": "Gan. P95",
+        "gv90": 1
       }
     },
     "Laura Valentina": {
