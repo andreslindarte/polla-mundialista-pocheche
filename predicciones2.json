@@ -79,6 +79,11 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "España 🇪🇸"
+      },
+      "99": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Noruega 🇳🇴"
       }
     },
     "Sadys": {
@@ -91,6 +96,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "España 🇪🇸"
+      },
+      "99": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       }
     },
     "Caro": {
@@ -104,6 +114,11 @@
         "gv90": 1,
         "avanza": "España 🇪🇸",
         "prorroga": false
+      },
+      "99": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Noruega 🇳🇴"
       }
     },
     "Robert": {
@@ -117,6 +132,11 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "España 🇪🇸"
+      },
+      "99": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       }
     },
     "Andrés": {
@@ -130,6 +150,11 @@
         "gv90": 1,
         "avanza": "España 🇪🇸",
         "penales": true
+      },
+      "99": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "Noruega 🇳🇴"
       }
     },
     "Adri L": {
@@ -142,6 +167,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "España 🇪🇸"
+      },
+      "99": {
+        "gl90": 2,
+        "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "gv90": 3
       }
     },
     "Adriana Maria": {
@@ -154,6 +184,11 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "España 🇪🇸"
+      },
+      "99": {
+        "gl90": 3,
+        "gv90": 0,
+        "avanza": "Noruega 🇳🇴"
       }
     },
     "Sahayda": {
@@ -166,6 +201,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "España 🇪🇸"
+      },
+      "99": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Noruega 🇳🇴"
       }
     },
     "Mario": {
@@ -178,6 +218,11 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Bélgica 🇧🇪"
+      },
+      "99": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Noruega 🇳🇴"
       }
     },
     "Ani": {
@@ -190,6 +235,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "España 🇪🇸"
+      },
+      "99": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Noruega 🇳🇴"
       }
     },
     "Eugenia": {
@@ -203,6 +253,11 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "España 🇪🇸"
+      },
+      "99": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Noruega 🇳🇴"
       }
     },
     "Jesus David": {
@@ -215,6 +270,11 @@
         "gl90": 1,
         "gv90": 0,
         "avanza": "España 🇪🇸"
+      },
+      "99": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       }
     },
     "Maria Isabel": {
@@ -229,6 +289,11 @@
         "gv90": 0,
         "avanza": "Bélgica 🇧🇪",
         "penales": true
+      },
+      "99": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Noruega 🇳🇴"
       }
     }
   },
