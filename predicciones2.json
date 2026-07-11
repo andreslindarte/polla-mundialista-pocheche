@@ -66,6 +66,12 @@
       "gl90": 2,
       "gv90": 1,
       "winner": "España 🇪🇸"
+    },
+    "99": {
+      "gl90": 1,
+      "gv90": 2,
+      "winner": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "prorroga": true
     }
   },
   "cuartos": {
