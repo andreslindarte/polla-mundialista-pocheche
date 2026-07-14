@@ -5154,6 +5154,83 @@
       }
     }
   },
-  "semi": {},
+  "semi": {
+    "Andres Jesús": {
+      "101": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "Gan. P97"
+      }
+    },
+    "Gloria Isabel": {
+      "101": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P98"
+      }
+    },
+    "Jaime Andres": {
+      "101": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P97"
+      }
+    },
+    "Andrea Carolina": {
+      "101": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Gan. P97"
+      }
+    },
+    "Juan Camilo": {
+      "101": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P97"
+      }
+    },
+    "Leonardo Fabio": {
+      "101": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Gan. P97"
+      }
+    },
+    "Laura Valentina": {
+      "101": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P98",
+        "penales": true
+      }
+    },
+    "José David": {
+      "101": {
+        "avanza": "Gan. P97"
+      }
+    },
+    "Cesar Lindarte": {
+      "101": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P97"
+      }
+    },
+    "Martha Cenidia": {
+      "101": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "Gan. P97"
+      }
+    },
+    "Juan David": {
+      "101": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Gan. P97"
+      }
+    }
+  },
   "final": {}
 }
