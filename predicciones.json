@@ -5171,9 +5171,9 @@
     },
     "Jaime Andres": {
       "101": {
-        "gl90": 2,
-        "gv90": 1,
-        "avanza": "Gan. P97"
+        "avanza": "Gan. P98",
+        "gl90": 1,
+        "gv90": 2
       }
     },
     "Andrea Carolina": {
@@ -5221,7 +5221,8 @@
       "101": {
         "gl90": 2,
         "gv90": 2,
-        "avanza": "Gan. P97"
+        "avanza": "Gan. P97",
+        "penales": true
       }
     },
     "Juan David": {
