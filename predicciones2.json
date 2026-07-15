@@ -385,6 +385,11 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "España 🇪🇸 "
+      },
+      "102": {
+        "gl90": 0,
+        "gv90": 1,
+        "avanza": "Argentina 🇦🇷 "
       }
     },
     "Caro": {
@@ -392,6 +397,12 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Argentina 🇦🇷 ",
+        "prorroga": true
       }
     },
     "Angie": {
@@ -399,6 +410,11 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "Argentina 🇦🇷 "
       }
     },
     "Sahayda": {
@@ -406,6 +422,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿 "
       }
     },
     "Adri L": {
@@ -413,6 +434,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 0,
+        "gv90": 2,
+        "avanza": "Argentina 🇦🇷 "
       }
     },
     "Andrés": {
@@ -420,6 +446,12 @@
         "gl90": 1,
         "gv90": 0,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿 ",
+        "penales": true
       }
     },
     "Ani": {
@@ -427,6 +459,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿 "
       }
     },
     "Mario": {
@@ -434,6 +471,11 @@
         "gl90": 1,
         "avanza": "España 🇪🇸 ",
         "gv90": 2
+      },
+      "102": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿 "
       }
     },
     "Jesus David": {
@@ -441,6 +483,11 @@
         "gl90": 3,
         "gv90": 2,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Argentina 🇦🇷 "
       }
     },
     "Sadys": {
@@ -448,6 +495,11 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Argentina 🇦🇷 "
       }
     },
     "Maria Isabel": {
@@ -456,6 +508,11 @@
         "gv90": 1,
         "avanza": "España 🇪🇸 ",
         "penales": true
+      },
+      "102": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿 "
       }
     },
     "Eugenia": {
@@ -463,6 +520,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Argentina 🇦🇷 "
       }
     },
     "Adriana Maria": {
@@ -470,6 +532,11 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "Francia 🇫🇷 "
+      },
+      "102": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Argentina 🇦🇷 "
       }
     }
   },
