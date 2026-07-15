@@ -36,8 +36,8 @@
       "date": "11 jul"
     },
     "101": {
-      "home": "",
-      "away": "",
+      "home": "Francia 🇫🇷 ",
+      "away": "España 🇪🇸 ",
       "date": "14 jul"
     },
     "102": {
@@ -78,6 +78,11 @@
       "gv90": 1,
       "winner": "Argetina 🇦🇷",
       "prorroga": true
+    },
+    "101": {
+      "gl90": 0,
+      "gv90": 2,
+      "winner": "Equipo Visitante (P101)"
     }
   },
   "cuartos": {
