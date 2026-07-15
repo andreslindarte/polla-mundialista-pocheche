@@ -1035,6 +1035,11 @@ async function fetchKnockoutData() {
       const statusDesc = event.status?.type?.description || '';
       const isPK  = statusName.includes('PK') || statusName.includes('SHOOTOUT') ||
                     statusName.includes('Pen') || statusDesc.toLowerCase().includes('pen');
+      // Prórroga: ESPN marca STATUS_FINAL_AET ("Final Score - After Extra Time").
+      // Nota: linescores viene VACÍO en esta API, así que gl120 nunca se llena;
+      // hay que detectar la prórroga por el status. Penales implica prórroga previa.
+      const isAET = statusName.includes('AET') || statusDesc.toLowerCase().includes('extra time');
+      const prorroga = isAET || isPK;
 
       // Scores: ESPN usa score final del partido (incluye ET si aplica)
       const gl90raw = parseInt(homeC.score);
@@ -1072,7 +1077,7 @@ async function fetchKnockoutData() {
                   : FIXTURE_CUARTOS.find(f=>f.n===fixture.n) ? 'cuartos'
                   : FIXTURE_SEMI.find(f=>f.n===fixture.n) ? 'semi' : 'final';
       if (!DATA.fixtureKO[phase]) DATA.fixtureKO[phase] = {};
-      DATA.fixtureKO[phase][fixture.n] = { gl90, gv90, gl120, gv120, penales: isPK, pkHome, pkAway, avanza };
+      DATA.fixtureKO[phase][fixture.n] = { gl90, gv90, gl120, gv120, penales: isPK, prorroga, pkHome, pkAway, avanza };
     }
   } catch(e) { /* fallo silencioso */ }
 }
@@ -1092,7 +1097,7 @@ function computeKnockoutScores(phaseFixture, phaseKey) {
     if (!real) return;
 
     // Resultado final: 120' si está disponible, si no gl90 (fallback para PK sin linescores)
-    const realPror = real.gl120 != null || real.penales;
+    const realPror = real.prorroga || real.gl120 != null || real.penales;
     const finalGL = real.gl120 ?? real.gl90;
     const finalGV = real.gv120 ?? real.gv90;
 
@@ -1320,7 +1325,7 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
   // Score display
   let scoreHtml;
   if (real) {
-    const whenLabel = real.penales ? '+ Penales' : real.gl120 != null ? '+ Prórroga' : '90\'';
+    const whenLabel = real.penales ? '+ Penales' : (real.prorroga || real.gl120 != null) ? '+ Prórroga' : '90\'';
     const pkLine = (real.penales && real.pkHome !== null)
       ? `<div class="pk-result">${real.pkHome}–${real.pkAway} <span class="pk-label">PEN</span></div>` : '';
     scoreHtml = `
@@ -1335,7 +1340,7 @@ function renderKnockoutMatchCard(match, phaseKey, phaseLabel) {
   }
 
   // Resultado final: 120' si está disponible, si no gl90 (fallback para PK sin linescores)
-  const realPror = real ? (real.gl120 != null || real.penales) : false;
+  const realPror = real ? (real.prorroga || real.gl120 != null || real.penales) : false;
   const finalGL = real ? (real.gl120 ?? real.gl90) : null;
   const finalGV = real ? (real.gv120 ?? real.gv90) : null;
 
