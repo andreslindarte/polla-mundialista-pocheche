@@ -72,6 +72,12 @@
       "gv90": 2,
       "winner": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
       "prorroga": true
+    },
+    "100": {
+      "gl90": 3,
+      "gv90": 1,
+      "winner": "Argetina 🇦🇷",
+      "prorroga": true
     }
   },
   "cuartos": {
@@ -203,6 +209,11 @@
         "gl90": 2,
         "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
         "gv90": 3
+      },
+      "100": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Adriana Maria": {
@@ -242,6 +253,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Noruega 🇳🇴"
+      },
+      "100": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Mario": {
@@ -281,6 +297,11 @@
         "gl90": 3,
         "gv90": 2,
         "avanza": "Noruega 🇳🇴"
+      },
+      "100": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Eugenia": {
@@ -321,6 +342,11 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿"
+      },
+      "100": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Argetina 🇦🇷"
       }
     },
     "Maria Isabel": {
