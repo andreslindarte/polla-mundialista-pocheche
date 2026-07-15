@@ -41,8 +41,8 @@
       "date": "14 jul"
     },
     "102": {
-      "home": "",
-      "away": "",
+      "home": "Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿 ",
+      "away": "Argentina 🇦🇷 ",
       "date": "15 jul"
     },
     "103": {
@@ -379,7 +379,100 @@
       }
     }
   },
-  "semi": {},
+  "semi": {
+    "Robert": {
+      "101": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "España 🇪🇸 "
+      }
+    },
+    "Caro": {
+      "101": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Francia 🇫🇷 "
+      }
+    },
+    "Angie": {
+      "101": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Francia 🇫🇷 "
+      }
+    },
+    "Sahayda": {
+      "101": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Francia 🇫🇷 "
+      }
+    },
+    "Adri L": {
+      "101": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Francia 🇫🇷 "
+      }
+    },
+    "Andrés": {
+      "101": {
+        "gl90": 1,
+        "gv90": 0,
+        "avanza": "Francia 🇫🇷 "
+      }
+    },
+    "Ani": {
+      "101": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Francia 🇫🇷 "
+      }
+    },
+    "Mario": {
+      "101": {
+        "gl90": 1,
+        "avanza": "España 🇪🇸 ",
+        "gv90": 2
+      }
+    },
+    "Jesus David": {
+      "101": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Francia 🇫🇷 "
+      }
+    },
+    "Sadys": {
+      "101": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Francia 🇫🇷 "
+      }
+    },
+    "Maria Isabel": {
+      "101": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "España 🇪🇸 ",
+        "penales": true
+      }
+    },
+    "Eugenia": {
+      "101": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Francia 🇫🇷 "
+      }
+    },
+    "Adriana Maria": {
+      "101": {
+        "gl90": 2,
+        "gv90": 0,
+        "avanza": "Francia 🇫🇷 "
+      }
+    }
+  },
   "tercero": {},
   "final": {}
 }
