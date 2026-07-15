@@ -996,6 +996,11 @@ async function fetchKnockoutData() {
 
     const allFixture = [...FIXTURE_R32, ...FIXTURE_R16, ...FIXTURE_CUARTOS, ...FIXTURE_SEMI, ...FIXTURE_FINAL];
 
+    // slotToTeam: resuelve "Gan. P89" → "Francia" de forma progresiva
+    // Se llena conforme ESPN confirma resultados (R32 → R16 → cuartos → semi → final)
+    // Esto evita depender de fechas UTC (que cruzan medianoche para partidos nocturnos)
+    const slotToTeam = {};
+
     for (const event of (json.events || [])) {
       const comp = event.competitions?.[0];
       if (!comp) continue;
@@ -1010,29 +1015,17 @@ async function fetchKnockoutData() {
       const espnAway = TEAM_MAP[awayC.team?.displayName] || awayC.team?.displayName || '';
       if (!espnHome || !espnAway) continue;
 
-      // Buscar partido en el fixture por fecha y equipos (cuando ya son conocidos)
-      const eventDate = new Date(event.date);
-      const _MON = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-      const espnDate = `${eventDate.getUTCDate()} ${_MON[eventDate.getUTCMonth()]}`;
-
-      // Match por AMBOS equipos a la vez (evita falsos positivos con OR)
-      let fixture = allFixture.find(f => {
-        const fTeams = new Set([f.home, f.away, f.homeSlot, f.awaySlot].filter(Boolean));
-        return fTeams.has(espnHome) && fTeams.has(espnAway);
+      // Buscar fixture: usa slotToTeam para resolver slots como "Gan. P89" en tiempo real
+      const fixture = allFixture.find(f => {
+        const fHome = slotToTeam[f.homeSlot] || f.home;
+        const fAway = slotToTeam[f.awaySlot] || f.away;
+        if (!fHome || !fAway) return false;
+        const t = new Set([fHome, fAway]);
+        return t.has(espnHome) && t.has(espnAway);
       });
-      // Fallback: fecha y orden (para slots aún no resueltos como Gan. P89)
-      if (!fixture) {
-        const dayFixtures = allFixture.filter(f => f.date === espnDate);
-        const dayEvents = (json.events || []).filter(e => {
-          const d = new Date(e.date);
-          return `${d.getUTCDate()} ${_MON[d.getUTCMonth()]}` === espnDate;
-        });
-        const idx = dayEvents.indexOf(event);
-        if (idx >= 0 && dayFixtures[idx]) fixture = dayFixtures[idx];
-      }
       if (!fixture) continue;
 
-      // Actualizar equipos reales en el slot
+      // Actualizar equipos reales en el fixture
       fixture.home = espnHome;
       fixture.away = espnAway;
 
@@ -1042,7 +1035,6 @@ async function fetchKnockoutData() {
       const statusDesc = event.status?.type?.description || '';
       const isPK  = statusName.includes('PK') || statusName.includes('SHOOTOUT') ||
                     statusName.includes('Pen') || statusDesc.toLowerCase().includes('pen');
-      const isAET = isPK || statusName.includes('AET') || statusName.includes('ET');
 
       // Scores: ESPN usa score final del partido (incluye ET si aplica)
       const gl90raw = parseInt(homeC.score);
@@ -1068,6 +1060,12 @@ async function fetchKnockoutData() {
       // Quién avanzó (winner)
       const winner = comp.competitors?.find(c => c.winner);
       const avanza = !winner ? null : (winner.homeAway === 'home' ? 'home' : 'away');
+
+      // Alimentar slotToTeam para que el siguiente nivel (cuartos/semi/final) resuelva sus slots
+      if (avanza) {
+        slotToTeam[`Gan. P${fixture.n}`] = avanza === 'home' ? espnHome : espnAway;
+        slotToTeam[`Per. P${fixture.n}`] = avanza === 'home' ? espnAway : espnHome;
+      }
 
       const phase = FIXTURE_R32.find(f=>f.n===fixture.n) ? 'r32'
                   : FIXTURE_R16.find(f=>f.n===fixture.n) ? 'r16'
