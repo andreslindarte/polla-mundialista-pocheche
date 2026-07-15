@@ -267,13 +267,21 @@ async function resolveKOSlots() {
                  '20260709','20260710','20260711',
                  '20260714','20260715','20260718','20260719'];
   const winnerMap = {};
+
+  function applyToFixtures() {
+    [...FIXTURE_R16,...FIXTURE_CUARTOS,...FIXTURE_SEMI,...FIXTURE_FINAL].forEach(m=>{
+      if (winnerMap[m.homeSlot] && !m.home) m.home = winnerMap[m.homeSlot];
+      if (winnerMap[m.awaySlot] && !m.away) m.away = winnerMap[m.awaySlot];
+    });
+  }
+
   for (const d of dates) {
     try {
       const res = await fetch(
         `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${d}`,
         { cache:'no-store' }
       );
-      if (!res.ok) continue;
+      if (!res.ok) { applyToFixtures(); continue; }
       const json = await res.json();
       for (const ev of (json.events||[])) {
         if (!ev.status?.type?.completed) continue;
@@ -295,11 +303,8 @@ async function resolveKOSlots() {
         winnerMap[`Per. P${fix.n}`] = TEAM_MAP_ESPN[lc.team.displayName]||lc.team.displayName;
       }
     } catch(e) { /* silent */ }
+    applyToFixtures();
   }
-  [...FIXTURE_CUARTOS,...FIXTURE_SEMI,...FIXTURE_FINAL].forEach(m=>{
-    if (winnerMap[m.homeSlot]) m.home = winnerMap[m.homeSlot];
-    if (winnerMap[m.awaySlot]) m.away = winnerMap[m.awaySlot];
-  });
 }
 
 let MATCHES = [], PARTICIPANTS = [], FIXTURE_SCORES = {};

@@ -259,7 +259,7 @@ header{background:linear-gradient(135deg,#041020 0%,#0A2540 50%,#041020 100%);
       </table>
     </div>
     <div class="pts-guide" style="margin-top:20px">
-      <div class="pts-guide-item"><span class="pts-guide-num">3</span>Marcador exacto en 90'</div>
+      <div class="pts-guide-item"><span class="pts-guide-num">2</span>Marcador exacto en 90'</div>
       <div class="pts-guide-item"><span class="pts-guide-num">1</span>Solo ganador correcto</div>
       <div class="pts-guide-item"><span class="pts-guide-num">+1</span>Aciertas prórroga</div>
       <div class="pts-guide-item"><span class="pts-guide-num">+1</span>Aciertas penales</div>
@@ -319,16 +319,12 @@ function calcPoints(pred, result) {
   if (!pred || !result || result.gl90 === undefined || result.gl90 === null) return null;
   let pts = 0;
   if (pred.gl90 === result.gl90 && pred.gv90 === result.gv90) {
-    pts += 3;
+    pts += 2;
   } else if (pred.avanza && result.winner && pred.avanza === result.winner) {
     pts += 1;
   }
-  if (result.prorroga !== undefined) {
-    if (!!pred.prorroga === !!result.prorroga) pts += 1;
-  }
-  if (result.prorroga && result.penales !== undefined) {
-    if (!!pred.penales === !!result.penales) pts += 1;
-  }
+  if (result.prorroga && pred.prorroga)  pts += 1;
+  if (result.penales  && pred.penales)   pts += 1;
   return pts;
 }
 
