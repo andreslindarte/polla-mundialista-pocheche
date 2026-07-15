@@ -5173,6 +5173,12 @@
         "avanza": "Gan. P98",
         "gv90": 2,
         "gl90": 1
+      },
+      "102": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P99",
+        "prorroga": true
       }
     },
     "Jaime Andres": {
@@ -5230,6 +5236,11 @@
         "gv90": 1,
         "avanza": "Gan. P98",
         "penales": true
+      },
+      "102": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P100"
       }
     },
     "José David": {
