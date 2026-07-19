@@ -5290,6 +5290,12 @@
         "gl90": 3,
         "gv90": 1,
         "avanza": "Per. P101"
+      },
+      "104": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Gan. P102",
+        "prorroga": true
       }
     },
     "Juan David": {
@@ -5297,6 +5303,12 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Per. P102"
+      },
+      "104": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Gan. P102",
+        "prorroga": true
       }
     },
     "Martha Cenidia": {
@@ -5304,6 +5316,11 @@
         "gl90": 2,
         "gv90": 0,
         "avanza": "Per. P101"
+      },
+      "104": {
+        "avanza": "Gan. P102",
+        "gv90": 3,
+        "gl90": 1
       }
     },
     "Maria Camila": {
@@ -5311,6 +5328,12 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Per. P101"
+      },
+      "104": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Gan. P102",
+        "prorroga": true
       }
     },
     "José David": {
@@ -5318,6 +5341,12 @@
         "gl90": 1,
         "gv90": 0,
         "avanza": "Per. P101"
+      },
+      "104": {
+        "gl90": 1,
+        "gv90": 1,
+        "avanza": "Gan. P102",
+        "penales": true
       }
     },
     "Gloria Isabel": {
@@ -5325,6 +5354,12 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Per. P102"
+      },
+      "104": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Gan. P102",
+        "prorroga": true
       }
     },
     "Leonardo Fabio": {
@@ -5332,6 +5367,12 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Per. P102"
+      },
+      "104": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "Gan. P101",
+        "penales": true
       }
     },
     "Cesar Lindarte": {
@@ -5339,6 +5380,11 @@
         "gl90": 2,
         "gv90": 1,
         "avanza": "Per. P101"
+      },
+      "104": {
+        "gl90": 1,
+        "gv90": 3,
+        "avanza": "Gan. P102"
       }
     },
     "Jaime Andres": {
@@ -5346,6 +5392,11 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Per. P102"
+      },
+      "104": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Gan. P102"
       }
     },
     "Laura Valentina": {
@@ -5353,6 +5404,12 @@
         "gl90": 1,
         "gv90": 0,
         "avanza": "Per. P101"
+      },
+      "104": {
+        "gv90": 2,
+        "gl90": 1,
+        "prorroga": true,
+        "avanza": "Gan. P102"
       }
     },
     "María del Pilar": {
@@ -5360,6 +5417,11 @@
         "gl90": 1,
         "gv90": 2,
         "avanza": "Per. P102"
+      },
+      "104": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Gan. P101"
       }
     },
     "Andrea Carolina": {
@@ -5367,6 +5429,12 @@
         "gl90": 2,
         "avanza": "Per. P101",
         "gv90": 0
+      },
+      "104": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Gan. P101",
+        "prorroga": true
       }
     }
   }
