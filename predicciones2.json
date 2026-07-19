@@ -51,8 +51,8 @@
       "date": "18 jul"
     },
     "104": {
-      "home": "",
-      "away": "",
+      "home": "España 🇪🇸 ",
+      "away": "Argentina 🇦🇷 ",
       "date": "19 jul"
     }
   },
@@ -93,6 +93,12 @@
       "gl90": 4,
       "gv90": 6,
       "winner": "Equipo Visitante (P103)"
+    },
+    "104": {
+      "gl90": 1,
+      "gv90": 0,
+      "prorroga": true,
+      "winner": "Equipo Local (P104)"
     }
   },
   "cuartos": {
@@ -636,5 +642,101 @@
       }
     }
   },
-  "final": {}
+  "final": {
+    "Robert": {
+      "104": {
+        "gl90": 2,
+        "gv90": 2,
+        "avanza": "Equipo Visitante (P104)",
+        "penales": true
+      }
+    },
+    "Caro": {
+      "104": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Equipo Local (P104)",
+        "prorroga": true
+      }
+    },
+    "Adriana Maria": {
+      "104": {
+        "gl90": 3,
+        "gv90": 2,
+        "avanza": "Equipo Local (P104)",
+        "prorroga": false
+      }
+    },
+    "Angie": {
+      "104": {
+        "gl90": 1,
+        "gv90": 2,
+        "avanza": "Equipo Visitante (P104)"
+      }
+    },
+    "Sahayda": {
+      "104": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Equipo Visitante (P104)"
+      }
+    },
+    "Adri L": {
+      "104": {
+        "gl90": 2,
+        "gv90": 1,
+        "avanza": "Equipo Local (P104)"
+      }
+    },
+    "Andrés": {
+      "104": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Equipo Visitante (P104)",
+        "prorroga": true
+      }
+    },
+    "Ani": {
+      "104": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Equipo Visitante (P104)"
+      }
+    },
+    "Mario": {
+      "104": {
+        "gl90": 2,
+        "gv90": 4,
+        "avanza": "Equipo Visitante (P104)"
+      }
+    },
+    "Jesus David": {
+      "104": {
+        "gl90": 0,
+        "avanza": "Equipo Visitante (P104)",
+        "gv90": 1
+      }
+    },
+    "Sadys": {
+      "104": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Equipo Visitante (P104)"
+      }
+    },
+    "Maria Isabel": {
+      "104": {
+        "gl90": 3,
+        "gv90": 1,
+        "avanza": "Equipo Local (P104)"
+      }
+    },
+    "Eugenia": {
+      "104": {
+        "gl90": 2,
+        "gv90": 3,
+        "avanza": "Equipo Visitante (P104)"
+      }
+    }
+  }
 }
